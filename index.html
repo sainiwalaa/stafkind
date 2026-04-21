@@ -25,7 +25,6 @@ button{
 .no{background:#ef4444;color:#fff;}
 .option{background:#e5e7eb;}
 .active{background:#22c55e;color:#fff;}
-
 .save{background:#2563eb;color:#fff;}
 
 input, textarea{
@@ -35,11 +34,38 @@ input, textarea{
   border-radius:5px;
 }
 
-textarea{
-  height:50px;
+textarea{height:50px;}
+.small{font-size:11px;color:#555;}
+
+/* 🔥 SCRIPT PANEL */
+.script-box{
+  position:fixed;
+  right:20px;
+  top:80px;
+  width:300px;
+  background:#fff;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.2);
+  max-height:80vh;
+  overflow:auto;
 }
 
-.small{font-size:11px;color:#555;}
+.script-box h3{
+  margin-top:0;
+}
+
+.lang-btn{
+  background:#6366f1;
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.script-text{
+  font-size:13px;
+  line-height:1.5;
+  white-space:pre-line;
+}
 </style>
 
 </head>
@@ -47,6 +73,56 @@ textarea{
 <body>
 
 <h2>📊 Smart CRM Dashboard</h2>
+
+<!-- 🔥 SCRIPT PANEL -->
+
+<div class="script-box">
+<button class="lang-btn" onclick="toggleLang()">🌐 Hindi / English</button>
+
+<div id="scriptHindi" class="script-text">
+√√ STAFKIND SERVICES √√
+
+HR - क्या मेरी बात मिस सुष्मिता से हो रही है?
+
+HR - मैं HR अंकुश बात कर रहा हूँ Stafkind Services से,
+हमारी कंपनी में आपकी प्रोफाइल Customer Support Work From Home के लिए shortlisted हुई है।
+Salary ₹12,000 से ₹15,000 होगी।
+
+क्या आप interested हैं?
+
+आज 2:00 PM एक session है।
+उसमें आपको salary, work, hours सब समझाया जाएगा।
+
+क्या यह आपका WhatsApp नंबर है?
+
+मैं आपको Google Meet link भेज देता हूँ,
+आप 2:00 PM पर join कर लेना।
+
+</div>
+
+<div id="scriptEnglish" class="script-text" style="display:none;">
+√√ STAFKIND SERVICES √√
+
+HR - Am I speaking with Miss Sushmita?
+
+HR - I am HR Ankush from Stafkind Services.
+Your profile has been shortlisted for Customer Support Work From Home.
+
+Salary: ₹12,000 to ₹15,000.
+
+Are you interested?
+
+We have a session today at 2:00 PM.
+You will be guided about salary, process, and work hours.
+
+Is this your WhatsApp number?
+
+I will send you a Google Meet link.
+Please join at 2:00 PM.
+
+</div>
+
+</div>
 
 <table>
 <thead>
@@ -71,6 +147,20 @@ textarea{
 
 const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
+/* LANGUAGE TOGGLE */
+function toggleLang(){
+let hi=document.getElementById("scriptHindi");
+let en=document.getElementById("scriptEnglish");
+
+if(hi.style.display==="none"){
+hi.style.display="block";
+en.style.display="none";
+}else{
+hi.style.display="none";
+en.style.display="block";
+}
+}
+
 function loadData(){
 fetch(API)
 .then(res=>res.json())
@@ -82,7 +172,6 @@ data.forEach((item,i)=>{
 
 html+=`
 <tr>
-
 <td>${item.name}</td>
 <td>${item.phone}</td>
 
@@ -99,14 +188,13 @@ html+=`
 </td>
 
 <td>
-<textarea id="fb${i}" placeholder="Type feedback...">${item.feedback||''}</textarea>
+<textarea id="fb${i}">${item.feedback||''}</textarea>
 
 </td>
 
 <td>
 <button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
 <button class="option" onclick="setVal('prob${i}','Wrong No')">Wrong</button>
-<button class="option" onclick="setVal('prob${i}','No Response')">No Res</button>
 <input id="prob${i}" value="${item.problem||''}">
 </td>
 
@@ -125,8 +213,6 @@ html+=`
 <td>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Angle')">Angle</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Upstox')">Upstox</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Tide')">Tide</button>
 <input id="ref${i}" value="${item.refer||''}">
 </td>
 
@@ -151,11 +237,10 @@ document.getElementById(id).value=val;
 
 function toggleMulti(btn,id,val){
 btn.classList.toggle("active");
-
 let current=document.getElementById(id).value;
 
 if(current.includes(val)){
-current=current.replace(val,"").replace(",,",",");
+current=current.replace(val,"");
 }else{
 current+= (current? ",":"")+val;
 }
@@ -164,7 +249,6 @@ document.getElementById(id).value=current;
 }
 
 function save(i){
-
 document.getElementById("msg"+i).innerText="Saving...";
 
 const payload={
@@ -183,14 +267,8 @@ method:"POST",
 headers:{"Content-Type":"text/plain;charset=utf-8"},
 body:JSON.stringify(payload)
 })
-.then(res=>res.json())
-.then(()=>{
-document.getElementById("msg"+i).innerText="Saved ✅";
-})
-.catch(()=>{
-document.getElementById("msg"+i).innerText="Error ❌";
-});
-
+.then(()=>{document.getElementById("msg"+i).innerText="Saved ✅";})
+.catch(()=>{document.getElementById("msg"+i).innerText="Error ❌";});
 }
 
 loadData();

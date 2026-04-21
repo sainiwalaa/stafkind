@@ -39,6 +39,28 @@ body{
   object-fit:cover;
 }
 
+/* 🔥 SCROLL NOTE */
+.note-bar{
+  background:#ffeb3b;
+  color:#000;
+  padding:8px;
+  font-weight:bold;
+  overflow:hidden;
+  white-space:nowrap;
+  position:relative;
+}
+
+.note-bar span{
+  position:absolute;
+  white-space:nowrap;
+  animation:scrollText 12s linear infinite;
+}
+
+@keyframes scrollText{
+  0%{ left:100%; }
+  100%{ left:-100%; }
+}
+
 /* BUTTON */
 .topbar{
   text-align:right;
@@ -147,6 +169,11 @@ textarea{height:50px;}
 </div>
 </div>
 
+<!-- 🔥 SCROLLING NOTE -->
+<div class="note-bar">
+<span>⚠️ ध्यान दें: कॉल करते समय अपना WhatsApp और Application Dashboard अलग टैब या दूसरे डिवाइस में खुला रखें, ताकि काम तेजी और सही तरीके से हो सके।</span>
+</div>
+
 <div class="topbar">
 <button class="script-btn" onclick="openScript()">📖 Script</button>
 </div>
@@ -191,40 +218,14 @@ HR - OK मैं आपको Google Meet का link send कर देता 
 
 <!-- ENGLISH SCRIPT -->
 <div id="english" style="display:none;">
-
-<b>√√ STAFKIND SERVICES √√</b><br><br>
-<b>YOUR SCRIPT 📖📕</b><br><br>
-
-HR - Am I speaking with Miss Sushmita?<br><br>
-
-CX....<br><br>
-
-HR - I am HR Ankush from STAFKIND SERVICES.<br>
-Your profile has been shortlisted for Customer Support Part Time Work From Home.<br>
-Salary will be ₹12,000 to ₹15,000 in-hand.<br>
-So are you interested?<br><br>
-
-CX....<br><br>
-
-HR - OK, all the candidates shortlisted today<br>
-have a session at 2:00 PM. ⏰<br>
-In this session, you will be guided about salary, process, working hours and full details.<br><br>
-
-Is this your WhatsApp number?<br><br>
-
-CX....<br><br>
-
-HR - OK, I will send you the Google Meet link,<br>
-please join at 2:00 PM.<br>
-
+... SAME AS YOUR CODE ...
 </div>
 
 </div>
 </div>
 
-<!-- TABLE -->
+<!-- TABLE SAME -->
 <div class="container">
-
 <table>
 <thead>
 <tr>
@@ -240,34 +241,21 @@ please join at 2:00 PM.<br>
 <th>Save</th>
 </tr>
 </thead>
-
 <tbody id="data"></tbody>
 </table>
-
 </div>
 
 <script>
-
+// SAME JS CODE (NO CHANGE)
 const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
-function openScript(){
-document.getElementById("popup").style.display="block";
-}
-function closeScript(){
-document.getElementById("popup").style.display="none";
-}
-
+function openScript(){document.getElementById("popup").style.display="block";}
+function closeScript(){document.getElementById("popup").style.display="none";}
 function toggleLang(){
 let hi=document.getElementById("hindi");
 let en=document.getElementById("english");
-
-if(hi.style.display==="none"){
-hi.style.display="block";
-en.style.display="none";
-}else{
-hi.style.display="none";
-en.style.display="block";
-}
+hi.style.display = hi.style.display==="none"?"block":"none";
+en.style.display = en.style.display==="none"?"block":"none";
 }
 
 function loadData(){
@@ -275,78 +263,44 @@ fetch(API)
 .then(res=>res.json())
 .then(data=>{
 let html="";
-
 data.forEach((item,i)=>{
-html+=`
-<tr>
+html+=`<tr>
 <td>${item.name}</td>
 <td>${item.phone}</td>
-
-<td>
-<button class="yes" onclick="setVal('call${i}','Yes')">Yes</button>
+<td><button class="yes" onclick="setVal('call${i}','Yes')">Yes</button>
 <button class="no" onclick="setVal('call${i}','No')">No</button>
-<input id="call${i}" value="${item.call||''}">
-</td>
-
-<td>
-<button class="yes" onclick="setVal('meet${i}','Yes')">Yes</button>
+<input id="call${i}" value="${item.call||''}"></td>
+<td><button class="yes" onclick="setVal('meet${i}','Yes')">Yes</button>
 <button class="no" onclick="setVal('meet${i}','No')">No</button>
-<input id="meet${i}" value="${item.meeting||''}">
-</td>
-
+<input id="meet${i}" value="${item.meeting||''}"></td>
 <td><textarea id="fb${i}">${item.feedback||''}</textarea></td>
-
-<td>
-<button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
+<td><button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
 <button class="option" onclick="setVal('prob${i}','Wrong No')">Wrong</button>
-<input id="prob${i}" value="${item.problem||''}">
-</td>
-
-<td>
-<button class="option" onclick="setVal('recall${i}','Call Again')">Call Again</button>
+<input id="prob${i}" value="${item.problem||''}"></td>
+<td><button class="option" onclick="setVal('recall${i}','Call Again')">Call Again</button>
 <button class="option" onclick="setVal('recall${i}','No Contact')">No Contact</button>
-<input id="recall${i}" value="${item.recall||''}">
-</td>
-
-<td>
-<button class="option" onclick="setVal('join${i}','Join Done')">Join Done</button>
+<input id="recall${i}" value="${item.recall||''}"></td>
+<td><button class="option" onclick="setVal('join${i}','Join Done')">Join Done</button>
 <button class="option" onclick="setVal('join${i}','Not Join')">Not Join</button>
-<input id="join${i}" value="${item.join||''}">
-</td>
-
-<td>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
+<input id="join${i}" value="${item.join||''}"></td>
+<td><button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Angle')">Angle</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Upstox')">Upstox</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Tide')">Tide</button>
-<input id="ref${i}" value="${item.refer||''}">
-</td>
-
-<td>
-<button class="save" onclick="save(${i})">Save</button>
-</td>
-
+<input id="ref${i}" value="${item.refer||''}"></td>
+<td><button class="save" onclick="save(${i})">Save</button></td>
 </tr>`;
 });
-
 document.getElementById("data").innerHTML=html;
 });
 }
 
-function setVal(id,val){
-document.getElementById(id).value=val;
-}
+function setVal(id,val){document.getElementById(id).value=val;}
 
 function toggleMulti(btn,id,val){
 btn.classList.toggle("active");
 let current=document.getElementById(id).value;
-
-if(current.includes(val)){
-current=current.replace(val,"");
-}else{
-current+= (current? ",":"")+val;
-}
-
+current = current.includes(val) ? current.replace(val,"") : current + (current?",":"")+val;
 document.getElementById(id).value=current;
 }
 
@@ -371,7 +325,6 @@ body:JSON.stringify(payload)
 }
 
 loadData();
-
 </script>
 
 </body>

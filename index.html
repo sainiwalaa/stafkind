@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Advanced CRM</title>
+<title>Smart CRM</title>
 
 <style>
 body{font-family:Arial;background:#eef2f7;padding:20px;}
@@ -28,7 +28,17 @@ button{
 
 .save{background:#2563eb;color:#fff;}
 
-input{width:100%;padding:5px;border:1px solid #ccc;border-radius:5px;}
+input, textarea{
+  width:100%;
+  padding:5px;
+  border:1px solid #ccc;
+  border-radius:5px;
+}
+
+textarea{
+  height:50px;
+}
+
 .small{font-size:11px;color:#555;}
 </style>
 
@@ -36,7 +46,7 @@ input{width:100%;padding:5px;border:1px solid #ccc;border-radius:5px;}
 
 <body>
 
-<h2>📊 Smart CRM (With Feedback)</h2>
+<h2>📊 Smart CRM Dashboard</h2>
 
 <table>
 <thead>
@@ -89,10 +99,8 @@ html+=`
 </td>
 
 <td>
-<button class="option" onclick="setVal('fb${i}','Interested')">Interested</button>
-<button class="option" onclick="setVal('fb${i}','Not Interested')">Not Int</button>
-<button class="option" onclick="setVal('fb${i}','Call Later')">Call Later</button>
-<input id="fb${i}" value="${item.feedback||''}">
+<textarea id="fb${i}" placeholder="Type feedback...">${item.feedback||''}</textarea>
+
 </td>
 
 <td>

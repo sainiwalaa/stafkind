@@ -36,7 +36,7 @@ input{width:100%;padding:5px;border:1px solid #ccc;border-radius:5px;}
 
 <body>
 
-<h2>📊 Smart Button CRM</h2>
+<h2>📊 Smart CRM (With Feedback)</h2>
 
 <table>
 <thead>
@@ -45,6 +45,7 @@ input{width:100%;padding:5px;border:1px solid #ccc;border-radius:5px;}
 <th>Mobile</th>
 <th>Call</th>
 <th>Meeting</th>
+<th>Feedback</th>
 <th>Problem</th>
 <th>Recall</th>
 <th>Join</th>
@@ -88,9 +89,16 @@ html+=`
 </td>
 
 <td>
-<button class="option" onclick="setVal('prob${i}','Not Interested')">Not Int</button>
+<button class="option" onclick="setVal('fb${i}','Interested')">Interested</button>
+<button class="option" onclick="setVal('fb${i}','Not Interested')">Not Int</button>
+<button class="option" onclick="setVal('fb${i}','Call Later')">Call Later</button>
+<input id="fb${i}" value="${item.feedback||''}">
+</td>
+
+<td>
 <button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
 <button class="option" onclick="setVal('prob${i}','Wrong No')">Wrong</button>
+<button class="option" onclick="setVal('prob${i}','No Response')">No Res</button>
 <input id="prob${i}" value="${item.problem||''}">
 </td>
 
@@ -155,6 +163,7 @@ const payload={
 row:i,
 call:document.getElementById("call"+i).value,
 meeting:document.getElementById("meet"+i).value,
+feedback:document.getElementById("fb"+i).value,
 problem:document.getElementById("prob"+i).value,
 recall:document.getElementById("recall"+i).value,
 join:document.getElementById("join"+i).value,
@@ -167,7 +176,7 @@ headers:{"Content-Type":"text/plain;charset=utf-8"},
 body:JSON.stringify(payload)
 })
 .then(res=>res.json())
-.then(res=>{
+.then(()=>{
 document.getElementById("msg"+i).innerText="Saved ✅";
 })
 .catch(()=>{

@@ -3,55 +3,96 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Smart CRM</title>
+<title>STAFKIND CRM</title>
 
 <style>
-body{font-family:Arial;background:#eef2f7;padding:20px;}
-h2{text-align:center;}
+body{
+  font-family:Arial;
+  margin:0;
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  color:#333;
+}
 
-/* TOP BAR */
+/* HEADER */
+.header{
+  text-align:center;
+  padding:15px;
+  background:#fff;
+}
+
+.header img{
+  width:120px;
+  border-radius:50%;
+}
+
+.header h1{
+  margin:5px;
+  color:#1e3c72;
+}
+
+/* TOP BUTTON */
 .topbar{
   text-align:right;
-  margin-bottom:10px;
+  padding:10px;
 }
+
 .script-btn{
-  background:#6366f1;
+  background:#ff9800;
   color:#fff;
   padding:8px 12px;
   border:none;
   border-radius:6px;
-  cursor:pointer;
 }
 
 /* TABLE */
-table{width:100%;border-collapse:collapse;background:#fff;}
-th{background:#111;color:#fff;padding:10px;}
-td{padding:8px;border-bottom:1px solid #ddd;text-align:center;}
+.container{
+  padding:10px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+th{
+  background:#111;
+  color:#fff;
+  padding:10px;
+}
+
+td{
+  padding:6px;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+}
 
 button{
-  padding:5px 8px;
+  padding:6px;
   border:none;
   border-radius:6px;
   margin:2px;
   cursor:pointer;
 }
 
-.yes{background:#22c55e;color:#fff;}
-.no{background:#ef4444;color:#fff;}
-.option{background:#e5e7eb;}
-.active{background:#22c55e;color:#fff;}
-.save{background:#2563eb;color:#fff;}
+.yes{background:#4caf50;color:#fff;}
+.no{background:#f44336;color:#fff;}
+.option{background:#ddd;}
+.active{background:#4caf50;color:#fff;}
+.save{background:#2196f3;color:#fff;}
 
-input, textarea{
+input,textarea{
   width:100%;
   padding:5px;
-  border:1px solid #ccc;
   border-radius:5px;
+  border:1px solid #ccc;
 }
-textarea{height:50px;}
-.small{font-size:11px;color:#555;}
 
-/* 🔥 POPUP */
+textarea{height:50px;}
+
+/* POPUP */
 .popup{
   display:none;
   position:fixed;
@@ -62,24 +103,19 @@ textarea{height:50px;}
 
 .popup-content{
   background:#fff;
-  width:400px;
-  max-height:80vh;
-  overflow:auto;
-  margin:50px auto;
+  width:90%;
+  max-width:400px;
+  margin:40px auto;
   padding:20px;
   border-radius:10px;
 }
 
-.close-btn{
-  background:red;
-  color:#fff;
-  float:right;
-}
-
-.lang-btn{
-  background:#6366f1;
-  color:#fff;
-  margin-bottom:10px;
+/* MOBILE */
+@media(max-width:768px){
+  table{
+    display:block;
+    overflow-x:auto;
+  }
 }
 </style>
 
@@ -87,63 +123,42 @@ textarea{height:50px;}
 
 <body>
 
-<h2>📊 Smart CRM Dashboard</h2>
+<!-- HEADER -->
+
+<div class="header">
+<img src="YOUR_IMAGE_LINK_HERE">
+<h1>STAFKIND SERVICES CRM</h1>
+</div>
 
 <div class="topbar">
 <button class="script-btn" onclick="openScript()">📖 Script</button>
 </div>
 
-<!-- 🔥 POPUP SCRIPT -->
+<!-- POPUP -->
 
 <div id="popup" class="popup">
 <div class="popup-content">
 
-<button class="close-btn" onclick="closeScript()">✖</button> <button class="lang-btn" onclick="toggleLang()">🌐 Hindi / English</button>
+<button onclick="closeScript()">❌ Close</button> <br><br>
 
-<div id="hi">
-√√ STAFKIND SERVICES √√
+<b>CALL SCRIPT</b><br><br>
 
-HR - क्या मेरी बात मिस सुष्मिता से हो रही है?
+HR - KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI.<br><br>
 
-HR - मैं HR अंकुश बात कर रहा हूँ Stafkind Services से।
-आपकी प्रोफाइल Work From Home Customer Support के लिए shortlisted हुई है।
+HR - MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE.<br>
+APKI PROFILE SHORTLISTED HUI HAI WORK FROM HOME KE LIYE.<br><br>
 
-Salary ₹12k–₹15k होगी।
-क्या आप interested हैं?
+SALARY ₹12K–₹15K<br><br>
 
-आज 2:00 PM session है।
-उसमें salary, process सब बताया जाएगा।
+ARE YOU INTERESTED?<br><br>
 
-क्या यह आपका WhatsApp नंबर है?
-
-मैं Google Meet link भेज दूँगा,
-आप 2:00 PM पर join कर लेना।
-
-</div>
-
-<div id="en" style="display:none;">
-√√ STAFKIND SERVICES √√
-
-HR - Am I speaking with Miss Sushmita?
-
-HR - I am HR Ankush from Stafkind Services.
-Your profile is shortlisted for Work From Home Customer Support.
-
-Salary ₹12k–₹15k.
-Are you interested?
-
-We have a session at 2:00 PM.
-You will be guided about salary & process.
-
-Is this your WhatsApp number?
-
-I will send you Google Meet link,
-join at 2:00 PM.
-
-</div>
+SESSION 2:00 PM PAR HOGA<br>
+GOOGLE MEET LINK SEND KARENGE<br>
 
 </div>
 </div>
+
+<div class="container">
 
 <table>
 <thead>
@@ -164,33 +179,20 @@ join at 2:00 PM.
 <tbody id="data"></tbody>
 </table>
 
+</div>
+
 <script>
 
 const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
-/* POPUP CONTROL */
 function openScript(){
 document.getElementById("popup").style.display="block";
 }
+
 function closeScript(){
 document.getElementById("popup").style.display="none";
 }
 
-/* LANGUAGE */
-function toggleLang(){
-let hi=document.getElementById("hi");
-let en=document.getElementById("en");
-
-if(hi.style.display==="none"){
-hi.style.display="block";
-en.style.display="none";
-}else{
-hi.style.display="none";
-en.style.display="block";
-}
-}
-
-/* DATA LOAD */
 function loadData(){
 fetch(API)
 .then(res=>res.json())
@@ -202,6 +204,7 @@ data.forEach((item,i)=>{
 
 html+=`
 <tr>
+
 <td>${item.name}</td>
 <td>${item.phone}</td>
 
@@ -217,7 +220,10 @@ html+=`
 <input id="meet${i}" value="${item.meeting||''}">
 </td>
 
-<td><textarea id="fb${i}">${item.feedback||''}</textarea></td>
+<td>
+<textarea id="fb${i}">${item.feedback||''}</textarea>
+
+</td>
 
 <td>
 <button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
@@ -240,12 +246,13 @@ html+=`
 <td>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Angle')">Angle</button>
+<button class="option" onclick="toggleMulti(this,'ref${i}','Upstox')">Upstox</button>
+<button class="option" onclick="toggleMulti(this,'ref${i}','Tide')">Tide</button>
 <input id="ref${i}" value="${item.refer||''}">
 </td>
 
 <td>
 <button class="save" onclick="save(${i})">Save</button>
-<div id="msg${i}" class="small"></div>
 </td>
 
 </tr>
@@ -276,7 +283,6 @@ document.getElementById(id).value=current;
 }
 
 function save(i){
-document.getElementById("msg"+i).innerText="Saving...";
 
 const payload={
 row:i,
@@ -291,11 +297,11 @@ refer:document.getElementById("ref"+i).value
 
 fetch(API,{
 method:"POST",
-headers:{"Content-Type":"text/plain;charset=utf-8"},
+headers:{"Content-Type":"text/plain"},
 body:JSON.stringify(payload)
 })
-.then(()=>{document.getElementById("msg"+i).innerText="Saved ✅";})
-.catch(()=>{document.getElementById("msg"+i).innerText="Error ❌";});
+.then(()=>alert("Saved ✅"));
+
 }
 
 loadData();

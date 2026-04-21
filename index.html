@@ -27,8 +27,8 @@ body{
 }
 
 .logo-box{
-  width:80px;
-  height:80px;
+  width:70px;
+  height:70px;
   border-radius:10px;
   overflow:hidden;
   border:2px solid #1e3c72;
@@ -39,26 +39,26 @@ body{
   object-fit:cover;
 }
 
-/* 🔥 SCROLL NOTE */
+/* 🔥 SCROLL NOTE (SMOOTH) */
 .note-bar{
-  background:#ffeb3b;
+  background:linear-gradient(90deg,#ffeb3b,#ffc107);
   color:#000;
-  padding:8px;
+  padding:10px 0;
   font-weight:bold;
   overflow:hidden;
-  white-space:nowrap;
-  position:relative;
+  border-bottom:2px solid red;
 }
 
-.note-bar span{
-  position:absolute;
+.note-track{
+  display:inline-block;
   white-space:nowrap;
-  animation:scrollText 12s linear infinite;
+  animation:scrollLeft 18s linear infinite;
+  padding-left:100%;
 }
 
-@keyframes scrollText{
-  0%{ left:100%; }
-  100%{ left:-100%; }
+@keyframes scrollLeft{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-100%); }
 }
 
 /* BUTTON */
@@ -171,7 +171,9 @@ textarea{height:50px;}
 
 <!-- 🔥 SCROLLING NOTE -->
 <div class="note-bar">
-<span>⚠️ ध्यान दें: कॉल करते समय अपना WhatsApp और Application Dashboard अलग टैब या दूसरे डिवाइस में खुला रखें, ताकि काम तेजी और सही तरीके से हो सके।</span>
+  <div class="note-track">
+    ⚠️ ध्यान दें: कॉल करते समय अपना WhatsApp और Application Dashboard हमेशा Login रखें और नए Tab या दूसरे Device में open रखें, ताकि काम तेज और बिना रुकावट के हो सके।
+  </div>
 </div>
 
 <div class="topbar">
@@ -186,7 +188,7 @@ textarea{height:50px;}
 
 <button class="lang-btn" onclick="toggleLang()">🌐 Hindi / English</button>
 
-<!-- HINDI SCRIPT -->
+<!-- HINDI -->
 <div id="hindi">
 
 <b>√√ STAFKIND SERVICES √√</b><br><br>
@@ -205,7 +207,7 @@ CX....<br><br>
 
 HR - OK, तो जितने candidates आज shortlisted हुए हैं,<br>
 उनका आज 2:00 PM एक session है। ⏰<br>
-Session में आपको each and everything guide किया जाएगा जैसे आपकी salary कितनी होगी, process क्या होगा, कितने घंटे काम रहेगा — everything detail में बताया जाएगा।<br><br>
+Session में आपको salary, process, working hours सब detail में समझाया जाएगा।<br><br>
 
 क्या यह आपका WhatsApp नंबर है?<br><br>
 
@@ -216,15 +218,39 @@ HR - OK मैं आपको Google Meet का link send कर देता 
 
 </div>
 
-<!-- ENGLISH SCRIPT -->
+<!-- ENGLISH -->
 <div id="english" style="display:none;">
-... SAME AS YOUR CODE ...
+
+<b>√√ STAFKIND SERVICES √√</b><br><br>
+<b>YOUR SCRIPT 📖📕</b><br><br>
+
+HR - Am I speaking with Miss Sushmita?<br><br>
+
+CX....<br><br>
+
+HR - I am HR Ankush from STAFKIND SERVICES.<br>
+Your profile has been shortlisted for Customer Support Part Time Work From Home.<br>
+Salary will be ₹12,000 to ₹15,000 in-hand.<br>
+So are you interested?<br><br>
+
+CX....<br><br>
+
+HR - All shortlisted candidates have a session at 2:00 PM.<br>
+You will be guided about salary, process and working hours.<br><br>
+
+Is this your WhatsApp number?<br><br>
+
+CX....<br><br>
+
+HR - I will send you the Google Meet link,<br>
+please join at 2:00 PM.<br>
+
 </div>
 
 </div>
 </div>
 
-<!-- TABLE SAME -->
+<!-- TABLE -->
 <div class="container">
 <table>
 <thead>
@@ -246,11 +272,12 @@ HR - OK मैं आपको Google Meet का link send कर देता 
 </div>
 
 <script>
-// SAME JS CODE (NO CHANGE)
+
 const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
 function openScript(){document.getElementById("popup").style.display="block";}
 function closeScript(){document.getElementById("popup").style.display="none";}
+
 function toggleLang(){
 let hi=document.getElementById("hindi");
 let en=document.getElementById("english");
@@ -267,28 +294,51 @@ data.forEach((item,i)=>{
 html+=`<tr>
 <td>${item.name}</td>
 <td>${item.phone}</td>
-<td><button class="yes" onclick="setVal('call${i}','Yes')">Yes</button>
+
+<td>
+<button class="yes" onclick="setVal('call${i}','Yes')">Yes</button>
 <button class="no" onclick="setVal('call${i}','No')">No</button>
-<input id="call${i}" value="${item.call||''}"></td>
-<td><button class="yes" onclick="setVal('meet${i}','Yes')">Yes</button>
+<input id="call${i}" value="${item.call||''}">
+</td>
+
+<td>
+<button class="yes" onclick="setVal('meet${i}','Yes')">Yes</button>
 <button class="no" onclick="setVal('meet${i}','No')">No</button>
-<input id="meet${i}" value="${item.meeting||''}"></td>
+<input id="meet${i}" value="${item.meeting||''}">
+</td>
+
 <td><textarea id="fb${i}">${item.feedback||''}</textarea></td>
-<td><button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
+
+<td>
+<button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
 <button class="option" onclick="setVal('prob${i}','Wrong No')">Wrong</button>
-<input id="prob${i}" value="${item.problem||''}"></td>
-<td><button class="option" onclick="setVal('recall${i}','Call Again')">Call Again</button>
+<input id="prob${i}" value="${item.problem||''}">
+</td>
+
+<td>
+<button class="option" onclick="setVal('recall${i}','Call Again')">Call Again</button>
 <button class="option" onclick="setVal('recall${i}','No Contact')">No Contact</button>
-<input id="recall${i}" value="${item.recall||''}"></td>
-<td><button class="option" onclick="setVal('join${i}','Join Done')">Join Done</button>
+<input id="recall${i}" value="${item.recall||''}">
+</td>
+
+<td>
+<button class="option" onclick="setVal('join${i}','Join Done')">Join Done</button>
 <button class="option" onclick="setVal('join${i}','Not Join')">Not Join</button>
-<input id="join${i}" value="${item.join||''}"></td>
-<td><button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
+<input id="join${i}" value="${item.join||''}">
+</td>
+
+<td>
+<button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Angle')">Angle</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Upstox')">Upstox</button>
 <button class="option" onclick="toggleMulti(this,'ref${i}','Tide')">Tide</button>
-<input id="ref${i}" value="${item.refer||''}"></td>
-<td><button class="save" onclick="save(${i})">Save</button></td>
+<input id="ref${i}" value="${item.refer||''}">
+</td>
+
+<td>
+<button class="save" onclick="save(${i})">Save</button>
+</td>
+
 </tr>`;
 });
 document.getElementById("data").innerHTML=html;
@@ -325,6 +375,7 @@ body:JSON.stringify(payload)
 }
 
 loadData();
+
 </script>
 
 </body>

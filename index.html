@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Center Dashboard</title>
+
+<style>
+body {
+  font-family: Arial;
+  background:#eef2f7;
+  padding:20px;
+}
+
+h2 {
+  text-align:center;
+}
+
+table {
+  width:100%;
+  border-collapse: collapse;
+  background:#fff;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+th {
+  background:#222;
+  color:#fff;
+  padding:10px;
+}
+
+td {
+  padding:10px;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+}
+
+button {
+  padding:6px 10px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.call { background:#28a745; color:#fff; }
+.recall { background:#ffc107; }
+.send { background:#007bff; color:#fff; }
+
+input {
+  padding:5px;
+  width:100%;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>📊 Calling Dashboard</h2>
+
+<table id="table">
+<thead>
+<tr>
+<th>Date</th>
+<th>Name</th>
+<th>Mobile</th>
+<th>Call</th>
+<th>Recall</th>
+<th>Send Link</th>
+<th>Feedback</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+</table>
+
+<script>
+
+const sheetURL = "https://docs.google.com/spreadsheets/d/1taHJ369cXbUQrBrlPGWNLwe-NOHmpn3zurqSmRyeOOY/gviz/tq?tqx=out:csv&sheet=calling";
+
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
+
+let rows = data.split("\n").slice(1);
+let html = "";
+
+rows.forEach(row => {
+
+let col = row.split(",");
+
+let date = col[0];
+let name = col[1];
+let phone = col[2];
+
+html += `
+<tr>
+<td>${date}</td>
+<td>${name}</td>
+<td>${phone}</td>
+
+<td>
+<a href="tel:${phone}">
+<button class="call">📞 Call</button>
+</a>
+</td>
+
+<td>
+<a href="tel:${phone}">
+<button class="recall">🔁 Recall</button>
+</a>
+</td>
+
+<td>
+<button class="send" onclick="sendWhatsApp('${phone}')">📩 Send</button>
+</td>
+
+<td>
+<input placeholder="Feedback">
+</td>
+
+</tr>
+`;
+
+});
+
+document.querySelector("tbody").innerHTML = html;
+
+});
+
+function sendWhatsApp(phone){
+let msg = "Hello, join meeting: https://meet.google.com/";
+window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
+}
+
+</script>
+
+</body>
+</html>

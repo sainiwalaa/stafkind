@@ -9,6 +9,21 @@
 body{font-family:Arial;background:#eef2f7;padding:20px;}
 h2{text-align:center;}
 
+/* TOP BAR */
+.topbar{
+  text-align:right;
+  margin-bottom:10px;
+}
+.script-btn{
+  background:#6366f1;
+  color:#fff;
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* TABLE */
 table{width:100%;border-collapse:collapse;background:#fff;}
 th{background:#111;color:#fff;padding:10px;}
 td{padding:8px;border-bottom:1px solid #ddd;text-align:center;}
@@ -33,38 +48,38 @@ input, textarea{
   border:1px solid #ccc;
   border-radius:5px;
 }
-
 textarea{height:50px;}
 .small{font-size:11px;color:#555;}
 
-/* 🔥 SCRIPT PANEL */
-.script-box{
+/* 🔥 POPUP */
+.popup{
+  display:none;
   position:fixed;
-  right:20px;
-  top:80px;
-  width:300px;
-  background:#fff;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.2);
-  max-height:80vh;
-  overflow:auto;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.6);
 }
 
-.script-box h3{
-  margin-top:0;
+.popup-content{
+  background:#fff;
+  width:400px;
+  max-height:80vh;
+  overflow:auto;
+  margin:50px auto;
+  padding:20px;
+  border-radius:10px;
+}
+
+.close-btn{
+  background:red;
+  color:#fff;
+  float:right;
 }
 
 .lang-btn{
   background:#6366f1;
   color:#fff;
   margin-bottom:10px;
-}
-
-.script-text{
-  font-size:13px;
-  line-height:1.5;
-  white-space:pre-line;
 }
 </style>
 
@@ -74,54 +89,60 @@ textarea{height:50px;}
 
 <h2>📊 Smart CRM Dashboard</h2>
 
-<!-- 🔥 SCRIPT PANEL -->
+<div class="topbar">
+<button class="script-btn" onclick="openScript()">📖 Script</button>
+</div>
 
-<div class="script-box">
-<button class="lang-btn" onclick="toggleLang()">🌐 Hindi / English</button>
+<!-- 🔥 POPUP SCRIPT -->
 
-<div id="scriptHindi" class="script-text">
+<div id="popup" class="popup">
+<div class="popup-content">
+
+<button class="close-btn" onclick="closeScript()">✖</button> <button class="lang-btn" onclick="toggleLang()">🌐 Hindi / English</button>
+
+<div id="hi">
 √√ STAFKIND SERVICES √√
 
 HR - क्या मेरी बात मिस सुष्मिता से हो रही है?
 
-HR - मैं HR अंकुश बात कर रहा हूँ Stafkind Services से,
-हमारी कंपनी में आपकी प्रोफाइल Customer Support Work From Home के लिए shortlisted हुई है।
-Salary ₹12,000 से ₹15,000 होगी।
+HR - मैं HR अंकुश बात कर रहा हूँ Stafkind Services से।
+आपकी प्रोफाइल Work From Home Customer Support के लिए shortlisted हुई है।
 
+Salary ₹12k–₹15k होगी।
 क्या आप interested हैं?
 
-आज 2:00 PM एक session है।
-उसमें आपको salary, work, hours सब समझाया जाएगा।
+आज 2:00 PM session है।
+उसमें salary, process सब बताया जाएगा।
 
 क्या यह आपका WhatsApp नंबर है?
 
-मैं आपको Google Meet link भेज देता हूँ,
+मैं Google Meet link भेज दूँगा,
 आप 2:00 PM पर join कर लेना।
 
 </div>
 
-<div id="scriptEnglish" class="script-text" style="display:none;">
+<div id="en" style="display:none;">
 √√ STAFKIND SERVICES √√
 
 HR - Am I speaking with Miss Sushmita?
 
 HR - I am HR Ankush from Stafkind Services.
-Your profile has been shortlisted for Customer Support Work From Home.
+Your profile is shortlisted for Work From Home Customer Support.
 
-Salary: ₹12,000 to ₹15,000.
-
+Salary ₹12k–₹15k.
 Are you interested?
 
-We have a session today at 2:00 PM.
-You will be guided about salary, process, and work hours.
+We have a session at 2:00 PM.
+You will be guided about salary & process.
 
 Is this your WhatsApp number?
 
-I will send you a Google Meet link.
-Please join at 2:00 PM.
+I will send you Google Meet link,
+join at 2:00 PM.
 
 </div>
 
+</div>
 </div>
 
 <table>
@@ -147,10 +168,18 @@ Please join at 2:00 PM.
 
 const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
-/* LANGUAGE TOGGLE */
+/* POPUP CONTROL */
+function openScript(){
+document.getElementById("popup").style.display="block";
+}
+function closeScript(){
+document.getElementById("popup").style.display="none";
+}
+
+/* LANGUAGE */
 function toggleLang(){
-let hi=document.getElementById("scriptHindi");
-let en=document.getElementById("scriptEnglish");
+let hi=document.getElementById("hi");
+let en=document.getElementById("en");
 
 if(hi.style.display==="none"){
 hi.style.display="block";
@@ -161,6 +190,7 @@ en.style.display="block";
 }
 }
 
+/* DATA LOAD */
 function loadData(){
 fetch(API)
 .then(res=>res.json())
@@ -187,10 +217,7 @@ html+=`
 <input id="meet${i}" value="${item.meeting||''}">
 </td>
 
-<td>
-<textarea id="fb${i}">${item.feedback||''}</textarea>
-
-</td>
+<td><textarea id="fb${i}">${item.feedback||''}</textarea></td>
 
 <td>
 <button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>

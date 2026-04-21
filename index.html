@@ -3,12 +3,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CRM Dashboard</title>
+<title>Smart CRM</title>
 
 <style>
-body {font-family:Arial; background:#eef2f7; padding:20px;}
+body {
+  font-family: Arial;
+  background:#eef2f7;
+  padding:20px;
+}
 
-h2 {text-align:center;}
+h2 {
+  text-align:center;
+}
 
 table {
   width:100%;
@@ -30,7 +36,9 @@ td {
   text-align:center;
 }
 
-tr:hover {background:#f1f5f9;}
+tr:hover {
+  background:#f1f5f9;
+}
 
 button {
   padding:5px 8px;
@@ -53,7 +61,6 @@ input {
 
 .status {
   font-size:12px;
-  margin-top:3px;
 }
 </style>
 
@@ -61,7 +68,7 @@ input {
 
 <body>
 
-<h2>📊 CRM Dashboard</h2>
+<h2>📊 Smart CRM Dashboard</h2>
 
 <table>
 <thead>
@@ -85,7 +92,7 @@ input {
 
 <script>
 
-const API = "https://script.google.com/macros/s/AKfycbzz7cpG5W9wd97vX4AesX605KTH-4CnQedIo4V9Qr-ABGHMRDhdhaqtwP8VMW_XQ5UL/exec";
+const API = "https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
 function loadData(){
 fetch(API)
@@ -157,18 +164,22 @@ refer: document.getElementById("ref"+i).value
 
 fetch(API,{
 method:"POST",
-headers: {
-"Content-Type":"application/json"
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
 },
 body: JSON.stringify(payload)
 })
 .then(res => res.json())
 .then(res => {
+if(res.status==="success"){
 document.getElementById("msg"+i).innerText = "Saved ✅";
-setTimeout(()=>{ loadData(); }, 1000);
+loadData();
+}else{
+document.getElementById("msg"+i).innerText = "Error ❌";
+}
 })
 .catch(()=>{
-document.getElementById("msg"+i).innerText = "Error ❌";
+document.getElementById("msg"+i).innerText = "Network Error ❌";
 });
 
 }

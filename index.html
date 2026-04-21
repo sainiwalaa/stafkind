@@ -3,43 +3,125 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Live CRM Dashboard</title>
+<title>Pro CRM Dashboard</title>
 
 <style>
-body {font-family:Arial; background:#f4f6f9; padding:20px;}
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  margin:0;
+  padding:20px;
+  color:#333;
+}
 
-h2 {text-align:center;}
+h2 {
+  text-align:center;
+  color:#fff;
+}
+
+.container {
+  background:#fff;
+  border-radius:15px;
+  padding:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
 
 table {
   width:100%;
   border-collapse: collapse;
-  background:#fff;
 }
 
-th, td {
+th {
+  background:#111827;
+  color:#fff;
   padding:10px;
-  border:1px solid #ddd;
-  text-align:center;
 }
 
-th {background:#222;color:#fff;}
+td {
+  padding:8px;
+  border-bottom:1px solid #eee;
+}
+
+tr:hover {
+  background:#f3f4f6;
+}
 
 button {
   padding:5px 8px;
+  border:none;
+  border-radius:6px;
   cursor:pointer;
+  transition:0.2s;
 }
 
-.call {background:green;color:#fff;}
-.refresh {background:#007bff;color:#fff;margin-bottom:10px;}
+.yes {
+  background:#22c55e;
+  color:#fff;
+}
+.yes:hover {background:#16a34a;}
+
+.no {
+  background:#ef4444;
+  color:#fff;
+}
+.no:hover {background:#dc2626;}
+
+.save {
+  background:#3b82f6;
+  color:#fff;
+}
+.save:hover {background:#2563eb;}
+
+.call {
+  background:#10b981;
+  color:#fff;
+}
+
+input {
+  width:100%;
+  padding:6px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  transition:0.2s;
+}
+
+input:focus {
+  border-color:#6366f1;
+  outline:none;
+  box-shadow:0 0 5px rgba(99,102,241,0.5);
+}
+
+.topbar {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.refresh {
+  background:#6366f1;
+  color:#fff;
+}
+
+.status-yes {
+  background:#dcfce7;
+}
+
+.status-no {
+  background:#fee2e2;
+}
 </style>
 
 </head>
 
 <body>
 
-<h2>📊 Live CRM Dashboard</h2>
+<h2>🚀 Smart CRM Dashboard</h2>
 
+<div class="container">
+
+<div class="topbar">
 <button class="refresh" onclick="loadData()">🔄 Refresh</button>
+</div>
 
 <table>
 <thead>
@@ -48,13 +130,20 @@ button {
 <th>Name</th>
 <th>Mobile</th>
 <th>Call</th>
-<th>Status</th>
+<th>Meeting</th>
 <th>Feedback</th>
+<th>Problem</th>
+<th>Recall</th>
+<th>Join</th>
+<th>Refer</th>
+<th>Save</th>
 </tr>
 </thead>
 
 <tbody id="data"></tbody>
 </table>
+
+</div>
 
 <script>
 
@@ -68,23 +157,36 @@ fetch(API)
 
 let html = "";
 
-data.forEach(item => {
+data.forEach((item,i) => {
 
 html += `
 <tr>
+
 <td>${item.date}</td>
 <td>${item.name}</td>
 <td>${item.phone}</td>
 
 <td>
-<a href="tel:${item.phone}">
-<button class="call">📞 Call</button>
-</a>
+<button class="yes" onclick="setVal('call${i}','Yes')">Yes</button>
+<button class="no" onclick="setVal('call${i}','No')">No</button>
+<input id="call${i}" value="${item.call || ''}">
 </td>
 
-<td>${item.callStatus || "Pending"}</td>
+<td>
+<button class="yes" onclick="setVal('meet${i}','Yes')">Yes</button>
+<button class="no" onclick="setVal('meet${i}','No')">No</button>
+<input id="meet${i}" value="${item.meeting || ''}">
+</td>
 
-<td>${item.feedback || ""}</td>
+<td><input id="fb${i}" value="${item.feedback || ''}"></td>
+<td><input id="prob${i}" value="${item.problem || ''}"></td>
+<td><input id="recall${i}" value="${item.recall || ''}"></td>
+<td><input id="join${i}" value="${item.join || ''}"></td>
+<td><input id="ref${i}" value="${item.refer || ''}"></td>
+
+<td>
+<button class="save" onclick="save(${i})">💾</button>
+</td>
 
 </tr>
 `;
@@ -97,11 +199,37 @@ document.getElementById("data").innerHTML = html;
 
 }
 
-// पहली बार load
-loadData();
+function setVal(id,val){
+  document.getElementById(id).value = val;
+}
 
-// हर 10 सेकंड में auto refresh
-setInterval(loadData, 10000);
+function save(i){
+
+const payload = {
+  row: i,
+  call: document.getElementById("call"+i).value,
+  meeting: document.getElementById("meet"+i).value,
+  feedback: document.getElementById("fb"+i).value,
+  problem: document.getElementById("prob"+i).value,
+  recall: document.getElementById("recall"+i).value,
+  join: document.getElementById("join"+i).value,
+  refer: document.getElementById("ref"+i).value
+};
+
+fetch(API,{
+  method:"POST",
+  body: JSON.stringify(payload)
+})
+.then(res=>res.text())
+.then(()=>{
+  alert("Saved ✅");
+  loadData();
+});
+
+}
+
+loadData();
+setInterval(loadData,10000);
 
 </script>
 

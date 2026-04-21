@@ -10,27 +10,34 @@ body{
   font-family:Arial;
   margin:0;
   background:linear-gradient(135deg,#1e3c72,#2a5298);
-  color:#333;
 }
 
 /* HEADER */
 .header{
-  text-align:center;
-  padding:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  padding:10px;
   background:#fff;
+  flex-wrap:wrap;
 }
 
 .header img{
-  width:120px;
+  width:70px;
+  height:70px;
+  object-fit:cover;
   border-radius:50%;
+  border:2px solid #1e3c72;
 }
 
 .header h1{
-  margin:5px;
+  margin:0;
+  font-size:22px;
   color:#1e3c72;
 }
 
-/* TOP BUTTON */
+/* TOP BAR */
 .topbar{
   text-align:right;
   padding:10px;
@@ -42,6 +49,7 @@ body{
   padding:8px 12px;
   border:none;
   border-radius:6px;
+  cursor:pointer;
 }
 
 /* TABLE */
@@ -111,7 +119,13 @@ textarea{height:50px;}
 }
 
 /* MOBILE */
-@media(max-width:768px){
+@media(max-width:600px){
+  .header{
+    flex-direction:column;
+  }
+  .header h1{
+    font-size:18px;
+  }
   table{
     display:block;
     overflow-x:auto;
@@ -126,7 +140,7 @@ textarea{height:50px;}
 <!-- HEADER -->
 
 <div class="header">
-<img src="WhatsApp Image 2026-04-21 at 8.32.08 PM.jpeg">
+<img src="logo.jpg">
 <h1>STAFKIND SERVICES CRM</h1>
 </div>
 
@@ -134,12 +148,12 @@ textarea{height:50px;}
 <button class="script-btn" onclick="openScript()">📖 Script</button>
 </div>
 
-<!-- POPUP -->
+<!-- SCRIPT POPUP -->
 
 <div id="popup" class="popup">
 <div class="popup-content">
 
-<button onclick="closeScript()">❌ Close</button> <br><br>
+<button onclick="closeScript()">❌ Close</button><br><br>
 
 <b>CALL SCRIPT</b><br><br>
 
@@ -185,14 +199,15 @@ GOOGLE MEET LINK SEND KARENGE<br>
 
 const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
+/* SCRIPT */
 function openScript(){
 document.getElementById("popup").style.display="block";
 }
-
 function closeScript(){
 document.getElementById("popup").style.display="none";
 }
 
+/* LOAD DATA */
 function loadData(){
 fetch(API)
 .then(res=>res.json())
@@ -265,12 +280,14 @@ document.getElementById("data").innerHTML=html;
 });
 }
 
+/* FUNCTIONS */
 function setVal(id,val){
 document.getElementById(id).value=val;
 }
 
 function toggleMulti(btn,id,val){
 btn.classList.toggle("active");
+
 let current=document.getElementById(id).value;
 
 if(current.includes(val)){

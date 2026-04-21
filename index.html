@@ -15,29 +15,34 @@ body{
 /* HEADER */
 .header{
   display:flex;
+  justify-content:space-between;
   align-items:center;
-  justify-content:center;
-  gap:15px;
-  padding:10px;
+  padding:10px 20px;
   background:#fff;
-  flex-wrap:wrap;
 }
 
-.header img{
-  width:70px;
-  height:70px;
-  object-fit:cover;
-  border-radius:50%;
+.title{
+  font-size:22px;
+  color:#1e3c72;
+  font-weight:bold;
+}
+
+/* IMAGE BOX */
+.logo-box{
+  width:80px;
+  height:80px;
+  border-radius:10px;
+  overflow:hidden;
   border:2px solid #1e3c72;
 }
 
-.header h1{
-  margin:0;
-  font-size:22px;
-  color:#1e3c72;
+.logo-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
-/* TOP BAR */
+/* BUTTON */
 .topbar{
   text-align:right;
   padding:10px;
@@ -49,20 +54,15 @@ body{
   padding:8px 12px;
   border:none;
   border-radius:6px;
-  cursor:pointer;
 }
 
 /* TABLE */
-.container{
-  padding:10px;
-}
+.container{padding:10px;}
 
 table{
   width:100%;
   border-collapse:collapse;
   background:#fff;
-  border-radius:10px;
-  overflow:hidden;
 }
 
 th{
@@ -112,19 +112,23 @@ textarea{height:50px;}
 .popup-content{
   background:#fff;
   width:90%;
-  max-width:400px;
+  max-width:420px;
   margin:40px auto;
   padding:20px;
   border-radius:10px;
+}
+
+.lang-btn{
+  background:#6366f1;
+  color:#fff;
+  margin-bottom:10px;
 }
 
 /* MOBILE */
 @media(max-width:600px){
   .header{
     flex-direction:column;
-  }
-  .header h1{
-    font-size:18px;
+    gap:10px;
   }
   table{
     display:block;
@@ -140,8 +144,11 @@ textarea{height:50px;}
 <!-- HEADER -->
 
 <div class="header">
+<div class="title">STAFKIND SERVICES CRM</div>
+
+<div class="logo-box">
 <img src="logo.jpg">
-<h1>STAFKIND SERVICES CRM</h1>
+</div>
 </div>
 
 <div class="topbar">
@@ -155,19 +162,51 @@ textarea{height:50px;}
 
 <button onclick="closeScript()">❌ Close</button><br><br>
 
-<b>CALL SCRIPT</b><br><br>
+<button class="lang-btn" onclick="toggleLang()">🌐 Hindi / English</button>
 
-HR - KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI.<br><br>
+<div id="hindi">
 
-HR - MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE.<br>
-APKI PROFILE SHORTLISTED HUI HAI WORK FROM HOME KE LIYE.<br><br>
+<b>√√ STAFKIND SERVICES √√</b><br><br>
 
-SALARY ₹12K–₹15K<br><br>
+HR - क्या मेरी बात मिस सुष्मिता से हो रही है?<br><br>
 
-ARE YOU INTERESTED?<br><br>
+HR - मैं HR अंकुश बात कर रहा हूँ STAFKIND SERVICES से,<br>
+हमारी कंपनी में आपकी प्रोफाइल Customer Support Work From Home के लिए shortlisted हुई है।<br>
+Salary ₹12K–₹15K होगी।<br><br>
 
-SESSION 2:00 PM PAR HOGA<br>
-GOOGLE MEET LINK SEND KARENGE<br>
+क्या आप interested हैं?<br><br>
+
+HR - आज 2:00 PM एक session है,<br>
+जिसमें आपको salary, process, working hours सब समझाया जाएगा।<br><br>
+
+क्या यह आपका WhatsApp नंबर है?<br><br>
+
+HR - मैं आपको Google Meet link भेज दूँगा,<br>
+आप 2:00 PM पर join कर लेना।<br>
+
+</div>
+
+<div id="english" style="display:none;">
+
+<b>√√ STAFKIND SERVICES √√</b><br><br>
+
+HR - Am I speaking with Miss Sushmita?<br><br>
+
+HR - I am HR Ankush from STAFKIND SERVICES.<br>
+Your profile has been shortlisted for Customer Support Work From Home.<br>
+Salary ₹12K–₹15K.<br><br>
+
+Are you interested?<br><br>
+
+HR - We have a session today at 2:00 PM,<br>
+where you will be guided about salary, process and working hours.<br><br>
+
+Is this your WhatsApp number?<br><br>
+
+HR - I will send you the Google Meet link,<br>
+please join at 2:00 PM.<br>
+
+</div>
 
 </div>
 </div>
@@ -199,7 +238,6 @@ GOOGLE MEET LINK SEND KARENGE<br>
 
 const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
 
-/* SCRIPT */
 function openScript(){
 document.getElementById("popup").style.display="block";
 }
@@ -207,19 +245,28 @@ function closeScript(){
 document.getElementById("popup").style.display="none";
 }
 
-/* LOAD DATA */
+function toggleLang(){
+let hi=document.getElementById("hindi");
+let en=document.getElementById("english");
+
+if(hi.style.display==="none"){
+hi.style.display="block";
+en.style.display="none";
+}else{
+hi.style.display="none";
+en.style.display="block";
+}
+}
+
 function loadData(){
 fetch(API)
 .then(res=>res.json())
 .then(data=>{
-
 let html="";
 
 data.forEach((item,i)=>{
-
 html+=`
 <tr>
-
 <td>${item.name}</td>
 <td>${item.phone}</td>
 
@@ -235,10 +282,7 @@ html+=`
 <input id="meet${i}" value="${item.meeting||''}">
 </td>
 
-<td>
-<textarea id="fb${i}">${item.feedback||''}</textarea>
-
-</td>
+<td><textarea id="fb${i}">${item.feedback||''}</textarea></td>
 
 <td>
 <button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
@@ -270,24 +314,19 @@ html+=`
 <button class="save" onclick="save(${i})">Save</button>
 </td>
 
-</tr>
-`;
-
+</tr>`;
 });
 
 document.getElementById("data").innerHTML=html;
-
 });
 }
 
-/* FUNCTIONS */
 function setVal(id,val){
 document.getElementById(id).value=val;
 }
 
 function toggleMulti(btn,id,val){
 btn.classList.toggle("active");
-
 let current=document.getElementById(id).value;
 
 if(current.includes(val)){
@@ -300,7 +339,6 @@ document.getElementById(id).value=current;
 }
 
 function save(i){
-
 const payload={
 row:i,
 call:document.getElementById("call"+i).value,
@@ -318,7 +356,6 @@ headers:{"Content-Type":"text/plain"},
 body:JSON.stringify(payload)
 })
 .then(()=>alert("Saved ✅"));
-
 }
 
 loadData();

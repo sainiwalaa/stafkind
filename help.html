@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAFKIND - Registration Help</title>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; margin: 0; padding: 0; }
+  .header { background: #0b3d91; color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 10; }
+  .container { max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  
+  .selector-box { margin-bottom: 25px; text-align: center; }
+  select { padding: 12px; font-size: 16px; border-radius: 8px; width: 100%; border: 2px solid #0b3d91; cursor: pointer; }
+  
+  .help-content { display: none; margin-top: 20px; }
+  .step-card { border-left: 5px solid #22c55e; background: #f8fafc; padding: 15px; margin-bottom: 12px; border-radius: 4px; }
+  .step-num { font-weight: bold; color: #0b3d91; font-size: 14px; text-transform: uppercase; }
+  .step-desc { display: block; margin-top: 5px; color: #334155; font-size: 15px; }
+  
+  .active { display: block; animation: slideIn 0.4s ease-out; }
+  @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  
+  .badge { background: #facc15; color: #000; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+  .btn-back { display: inline-block; margin-top: 20px; color: #0b3d91; text-decoration: none; font-size: 14px; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h2 style="margin:0;">STAFKIND HELP CENTER</h2>
+</div>
+
+<div class="container">
+  <div class="selector-box">
+    <p style="margin-bottom:10px; color:#64748b;">Kiski help chahiye? Select karein:</p>
+    <select id="appSelector" onchange="showHelp()">
+      <option value="">-- Application Choose Karein --</option>
+      <option value="angel">Angel One (Registration Steps)</option>
+      <option value="upstox">Upstox (Registration Steps)</option>
+    </select>
+  </div>
+
+  <div id="angel" class="help-content">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="color:#0b3d91;">Angel One Guide</h3>
+      <span class="badge">FREE ACCOUNT</span>
+    </div>
+    
+    <div class="step-card"><span class="step-num">Step 1</span><span class="step-desc">Link pe click karke Name, Mobile aur Pincode dalein.</span></div>
+    <div class="step-card"><span class="step-num">Step 2</span><span class="step-desc">Mobile OTP verify karein aur Email ID enter karein.</span></div>
+    <div class="step-card"><span class="step-num">Step 3</span><span class="step-desc">PAN Card number aur Date of Birth ki details fill karein.</span></div>
+    <div class="step-card"><span class="step-num">Step 4</span><span class="step-desc">DigiLocker ke zariye Aadhaar e-KYC karein (Allow button pe click karein).</span></div>
+    <div class="step-card"><span class="step-num">Step 5</span><span class="step-desc">Bank Account aur IFSC code verify karke process complete karein.</span></div>
+  </div>
+
+  <div id="upstox" class="help-content">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="color:#0b3d91;">Upstox Guide</h3>
+      <span class="badge">PAPERLESS</span>
+    </div>
+    
+    <div class="step-card"><span class="step-num">Step 1</span><span class="step-desc">Mobile number dalein aur OTP se login karein.</span></div>
+    <div class="step-card"><span class="step-num">Step 2</span><span class="step-desc">"Continue with Google" karke apni Email verify karein.</span></div>
+    <div class="step-card"><span class="step-num">Step 3</span><span class="step-desc">PAN card details aur apni Personal Information (Income, Gender) bharein.</span></div>
+    <div class="step-card"><span class="step-num">Step 4</span><span class="step-desc">Screen par apna Signature karein aur Selfie capture karein.</span></div>
+    <div class="step-card"><span class="step-num">Step 5</span><span class="step-desc">Aadhaar OTP (NSDL) ke zariye e-Sign complete karein.</span></div>
+  </div>
+
+  <div id="no-selection" style="text-align:center; padding:50px 0; color:#94a3b8;">
+    <p>Apne candidate ko samjhane ke liye <br>upar se application select karein.</p>
+  </div>
+
+  <center><a href="index.html" class="btn-back">← Back to CRM</a></center>
+</div>
+
+<script>
+function showHelp() {
+  const val = document.getElementById("appSelector").value;
+  const sections = document.querySelectorAll(".help-content");
+  const noSelect = document.getElementById("no-selection");
+
+  sections.forEach(s => s.classList.remove("active"));
+  noSelect.style.display = "block";
+
+  if(val) {
+    document.getElementById(val).classList.add("active");
+    noSelect.style.display = "none";
+  }
+}
+</script>
+
+</body>
+</html>

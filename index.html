@@ -11,6 +11,7 @@ body{
   background:#eef2f7;
 }
 
+/* HEADER */
 .header{
   background:#0b3d91;
   color:#fff;
@@ -20,6 +21,7 @@ body{
   align-items:center;
   position:sticky;
   top:0;
+  z-index:5;
 }
 
 .logo{font-weight:bold;font-size:18px;}
@@ -32,11 +34,19 @@ body{
   border-radius:6px;
   cursor:pointer;
   font-size:13px;
+  margin-left:5px;
 }
 
 .note{
   background:#facc15;
   padding:5px;
+  font-size:13px;
+}
+
+.filter{
+  background:#fff;
+  padding:6px;
+  text-align:center;
 }
 
 .container{
@@ -57,29 +67,39 @@ th{
   background:#0b3d91;
   color:#fff;
   padding:8px;
+  font-size:12px;
 }
 
 td{
   padding:6px;
   border-bottom:1px solid #ddd;
   text-align:center;
+  font-size:12px;
 }
 
 input{
   width:100%;
+  padding:3px;
+  font-size:11px;
 }
 
 button{
-  padding:4px;
+  padding:3px 5px;
   border:none;
   border-radius:4px;
+  margin:2px;
   cursor:pointer;
+  font-size:10px;
 }
 
+.call{background:#e2e8f0;}
+.recall{background:#fde68a;}
+.join{background:#c7d2fe;}
 .save{background:#22c55e;color:#fff;}
 .wa{background:#25D366;color:#fff;}
 
-/* POPUP */
+.active{background:#22c55e !important;color:#fff;}
+
 #scriptPopup{
   display:none;
   position:fixed;
@@ -103,8 +123,6 @@ button{
   white-space:pre-wrap;
   max-height:65vh;
   overflow:auto;
-  font-size:13px;
-  line-height:1.5;
 }
 </style>
 </head>
@@ -114,13 +132,13 @@ button{
 <div class="header">
   <div class="logo">STAFKIND CRM</div>
   <div>
-    <button class="dashbtn" onclick="openDashboard()">🔐 Login Dashboard</button>
+    <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
     <button class="dashbtn" onclick="openScript()">📖 Script</button>
   </div>
 </div>
 
 <div class="note">
-<marquee>⚠️ Calling ke time WhatsApp & Dashboard login rakhe</marquee>
+<marquee>⚠️ कॉल करते समय WhatsApp और Dashboard Login रखें</marquee>
 </div>
 
 <div class="container">
@@ -131,6 +149,9 @@ button{
 <th>Name</th>
 <th>Mobile</th>
 <th>Send</th>
+<th>Call</th>
+<th>Recall</th>
+<th>Join</th>
 <th>Status</th>
 <th>Save</th>
 </tr>
@@ -142,17 +163,26 @@ button{
 <!-- SCRIPT POPUP -->
 <div id="scriptPopup">
   <div class="popup-box">
+
     <div style="text-align:right;">
       <button onclick="closeScript()">❌</button>
     </div>
 
+    <div style="text-align:center;">
+      <button onclick="setLang('hin')">Hindi</button>
+      <button onclick="setLang('eng')">English</button>
+    </div>
+
     <pre id="scriptText"></pre>
+
   </div>
 </div>
 
 <script>
 
 const API="https://script.google.com/macros/s/AKfycbyKKk-P8MHC_kskC3FDN8pRrSBWJCXRCoUJyTfI2C_KqcYcmX8uaECjRquoVRzQegPo/exec";
+
+let globalData=[];
 
 function openDashboard(){
   window.open("https://offers.earnpati.com/auth/login","_blank");
@@ -161,29 +191,30 @@ function openDashboard(){
 function loadData(){
 fetch(API)
 .then(res=>res.json())
-.then(data=>render(data));
+.then(data=>{
+globalData=data;
+render(data);
+});
 }
 
 function render(data){
 let html="";
 data.forEach((item,i)=>{
+
 html+=`
 <tr>
 <td>${item.date||''}</td>
 <td>${item.name||''}</td>
 <td>${item.phone||''}</td>
 
-<td>
-<button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">WA</button>
-</td>
+<td><button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">WA</button></td>
 
-<td>
-<input id="status${i}" value="${item.status||''}">
-</td>
+<td><input id="call${i}" value="${item.call||''}"></td>
+<td><input id="recall${i}" value="${item.recall||''}"></td>
+<td><input id="join${i}" value="${item.join||''}"></td>
+<td><input id="status${i}" value="${item.status||''}"></td>
 
-<td>
-<button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
-</td>
+<td><button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button></td>
 </tr>`;
 });
 document.getElementById("data").innerHTML=html;
@@ -198,6 +229,9 @@ function save(i,name,phone){
 const payload={
 name:name,
 mobile:phone,
+call:document.getElementById("call"+i).value,
+recall:document.getElementById("recall"+i).value,
+join:document.getElementById("join"+i).value,
 status:document.getElementById("status"+i).value
 };
 
@@ -208,11 +242,26 @@ body:JSON.stringify(payload)
 .then(()=>{ alert("Saved"); loadData(); });
 }
 
-/* SCRIPT (NO CHANGE — SAME AS YOU GAVE) */
+/* SCRIPT SYSTEM */
+let currentLang="hin";
+
 function openScript(){
 document.getElementById("scriptPopup").style.display="block";
+loadScript();
+}
 
-let script=`√√ STAFKIND SERVICES √√
+function closeScript(){
+document.getElementById("scriptPopup").style.display="none";
+}
+
+function setLang(l){
+currentLang=l;
+loadScript();
+}
+
+function loadScript(){
+
+let hin=`√√ STAFKIND SERVICES √√
 
 YOUR  CALLING SCRIPT 📖📕
 
@@ -235,11 +284,36 @@ CX....
 
 HR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU AP 2:00 PM SE SESSION JOIN KAR LENA & MERA NUMBER BHI SAVE KAR LIJIYE JISSE AP SESSION KE BAAD CONTACT KAR SAKTE HAI.`;
 
-document.getElementById("scriptText").innerText = script;
-}
 
-function closeScript(){
-document.getElementById("scriptPopup").style.display="none";
+let eng=`√√ STAFKIND SERVICES √√
+
+YOUR  CALLING SCRIPT 📖📕
+
+HR- AM I SPEAKING WITH MISS SUSHMITA?
+
+CX....
+
+HR- I AM HR ANKUSH FROM STAFKIND SERVICES,
+YOUR PROFILE HAS BEEN SHORTLISTED FOR CUSTOMER SUPPORT PART TIME WORK FROM HOME.
+
+& YOUR SALARY WILL BE 12K TO 15K INHAND, SO ARE YOU INTERESTED?
+
+CX.....
+
+HR- ALL SHORTLISTED CANDIDATES HAVE A SESSION AT 2 PM.
+IN THIS SESSION EVERYTHING WILL BE EXPLAINED LIKE SALARY, PROCESS, WORK HOURS.
+
+IS THIS YOUR WHATSAPP NUMBER?
+
+CX....
+
+HR- I WILL SEND YOU GOOGLE MEET LINK.
+JOIN AT 2:00 PM AND SAVE MY NUMBER FOR CONTACT AFTER SESSION.`;
+
+
+document.getElementById("scriptText").innerText =
+(currentLang==="hin") ? hin : eng;
+
 }
 
 loadData();

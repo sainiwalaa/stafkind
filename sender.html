@@ -16,31 +16,32 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 
 h2 { text-align: center; color: var(--primary); margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
 
-.input-group { margin-bottom: 20px; }
-label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
-input, select, textarea {
+.input-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; color: #444; font-size: 14px; }
+input, select {
     width: 100%; padding: 12px; border: 1.5px solid #ddd;
     border-radius: 8px; box-sizing: border-box; font-size: 15px;
+}
+
+.action-buttons { display: flex; gap: 10px; margin-top: 20px; }
+
+.btn {
+    flex: 1; padding: 15px; border: none; border-radius: 8px;
+    font-size: 16px; font-weight: bold; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
     transition: 0.3s;
 }
-input:focus, textarea:focus { border-color: var(--primary); outline: none; }
 
-.btn-send {
-    width: 100%; padding: 15px; background: var(--accent);
-    color: white; border: none; border-radius: 8px;
-    font-size: 18px; font-weight: bold; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
-}
-
-.btn-send:hover { background: #1eb956; transform: translateY(-1px); }
+.btn-wa { background: var(--accent); color: white; }
+.btn-copy { background: #64748b; color: white; }
+.btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
 .preview-box {
     margin-top: 25px; padding: 15px; background: #f8fafc;
     border: 1px solid #e2e8f0; border-radius: 10px;
 }
 .preview-header { font-weight: bold; color: #64748b; margin-bottom: 10px; font-size: 12px; text-transform: uppercase; }
-#msgPreview { font-size: 13px; color: #334155; white-space: pre-wrap; line-height: 1.5; font-family: monospace; }
+#msgPreview { font-size: 13px; color: #334155; white-space: pre-wrap; line-height: 1.5; font-family: sans-serif; }
 
 .back-link { text-align: center; margin-top: 20px; }
 .back-link a { color: #64748b; text-decoration: none; font-size: 14px; }
@@ -52,8 +53,16 @@ input:focus, textarea:focus { border-color: var(--primary); outline: none; }
     <h2>🔗 Professional Link Sender</h2>
     
     <div class="input-group">
+        <label>Select App Profile</label>
+        <select id="appType" onchange="updateContent()">
+            <option value="standard">m.Stock / Upstox / Angel One</option>
+            <option value="tide">Tide Business Account</option>
+        </select>
+    </div>
+
+    <div class="input-group">
         <label>Candidate Name</label>
-        <input type="text" id="custName" placeholder="Candidate ka naam likhein" oninput="updatePreview()">
+        <input type="text" id="custName" placeholder="Candidate ka naam" oninput="updatePreview()">
     </div>
 
     <div class="input-group">
@@ -62,13 +71,19 @@ input:focus, textarea:focus { border-color: var(--primary); outline: none; }
     </div>
 
     <div class="input-group">
-        <label>Paste HR Registration Link</label>
-        <input type="text" id="customLink" placeholder="Yahan link paste karein" oninput="updatePreview()">
+        <label>Registration Link</label>
+        <input type="text" id="regLink" placeholder="Link paste karein" oninput="updatePreview()">
     </div>
 
-    <button class="btn-send" onclick="sendWhatsApp()">
-        Send Professional Guide ✅
-    </button>
+    <div class="input-group">
+        <label>HR Name</label>
+        <input type="text" id="hrName" value="Sunil Kumar Saini" oninput="updatePreview()">
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-wa" onclick="sendWhatsApp()">WhatsApp ✅</button>
+        <button class="btn btn-copy" onclick="copyToClipboard()">Copy SMS 📋</button>
+    </div>
 
     <div class="preview-box">
         <div class="preview-header">Live Message Preview</div>
@@ -81,11 +96,55 @@ input:focus, textarea:focus { border-color: var(--primary); outline: none; }
 </div>
 
 <script>
-function generateMessage() {
-    const name = document.getElementById('custName').value || "[Candidate Name]";
-    const link = document.getElementById('customLink').value || "[Paste Link Here]";
+// Tide fixed link as per your request
+const tideLink = "https://share.trkep.in/share/69ecdca35995639f0d191273";
 
-    return `Subject: Telecaller Position – Registration Process
+function updateContent() {
+    const type = document.getElementById('appType').value;
+    if(type === 'tide') {
+        document.getElementById('regLink').value = tideLink;
+    } else {
+        document.getElementById('regLink').value = "";
+    }
+    updatePreview();
+}
+
+function generateMessage() {
+    const type = document.getElementById('appType').value;
+    const name = document.getElementById('custName').value || "[Candidate Name]";
+    const link = document.getElementById('regLink').value || "[Registration Link]";
+    const hr = document.getElementById('hrName').value || "Sunil Kumar Saini";
+
+    if (type === 'tide') {
+        return `Subject: Telecaller Position – Registration Process
+
+Dear ${name},
+
+Congratulations! You have been shortlisted for the Telecaller position at our company.
+
+Please note that no device will be provided by the company. Therefore, you are requested to complete your registration process using the official HR link shared with you.
+
+Before proceeding with registration, kindly ensure the following:
+
+- Keep your Aadhaar Card, PAN Card, Bank Details, and DigiLocker access ready.
+- Complete the registration process by yourself (self-registration only).
+- Use only your mobile SIM data while registering. Avoid using Wi-Fi or any other network.
+- Do not refresh the page during the registration process.
+- In case of any error or issue, contact HR immediately for assistance.
+
+Important Information:
+After completing your Video KYC, to activate the withdrawal service, you need to add ₹50 to your account. Once ₹50 is added, the company will credit ₹25 + ₹25 extra, making a total of ₹100, which you can then withdraw.
+
+Registration Link:
+${link}
+
+Please follow all the instructions carefully to ensure a smooth and successful registration.
+
+Best Regards,
+HR ${hr}
+*STAFKIND SERVICES*`;
+    } else {
+        return `Subject: Telecaller Position – Registration Process
 
 Dear ${name},
 
@@ -106,27 +165,28 @@ Please follow all the instructions carefully to ensure a smooth and successful r
 Your link here: ${link}
 
 Best Regards,
-HR Sunil Kumar Saini
+HR ${hr}
 *STAFKIND SERVICES*`;
+    }
 }
 
 function updatePreview() {
     document.getElementById('msgPreview').innerText = generateMessage();
 }
 
+function copyToClipboard() {
+    const text = generateMessage();
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Message copied to clipboard!");
+    });
+}
+
 function sendWhatsApp() {
     const phone = document.getElementById('custPhone').value;
-    const link = document.getElementById('customLink').value;
-
     if(!phone || phone.length < 10) { 
         alert("Kripya sahi WhatsApp number dalein!"); 
         return; 
     }
-    if(!link) {
-        alert("Kripya Registration Link paste karein!");
-        return;
-    }
-    
     const message = generateMessage();
     const waLink = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
     window.open(waLink, '_blank');

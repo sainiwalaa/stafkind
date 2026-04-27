@@ -18,6 +18,7 @@ body{
   padding:12px;
   font-weight:bold;
   font-size:18px;
+  text-align:center;
 }
 
 .container{padding:10px;}
@@ -27,6 +28,8 @@ table{
   border-collapse:collapse;
   background:#fff;
   color:#000;
+  border-radius:8px;
+  overflow:hidden;
 }
 
 th{
@@ -67,12 +70,12 @@ button{
 
 .active{background:#22c55e !important;color:#fff;}
 
-/* 🔥 SAVE STAGES */
-.stage1{background:#dcfce7 !important;}
-.stage2{background:#bbf7d0 !important;}
-.stage3{background:#86efac !important;}
-.stage4{background:#4ade80 !important;}
-.stage5{background:#22c55e !important;color:#fff;}
+/* 🎯 COLOR STAGES */
+.stage1{background:#dcfce7;}
+.stage2{background:#bbf7d0;}
+.stage3{background:#86efac;}
+.stage4{background:#4ade80;}
+.stage5{background:#22c55e;color:#fff;}
 
 @media(max-width:600px){
   table{display:block;overflow-x:auto;}
@@ -107,30 +110,32 @@ button{
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbzjFOomgDdBRRyAAasrxgWnvxEwabKOB49dvpjCWXl8UKMgsOKs6Hsfsawvm60wn4r7/exec";
+const API="https://script.google.com/macros/s/AKfycbzCtPtjA76jf-F0JpO4pM7wu6JHJffv45zX8al5-aKEftK0IqHCclZZ_E-s4dURdl0/exec";
 
 function loadData(){
 fetch(API)
 .then(res=>res.json())
 .then(data=>{
+
 let html="";
 
 data.forEach((item,i)=>{
 
-let stageClass="";
 let count = item.count || 0;
+let stage="";
 
-if(count==1) stageClass="stage1";
-else if(count==2) stageClass="stage2";
-else if(count==3) stageClass="stage3";
-else if(count==4) stageClass="stage4";
-else if(count>=5) stageClass="stage5";
+if(count==1) stage="stage1";
+else if(count==2) stage="stage2";
+else if(count==3) stage="stage3";
+else if(count==4) stage="stage4";
+else if(count>=5) stage="stage5";
 
-html+=`<tr id="row${i}" class="${stageClass}" data-count="${count}">
+html+=`
+<tr id="row${i}" class="${stage}" data-count="${count}">
 
 <td>${item.date || ''}</td>
-<td>${item.name}</td>
-<td>${item.phone}</td>
+<td>${item.name || ''}</td>
+<td>${item.phone || ''}</td>
 
 <td>
 <button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">Send</button>
@@ -138,37 +143,44 @@ html+=`<tr id="row${i}" class="${stageClass}" data-count="${count}">
 
 <td>
 <button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
+<button class="call" onclick="setVal('call${i}','Switch Off',this)">Off</button>
+<button class="call" onclick="setVal('call${i}','Wrong',this)">Wrong</button>
 <button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
 <input id="call${i}" value="${item.call || ''}">
 </td>
 
 <td>
-<button class="recall" onclick="setVal('recall${i}','Meeting',this)">Meeting</button>
+<button class="recall" onclick="setVal('recall${i}','Send Meeting',this)">Meeting</button>
+<button class="recall" onclick="setVal('recall${i}','Send App',this)">App</button>
 <button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
 <input id="recall${i}" value="${item.recall || ''}">
 </td>
 
 <td>
-<button class="join" onclick="setVal('join${i}','Join',this)">Join</button>
-<button class="join" onclick="setVal('join${i}','Training',this)">Training</button>
+<button class="join" onclick="setVal('join${i}','Training Start',this)">Training</button>
+<button class="join" onclick="setVal('join${i}','Joined',this)">Join</button>
 <input id="join${i}" value="${item.join || ''}">
 </td>
 
 <td>
-<input id="status${i}" value="${item.status || ''}">
+<input id="status${i}" value="${item.status || ''}" placeholder="Write...">
 </td>
 
 <td>
 <button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
 </td>
 
-</tr>`;
+</tr>
+`;
+
 });
 
 document.getElementById("data").innerHTML=html;
+
 });
 }
 
+/* BUTTON SELECT */
 function setVal(id,val,btn){
 document.getElementById(id).value=val;
 
@@ -178,21 +190,22 @@ group.forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 }
 
+/* WHATSAPP */
 function sendMeet(phone,link){
 let msg=`Join meeting:\n${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
+/* SAVE SYSTEM */
 function save(i,name,phone){
 
-let row = document.getElementById("row"+i);
+let row=document.getElementById("row"+i);
 
-// 🔥 COUNT SYSTEM
-let count = parseInt(row.getAttribute("data-count") || 0);
+let count=parseInt(row.getAttribute("data-count")||0);
 count++;
 row.setAttribute("data-count",count);
 
-// 🔥 COLOR APPLY
+/* COLOR UPDATE */
 row.classList.remove("stage1","stage2","stage3","stage4","stage5");
 
 if(count==1) row.classList.add("stage1");
@@ -207,13 +220,12 @@ mobile:phone,
 call:document.getElementById("call"+i).value,
 recall:document.getElementById("recall"+i).value,
 join:document.getElementById("join"+i).value,
-status:document.getElementById("status"+i).value,
-count:count
+status:document.getElementById("status"+i).value
 };
 
 fetch(API,{
 method:"POST",
-body: JSON.stringify(payload)
+body:JSON.stringify(payload)
 })
 .then(()=>console.log("Saved"));
 

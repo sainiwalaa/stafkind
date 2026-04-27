@@ -11,7 +11,6 @@ body{
   background:#eef2f7;
 }
 
-/* HEADER */
 .header{
   background:#0b3d91;
   color:#fff;
@@ -21,12 +20,10 @@ body{
   align-items:center;
   position:sticky;
   top:0;
-  z-index:5;
 }
 
 .logo{font-weight:bold;font-size:18px;}
 
-/* BUTTON */
 .dashbtn{
   background:#22c55e;
   color:#fff;
@@ -35,39 +32,13 @@ body{
   border-radius:6px;
   cursor:pointer;
   font-size:13px;
-  margin-left:5px;
 }
 
-/* RUNNING NOTE */
 .note{
   background:#facc15;
   padding:5px;
-  font-size:13px;
 }
 
-/* FILTER */
-.filter{
-  background:#fff;
-  padding:6px;
-  text-align:center;
-}
-
-.filter input{
-  padding:4px;
-  font-size:12px;
-}
-
-.filter button{
-  padding:5px 8px;
-  background:#0b3d91;
-  color:#fff;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-  font-size:12px;
-}
-
-/* TABLE */
 .container{
   height:80vh;
   overflow:auto;
@@ -86,48 +57,27 @@ th{
   background:#0b3d91;
   color:#fff;
   padding:8px;
-  font-size:12px;
-  z-index:2;
 }
 
 td{
   padding:6px;
   border-bottom:1px solid #ddd;
   text-align:center;
-  font-size:12px;
 }
 
-/* INPUT */
 input{
   width:100%;
-  padding:3px;
-  font-size:11px;
 }
 
-/* BUTTON */
 button{
-  padding:3px 5px;
+  padding:4px;
   border:none;
   border-radius:4px;
-  margin:2px;
   cursor:pointer;
-  font-size:10px;
 }
 
-.call{background:#e2e8f0;}
-.recall{background:#fde68a;}
-.join{background:#c7d2fe;}
 .save{background:#22c55e;color:#fff;}
 .wa{background:#25D366;color:#fff;}
-
-.active{background:#22c55e !important;color:#fff;}
-
-/* COLOR TRACK */
-.stage1{background:#dcfce7;}
-.stage2{background:#bbf7d0;}
-.stage3{background:#86efac;}
-.stage4{background:#4ade80;}
-.stage5{background:#22c55e;color:#fff;}
 
 /* POPUP */
 #scriptPopup{
@@ -138,7 +88,6 @@ button{
   width:100%;
   height:100%;
   background:rgba(0,0,0,0.6);
-  z-index:100;
 }
 
 .popup-box{
@@ -148,10 +97,15 @@ button{
   margin:5% auto;
   padding:15px;
   border-radius:8px;
-  max-height:80vh;
-  overflow:auto;
 }
 
+#scriptText{
+  white-space:pre-wrap;
+  max-height:65vh;
+  overflow:auto;
+  font-size:13px;
+  line-height:1.5;
+}
 </style>
 </head>
 
@@ -159,23 +113,14 @@ button{
 
 <div class="header">
   <div class="logo">STAFKIND CRM</div>
-
   <div>
-    <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
+    <button class="dashbtn" onclick="openDashboard()">🔐 Login Dashboard</button>
     <button class="dashbtn" onclick="openScript()">📖 Script</button>
   </div>
 </div>
 
 <div class="note">
-<marquee>
-⚠️ कॉल करते समय अपना WhatsApp और Application Dashboard हमेशा Login रखें और नए Tab या दूसरे Device में open रखें।
-</marquee>
-</div>
-
-<div class="filter">
-<input type="date" id="dateFilter">
-<button onclick="filterData()">🔍</button>
-<button onclick="loadData()">♻</button>
+<marquee>⚠️ Calling ke time WhatsApp & Dashboard login rakhe</marquee>
 </div>
 
 <div class="container">
@@ -186,9 +131,6 @@ button{
 <th>Name</th>
 <th>Mobile</th>
 <th>Send</th>
-<th>Call</th>
-<th>Recall</th>
-<th>Join</th>
 <th>Status</th>
 <th>Save</th>
 </tr>
@@ -200,18 +142,11 @@ button{
 <!-- SCRIPT POPUP -->
 <div id="scriptPopup">
   <div class="popup-box">
-
     <div style="text-align:right;">
       <button onclick="closeScript()">❌</button>
     </div>
 
-    <div style="text-align:center;">
-      <button onclick="setLang('hin')">Hindi</button>
-      <button onclick="setLang('eng')">English</button>
-    </div>
-
-    <pre id="scriptText" style="white-space:pre-wrap;"></pre>
-
+    <pre id="scriptText"></pre>
   </div>
 </div>
 
@@ -219,41 +154,21 @@ button{
 
 const API="https://script.google.com/macros/s/AKfycbyKKk-P8MHC_kskC3FDN8pRrSBWJCXRCoUJyTfI2C_KqcYcmX8uaECjRquoVRzQegPo/exec";
 
-let globalData=[];
-
-/* DASHBOARD */
 function openDashboard(){
   window.open("https://offers.earnpati.com/auth/login","_blank");
 }
 
-/* LOAD */
 function loadData(){
 fetch(API)
 .then(res=>res.json())
-.then(data=>{
-globalData=data;
-render(data);
-});
+.then(data=>render(data));
 }
 
-/* RENDER */
 function render(data){
 let html="";
-
 data.forEach((item,i)=>{
-
-let count=parseInt(item.count||0);
-let stage="";
-
-if(count==1) stage="stage1";
-else if(count==2) stage="stage2";
-else if(count==3) stage="stage3";
-else if(count==4) stage="stage4";
-else if(count>=5) stage="stage5";
-
 html+=`
-<tr id="row${i}" class="${stage}" data-count="${count}">
-
+<tr>
 <td>${item.date||''}</td>
 <td>${item.name||''}</td>
 <td>${item.phone||''}</td>
@@ -263,80 +178,26 @@ html+=`
 </td>
 
 <td>
-<button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
-<button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
-<button class="call" onclick="setVal('call${i}','Switch Off',this)">Off</button>
-<button class="call" onclick="setVal('call${i}','Cut Call',this)">Cut</button>
-<button class="call" onclick="setVal('call${i}','Disconnect',this)">Disc</button>
-<input id="call${i}" value="${item.call||''}">
-</td>
-
-<td>
-<button class="recall" onclick="setVal('recall${i}','Send Meeting',this)">Meeting</button>
-<button class="recall" onclick="setVal('recall${i}','Send App',this)">App</button>
-<button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
-<input id="recall${i}" value="${item.recall||''}">
-</td>
-
-<td>
-<button class="join" onclick="setVal('join${i}','Joined',this)">Join</button>
-<button class="join" onclick="setVal('join${i}','Meeting Done',this)">Meet</button>
-<button class="join" onclick="setVal('join${i}','Training Now',this)">Train</button>
-<button class="join" onclick="setVal('join${i}','Join Later',this)">Later</button>
-<button class="join" onclick="setVal('join${i}','Not Interested',this)">Not</button>
-<input id="join${i}" value="${item.join||''}">
-</td>
-
-<td>
 <input id="status${i}" value="${item.status||''}">
 </td>
 
 <td>
 <button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
 </td>
-
 </tr>`;
 });
-
 document.getElementById("data").innerHTML=html;
 }
 
-/* FILTER */
-function filterData(){
-let selected=document.getElementById("dateFilter").value;
-if(!selected){alert("Select Date");return;}
-
-let d=new Date(selected);
-let formatted = String(d.getDate()).padStart(2,'0') + "/" +
-                String(d.getMonth()+1).padStart(2,'0') + "/" +
-                d.getFullYear();
-
-let filtered = globalData.filter(x => (x.date||"").trim()===formatted);
-
-render(filtered);
-}
-
-/* BUTTON */
-function setVal(id,val,btn){
-document.getElementById(id).value=val;
-btn.parentNode.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-}
-
-/* WHATSAPP */
 function sendMeet(phone,link){
 let msg=`Join meeting:\n${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
-/* SAVE */
 function save(i,name,phone){
 const payload={
 name:name,
 mobile:phone,
-call:document.getElementById("call"+i).value,
-recall:document.getElementById("recall"+i).value,
-join:document.getElementById("join"+i).value,
 status:document.getElementById("status"+i).value
 };
 
@@ -344,51 +205,41 @@ fetch(API,{
 method:"POST",
 body:JSON.stringify(payload)
 })
-.then(()=>{ alert("✅ Saved"); loadData(); });
+.then(()=>{ alert("Saved"); loadData(); });
 }
 
-/* SCRIPT SYSTEM */
-let currentLang="hin";
-
+/* SCRIPT (NO CHANGE — SAME AS YOU GAVE) */
 function openScript(){
 document.getElementById("scriptPopup").style.display="block";
-loadScript();
+
+let script=`√√ STAFKIND SERVICES √√
+
+YOUR  CALLING SCRIPT 📖📕
+
+HR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI.
+
+CX....
+
+HR- MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE,, 
+HUMARI COMPANY ME APKI PROFILE SHORT LISTED HUI HAI AS A CUSTOMER SUPPORT PART TIME WORK FROM HOME KE LIYE,,
+
+& APKI JO SALARY HOGA 12K TO 15K INHAND ,, SO ARE YOU INTERESTED?
+
+CX.....
+
+HR- OK, TO JITNE CANDIDATE KA PROFILE SHORTLISTED HUE HAI UNKA AFTERNOON 2PM EK SESSION HAI..🕦
+SESSION ME APKO EACH AND EVERYTHING GUIDE KAR DIYA JAYEGA LIKE APKA SALARY KITNA HOGE , PROCESS KY HOGA , KITNE HOURS APKA WORK RAHEGA EACH & EVERYTHING APKO GUIDE KAR DIYA JAYEGA
+KYA APKA YE WHATSAAP NUMBER HAI?
+
+CX....
+
+HR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU AP 2:00 PM SE SESSION JOIN KAR LENA & MERA NUMBER BHI SAVE KAR LIJIYE JISSE AP SESSION KE BAAD CONTACT KAR SAKTE HAI.`;
+
+document.getElementById("scriptText").innerText = script;
 }
 
 function closeScript(){
 document.getElementById("scriptPopup").style.display="none";
-}
-
-function setLang(l){
-currentLang=l;
-loadScript();
-}
-
-function loadScript(){
-
-let hin=`√√ STAFKIND SERVICES √√
-
-YOUR CALLING SCRIPT 📖📕
-
-HR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI.
-
-HR- MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE,
-HUMARI COMPANY ME APKI PROFILE SHORT LISTED HUI HAI...
-
-HR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU...`;
-
-let eng=`√√ STAFKIND SERVICES √√
-
-YOUR CALLING SCRIPT 📖📕
-
-HR- AM I SPEAKING WITH MISS SUSHMITA?
-
-HR- I AM HR ANKUSH FROM STAFKIND SERVICES...
-
-I WILL SEND YOU GOOGLE MEET LINK.`;
-
-document.getElementById("scriptText").innerText =
-(currentLang==="hin") ? hin : eng;
 }
 
 loadData();

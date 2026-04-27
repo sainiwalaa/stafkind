@@ -3,206 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STAFKIND Training Center</title>
+<title>STAFKIND Training Portal</title>
 
 <style>
-:root { --primary:#0b3d91; --bg:#f0f4f8; }
+:root { --primary:#0b3d91; --accent:#22c55e; --bg:#f4f7fa; }
 
-body { margin:0; font-family:Arial; background:var(--bg); }
+body { margin:0; font-family:'Segoe UI', Arial; background:var(--bg); color:#333; }
 
 .header{
-  background:var(--primary);
-  color:#fff;
-  text-align:center;
-  padding:15px;
+  background: linear-gradient(135deg, #0b3d91 0%, #1e40af 100%);
+  color:#fff; text-align:center; padding:20px;
 }
 
-.container{max-width:1100px;margin:auto;padding:10px;}
+.container { max-width:1100px; margin:auto; padding:10px; }
 
-.sidebar{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding:10px 0;
+/* NAVIGATION */
+.sidebar {
+  display:flex; gap:10px; overflow-x:auto; padding:10px 0;
+  scrollbar-width: none;
+}
+.sidebar::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+  padding:12px 22px; border-radius:30px; border:none;
+  background:#fff; cursor:pointer; font-weight:bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); white-space:nowrap;
+  color: var(--primary); transition: 0.3s;
 }
 
-.nav-btn{
-  padding:10px 18px;
-  border-radius:30px;
-  border:1px solid #ddd;
-  background:#fff;
-  cursor:pointer;
-  white-space:nowrap;
+.nav-btn.active { background:var(--primary); color:#fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+/* LIVE TEXT GUIDE TICKER */
+.ticker-box {
+  background:#fff7cc; border-left:5px solid #facc15;
+  padding:12px; margin-bottom:15px; border-radius:8px;
+  overflow:hidden; position:relative; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.nav-btn.active{
-  background:var(--primary);
-  color:#fff;
+.ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: ticker-scroll 25s linear infinite;
+  font-weight: 600;
+  color: #854d0e;
 }
 
-/* TICKER */
-.ticker{
-  background:#fff7cc;
-  padding:8px;
-  font-size:13px;
-  border-radius:6px;
-  margin-bottom:10px;
-  overflow:hidden;
-  white-space:nowrap;
+@keyframes ticker-scroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
 }
 
-.ticker span{
-  display:inline-block;
-  animation:scroll 14s linear infinite;
-}
+.ticker-box:hover .ticker-content { animation-play-state: paused; }
 
-@keyframes scroll{
-  0%{transform:translateX(100%);}
-  100%{transform:translateX(-100%);}
-}
+/* CARD & VIEWER */
+.card { background:#fff; border-radius:12px; overflow:hidden; display:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.card.active { display:block; }
 
-/* CARD */
-.card{
-  background:#fff;
-  border-radius:10px;
-  overflow:hidden;
-  display:none;
-}
+.card-header { padding:15px; background:#f8fafc; border-bottom:1px solid #eee; font-weight:bold; color:var(--primary); }
 
-.card.active{display:block;}
+.viewer { height:75vh; background:#333; position:relative; }
+iframe { width:100%; height:100%; border:none; }
 
-.card-header{
-  padding:10px;
-  border-bottom:1px solid #eee;
-  font-weight:bold;
-  color:var(--primary);
-}
+.fallback { text-align:center; padding:10px; background:#fefce8; font-size:14px; }
+.fallback a { color:#b45309; font-weight:bold; text-decoration:none; }
 
-/* VIEWER */
-.viewer{
-  height:75vh;
-  background:#333;
-}
-
-iframe{
-  width:100%;
-  height:100%;
-  border:none;
-}
-
-/* LINK */
-.fallback{
-  text-align:center;
-  padding:8px;
-  background:#fff3cd;
-}
-
-.fallback a{color:#b45309;font-weight:bold;}
-
-@media(max-width:600px){
-  .viewer{height:60vh;}
-}
+@media(max-width:600px){ .viewer { height:60vh; } }
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<h2>STAFKIND TRAINING PORTAL</h2>
-<p style="margin:0;opacity:0.8;font-size:13px;">KYC Training System (Step-by-Step Guide)</p>
+  <h2 style="margin:0;">STAFKIND TRAINING PORTAL</h2>
+  <p style="margin:5px 0 0; font-size:14px; opacity:0.9;">KYC Support Center (All-in-One Guide)</p>
 </div>
 
 <div class="container">
 
-<!-- BUTTONS -->
-<div class="sidebar">
-<button class="nav-btn active" onclick="show('mstock',this)">mStock</button>
-<button class="nav-btn" onclick="show('angel',this)">Angel One</button>
-<button class="nav-btn" onclick="show('upstox',this)">Upstox</button>
-<button class="nav-btn" onclick="show('tide',this)">Tide</button>
-</div>
+  <div class="sidebar">
+    <button class="nav-btn active" onclick="show('mstock',this)">m.Stock</button>
+    <button class="nav-btn" onclick="show('angel',this)">Angel One</button>
+    <button class="nav-btn" onclick="show('upstox',this)">Upstox</button>
+    <button class="nav-btn" onclick="show('tide',this)">Tide</button>
+    <button class="nav-btn" onclick="window.location.href='index.html'" style="background:#64748b; color:#fff;">Back</button>
+  </div>
 
-<!-- TICKER -->
-<div class="ticker"><span id="textGuide">Select Application to see KYC guide...</span></div>
+  <div class="ticker-box">
+    <div class="ticker-content" id="liveGuide">
+      M.Stock Guide: Step 1. Mobile & Email OTP verify karein, Step 2. PAN Card & DOB dalein, Step 3. Plan select karein, Step 4. Selfie & Signature upload karein, Step 5. Bank verify karein aur e-Sign poora karein.
+    </div>
+  </div>
 
-<!-- mStock -->
-<div id="mstock" class="card active">
-<div class="card-header">mStock KYC Guide</div>
+  <div id="mstock" class="card active">
+    <div class="card-header">m.Stock Account Opening Guide</div>
+    <div class="fallback"><a href="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/view" target="_blank">PDF Full Screen mein dekhein</a></div>
+    <div class="viewer">
+      <iframe src="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/preview"></iframe>
+    </div>
+  </div>
 
-<div class="fallback">
-<a href="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/view" target="_blank">Open PDF</a>
-</div>
+  <div id="angel" class="card">
+    <div class="card-header">Angel One Registration Guide</div>
+    <div class="fallback"><a href="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/view" target="_blank">PDF Full Screen mein dekhein</a></div>
+    <div class="viewer">
+      <iframe src="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/preview"></iframe>
+    </div>
+  </div>
 
-<div class="viewer">
-<iframe loading="lazy"
-src="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/preview"></iframe>
-</div>
-</div>
+  <div id="upstox" class="card">
+    <div class="card-header">Upstox KYC Support</div>
+    <div class="fallback"><a href="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/view" target="_blank">PDF Full Screen mein dekhein</a></div>
+    <div class="viewer">
+      <iframe src="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/preview"></iframe>
+    </div>
+  </div>
 
-<!-- ANGEL -->
-<div id="angel" class="card">
-<div class="card-header">Angel One KYC Guide</div>
-
-<div class="fallback">
-<a href="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/view" target="_blank">Open PDF</a>
-</div>
-
-<div class="viewer">
-<iframe loading="lazy"
-src="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/preview"></iframe>
-</div>
-</div>
-
-<!-- UPSTOX -->
-<div id="upstox" class="card">
-<div class="card-header">Upstox KYC Guide</div>
-
-<div class="fallback">
-<a href="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/view" target="_blank">Open PDF</a>
-</div>
-
-<div class="viewer">
-<iframe loading="lazy"
-src="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/preview"></iframe>
-</div>
-</div>
-
-<!-- TIDE -->
-<div id="tide" class="card">
-<div class="card-header">Tide KYC Guide</div>
-
-<div class="fallback">
-<a href="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/view?usp=sharing" target="_blank">Open PDF</a>
-</div>
-
-<div class="viewer">
-<iframe loading="lazy"
-src="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/preview"></iframe>
-</div>
-</div>
+  <div id="tide" class="card">
+    <div class="card-header">Tide Business Account Guide</div>
+    <div class="fallback"><a href="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/view" target="_blank">PDF Full Screen mein dekhein</a></div>
+    <div class="viewer">
+      <iframe src="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/preview"></iframe>
+    </div>
+  </div>
 
 </div>
 
 <script>
-
-const guides = {
-mstock: "mStock KYC: PAN, Aadhaar OTP verification, bank linking, DigiLocker verification आवश्यक है।",
-angel: "Angel One KYC: PAN, Aadhaar upload, OTP verification, e-sign process पूरा करना जरूरी है।",
-upstox: "Upstox KYC: PAN verification, Aadhaar OTP, bank linking और video/self verification जरूरी है।",
-tide: "Tide KYC: Mobile verification, identity proof upload, business details और full verification process पूरा करें।"
+// Yahan aap points ko edit kar sakte hain
+const guidesText = {
+  mstock: "M.Stock Step-by-Step: 1. Verify Mobile & Email (OTP) → 2. Enter PAN & DOB → 3. Select zero brokerage/free plan → 4. Upload Selfie & Signature → 5. Link Bank Account (IFSC) → 6. Final E-Sign via Aadhaar OTP.",
+  angel: "Angel One Guide: 1. Enter Mobile Number & OTP → 2. Fill Name & Email → 3. PAN Card & DOB verification → 4. DigiLocker Aadhaar KYC (Allow Access) → 5. Bank Account details → 6. Take Selfie → 7. NSDL Aadhaar E-Sign.",
+  upstox: "Upstox Process: 1. Mobile Login → 2. Google Email connection → 3. Enter PAN & Income details → 4. Live Selfie and Digital Signature on screen → 5. Bank account penny drop verification → 6. Aadhaar OTP E-sign.",
+  tide: "Tide Steps: 1. Mobile number verify karein → 2. Identity proof/Aadhaar upload karein → 3. Business details fill karein → 4. Video KYC ya verification process complete karein."
 };
 
-function show(id,btn){
+function show(id, btn) {
+  // Hide all cards
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+  // Deactivate all buttons
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
-document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  // Show clicked card and button
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
 
-document.getElementById(id).classList.add('active');
-btn.classList.add('active');
-
-document.getElementById("textGuide").innerText = guides[id];
+  // Update Ticker Text with animation reset
+  const ticker = document.getElementById("liveGuide");
+  ticker.style.animation = 'none';
+  ticker.offsetHeight; /* trigger reflow */
+  ticker.innerText = guidesText[id];
+  ticker.style.animation = 'ticker-scroll 25s linear infinite';
 }
-
 </script>
 
 </body>

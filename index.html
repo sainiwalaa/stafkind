@@ -152,6 +152,14 @@ button{
   overflow:auto;
 }
 
+.lang-btn {
+    padding: 8px 15px;
+    background: #0b3d91;
+    color: white;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
 </style>
 </head>
 
@@ -197,21 +205,19 @@ button{
 </table>
 </div>
 
-<!-- SCRIPT POPUP -->
 <div id="scriptPopup">
   <div class="popup-box">
-
-    <div style="text-align:right;">
-      <button onclick="closeScript()">❌</button>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; margin-bottom: 10px; padding-bottom: 5px;">
+      <h3 style="margin:0;">Calling Script</h3>
+      <button onclick="closeScript()" style="background:#ef4444; color:white; font-size:14px; padding: 5px 10px;">X</button>
     </div>
 
-    <div style="text-align:center;">
-      <button onclick="setLang('hin')">Hindi</button>
-      <button onclick="setLang('eng')">English</button>
+    <div style="text-align:center; margin-bottom: 15px;">
+      <button class="lang-btn" onclick="setLang('hin')">Hindi</button>
+      <button class="lang-btn" onclick="setLang('eng')">English</button>
     </div>
 
-    <pre id="scriptText" style="white-space:pre-wrap;"></pre>
-
+    <div id="scriptText" style="white-space:pre-wrap; font-size: 13px; line-height: 1.5; color: #333; background: #f9fafb; padding: 10px; border-radius: 5px; border: 1px solid #eee;"></div>
   </div>
 </div>
 
@@ -367,25 +373,44 @@ loadScript();
 function loadScript(){
 
 let hin=`√√ STAFKIND SERVICES √√
-
 YOUR CALLING SCRIPT 📖📕
 
-HR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI.
+HR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI?
+CX- ....
 
-HR- MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE,
-HUMARI COMPANY ME APKI PROFILE SHORT LISTED HUI HAI...
+HR- MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE,, 
+HUMARI COMPANY ME APKI PROFILE SHORT LISTED HUI HAI AS A CUSTOMER SUPPORT PART TIME WORK FROM HOME KE LIYE,,
 
-HR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU...`;
+& APKI JO SALARY HOGA 12K TO 15K INHAND ,, SO ARE YOU INTERESTED?
+CX- .....
+
+HR- OK, TO JITNE CANDIDATE KA PROFILE SHORTLISTED HUE HAI UNKA AFTERNOON 2PM EK SESSION HAI..🕦
+SESSION ME APKO EACH AND EVERYTHING GUIDE KAR DIYA JAYEGA LIKE APKA SALARY KITNA HOGE , PROCESS KY HOGA , KITNE HOURS APKA WORK RAHEGA EACH & EVERYTHING APKO GUIDE KAR DIYA JAYEGA.
+
+KYA APKA YE WHATSAAP NUMBER HAI?
+CX- ....
+
+HR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU AP 2:00 PM SE SESSION JOIN KAR LENA & MERA NUMBER BHI SAVE KAR LIJIYE JISSE AP SESSION KE BAAD CONTACT KAR SAKTE HAI.`;
 
 let eng=`√√ STAFKIND SERVICES √√
-
 YOUR CALLING SCRIPT 📖📕
 
 HR- AM I SPEAKING WITH MISS SUSHMITA?
+CX- ....
 
-HR- I AM HR ANKUSH FROM STAFKIND SERVICES...
+HR- I AM HR ANKUSH FROM STAFKIND SERVICES. 
+YOUR PROFILE HAS BEEN SHORTLISTED IN OUR COMPANY FOR CUSTOMER SUPPORT (PART-TIME WORK FROM HOME).
 
-I WILL SEND YOU GOOGLE MEET LINK.`;
+THE SALARY WILL BE 12K TO 15K IN-HAND. ARE YOU INTERESTED?
+CX- ....
+
+HR- OK, ALL THE SHORTLISTED CANDIDATES HAVE A SESSION TODAY AT 2:00 PM. 🕦
+IN THIS SESSION, EVERYTHING WILL BE GUIDED TO YOU, SUCH AS SALARY DETAILS, THE PROCESS, WORKING HOURS, AND ALL OTHER NECESSARY INFO.
+
+IS THIS YOUR WHATSAPP NUMBER?
+CX- ....
+
+HR- OK, I AM SENDING YOU THE GOOGLE MEET LINK. PLEASE JOIN THE SESSION AT 2:00 PM. ALSO, PLEASE SAVE MY NUMBER SO YOU CAN CONTACT ME AFTER THE SESSION.`;
 
 document.getElementById("scriptText").innerText =
 (currentLang==="hin") ? hin : eng;

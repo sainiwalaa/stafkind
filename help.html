@@ -40,7 +40,7 @@ body { margin:0; font-family:Arial; background:var(--bg); }
   color:#fff;
 }
 
-/* TICKER TEXT */
+/* TICKER */
 .ticker{
   background:#fff7cc;
   padding:8px;
@@ -53,7 +53,7 @@ body { margin:0; font-family:Arial; background:var(--bg); }
 
 .ticker span{
   display:inline-block;
-  animation:scroll 12s linear infinite;
+  animation:scroll 14s linear infinite;
 }
 
 @keyframes scroll{
@@ -78,7 +78,7 @@ body { margin:0; font-family:Arial; background:var(--bg); }
   color:var(--primary);
 }
 
-/* PDF */
+/* VIEWER */
 .viewer{
   height:75vh;
   background:#333;
@@ -109,7 +109,7 @@ iframe{
 
 <div class="header">
 <h2>STAFKIND TRAINING PORTAL</h2>
-<p style="margin:0;opacity:0.8;font-size:13px;">Application Guide + Live Training System</p>
+<p style="margin:0;opacity:0.8;font-size:13px;">KYC Training System (Step-by-Step Guide)</p>
 </div>
 
 <div class="container">
@@ -119,14 +119,15 @@ iframe{
 <button class="nav-btn active" onclick="show('mstock',this)">mStock</button>
 <button class="nav-btn" onclick="show('angel',this)">Angel One</button>
 <button class="nav-btn" onclick="show('upstox',this)">Upstox</button>
+<button class="nav-btn" onclick="show('tide',this)">Tide</button>
 </div>
 
 <!-- TICKER -->
-<div class="ticker"><span id="textGuide">Select Application to see guide...</span></div>
+<div class="ticker"><span id="textGuide">Select Application to see KYC guide...</span></div>
 
 <!-- mStock -->
 <div id="mstock" class="card active">
-<div class="card-header">mStock Guide</div>
+<div class="card-header">mStock KYC Guide</div>
 
 <div class="fallback">
 <a href="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/view" target="_blank">Open PDF</a>
@@ -140,7 +141,7 @@ src="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/preview">
 
 <!-- ANGEL -->
 <div id="angel" class="card">
-<div class="card-header">Angel One Guide</div>
+<div class="card-header">Angel One KYC Guide</div>
 
 <div class="fallback">
 <a href="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/view" target="_blank">Open PDF</a>
@@ -154,7 +155,7 @@ src="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/preview">
 
 <!-- UPSTOX -->
 <div id="upstox" class="card">
-<div class="card-header">Upstox Guide</div>
+<div class="card-header">Upstox KYC Guide</div>
 
 <div class="fallback">
 <a href="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/view" target="_blank">Open PDF</a>
@@ -166,14 +167,29 @@ src="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/preview">
 </div>
 </div>
 
+<!-- TIDE -->
+<div id="tide" class="card">
+<div class="card-header">Tide KYC Guide</div>
+
+<div class="fallback">
+<a href="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/view?usp=sharing" target="_blank">Open PDF</a>
+</div>
+
+<div class="viewer">
+<iframe loading="lazy"
+src="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/preview"></iframe>
+</div>
+</div>
+
 </div>
 
 <script>
 
 const guides = {
-mstock: "mStock: Account opening, KYC complete, referral system, trading dashboard use step by step...",
-angel: "Angel One: Registration, Demat account setup, document upload, verification process complete guide...",
-upstox: "Upstox: Account create, e-sign process, bank linking, trading activation full training guide..."
+mstock: "mStock KYC: PAN, Aadhaar OTP verification, bank linking, DigiLocker verification आवश्यक है।",
+angel: "Angel One KYC: PAN, Aadhaar upload, OTP verification, e-sign process पूरा करना जरूरी है।",
+upstox: "Upstox KYC: PAN verification, Aadhaar OTP, bank linking और video/self verification जरूरी है।",
+tide: "Tide KYC: Mobile verification, identity proof upload, business details और full verification process पूरा करें।"
 };
 
 function show(id,btn){

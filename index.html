@@ -39,40 +39,11 @@ body{
   object-fit:cover;
 }
 
-/* 🔥 SCROLL NOTE (SMOOTH) */
+/* NOTE */
 .note-bar{
   background:linear-gradient(90deg,#ffeb3b,#ffc107);
-  color:#000;
-  padding:10px 0;
-  font-weight:bold;
-  overflow:hidden;
-  border-bottom:2px solid red;
-}
-
-.note-track{
-  display:inline-block;
-  white-space:nowrap;
-  animation:scrollLeft 18s linear infinite;
-  padding-left:100%;
-}
-
-@keyframes scrollLeft{
-  0%{ transform:translateX(0); }
-  100%{ transform:translateX(-100%); }
-}
-
-/* BUTTON */
-.topbar{
-  text-align:right;
   padding:10px;
-}
-.script-btn{
-  background:#ff9800;
-  color:#fff;
-  padding:8px 12px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+  font-weight:bold;
 }
 
 /* TABLE */
@@ -103,56 +74,16 @@ button{
 .yes{background:#4caf50;color:#fff;}
 .no{background:#f44336;color:#fff;}
 .option{background:#ddd;}
-.active{background:#4caf50;color:#fff;}
 .save{background:#2196f3;color:#fff;}
 
 input,textarea{
   width:100%;
   padding:5px;
-  border-radius:5px;
-  border:1px solid #ccc;
-}
-textarea{height:50px;}
-
-/* POPUP */
-.popup{
-  display:none;
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:rgba(0,0,0,0.6);
-}
-
-.popup-content{
-  background:#fff;
-  width:90%;
-  max-width:450px;
-  margin:40px auto;
-  padding:20px;
-  border-radius:10px;
-  max-height:80vh;
-  overflow:auto;
-}
-
-.lang-btn{
-  background:#6366f1;
-  color:#fff;
-  margin-bottom:10px;
-  padding:6px;
-  border:none;
-  border-radius:5px;
 }
 
 /* MOBILE */
 @media(max-width:600px){
-  .header{
-    flex-direction:column;
-    gap:10px;
-  }
-  table{
-    display:block;
-    overflow-x:auto;
-  }
+table{display:block;overflow-x:auto;}
 }
 </style>
 
@@ -160,103 +91,23 @@ textarea{height:50px;}
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
-<div class="title">STAFKIND SERVICES CRM</div>
-
-<div class="logo-box">
-<img src="logo.jpg">
-</div>
+<div class="title">STAFKIND CRM</div>
+<div class="logo-box"><img src="logo.jpg"></div>
 </div>
 
-<!-- 🔥 SCROLLING NOTE -->
 <div class="note-bar">
-  <div class="note-track">
-    ⚠️ ध्यान दें: कॉल करते समय अपना WhatsApp और Application Dashboard हमेशा Login रखें और नए Tab या दूसरे Device में open रखें, ताकि काम तेज और बिना रुकावट के हो सके।
-  </div>
+⚠️ WhatsApp open rakho aur fast kaam karo
 </div>
 
-<div class="topbar">
-<button class="script-btn" onclick="openScript()">📖 Script</button>
-</div>
-
-<!-- SCRIPT POPUP -->
-<div id="popup" class="popup">
-<div class="popup-content">
-
-<button onclick="closeScript()">❌ Close</button><br><br>
-
-<button class="lang-btn" onclick="toggleLang()">🌐 Hindi / English</button>
-
-<!-- HINDI -->
-<div id="hindi">
-
-<b>√√ STAFKIND SERVICES √√</b><br><br>
-<b>YOUR SCRIPT 📖📕</b><br><br>
-
-HR - क्या मेरी बात मिस सुष्मिता से हो रही है?<br><br>
-
-CX....<br><br>
-
-HR - मैं HR अंकुश बात कर रहा हूँ STAFKIND SERVICES से,<br>
-हमारी कंपनी में आपकी प्रोफाइल Customer Support Part Time Work From Home के लिए shortlisted हुई है। ☎️<br>
-और आपकी salary ₹12,000 से ₹15,000 in-hand रहेगी।<br>
-So are you interested?<br><br>
-
-CX....<br><br>
-
-HR - OK, तो जितने candidates आज shortlisted हुए हैं,<br>
-उनका आज 2:00 PM एक session है। ⏰<br>
-Session में आपको salary, process, working hours सब detail में समझाया जाएगा।<br><br>
-
-क्या यह आपका WhatsApp नंबर है?<br><br>
-
-CX....<br><br>
-
-HR - OK मैं आपको Google Meet का link send कर देता हूँ,<br>
-आप 2:00 PM से session join कर लेना।<br>
-
-</div>
-
-<!-- ENGLISH -->
-<div id="english" style="display:none;">
-
-<b>√√ STAFKIND SERVICES √√</b><br><br>
-<b>YOUR SCRIPT 📖📕</b><br><br>
-
-HR - Am I speaking with Miss Sushmita?<br><br>
-
-CX....<br><br>
-
-HR - I am HR Ankush from STAFKIND SERVICES.<br>
-Your profile has been shortlisted for Customer Support Part Time Work From Home.<br>
-Salary will be ₹12,000 to ₹15,000 in-hand.<br>
-So are you interested?<br><br>
-
-CX....<br><br>
-
-HR - All shortlisted candidates have a session at 2:00 PM.<br>
-You will be guided about salary, process and working hours.<br><br>
-
-Is this your WhatsApp number?<br><br>
-
-CX....<br><br>
-
-HR - I will send you the Google Meet link,<br>
-please join at 2:00 PM.<br>
-
-</div>
-
-</div>
-</div>
-
-<!-- TABLE -->
 <div class="container">
 <table>
 <thead>
 <tr>
+<th>Date</th>
 <th>Name</th>
 <th>Mobile</th>
+<th>Send Link</th>
 <th>Call</th>
 <th>Meeting</th>
 <th>Feedback</th>
@@ -264,6 +115,7 @@ please join at 2:00 PM.<br>
 <th>Recall</th>
 <th>Join</th>
 <th>Refer</th>
+<th>Status</th>
 <th>Save</th>
 </tr>
 </thead>
@@ -273,17 +125,7 @@ please join at 2:00 PM.<br>
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbyW06DRLqD26jrsoR5QWXuh_zwkm_PNVZGGRtiR6d3AHTTEMNSc7-5n0o724Dy1Y21g/exec";
-
-function openScript(){document.getElementById("popup").style.display="block";}
-function closeScript(){document.getElementById("popup").style.display="none";}
-
-function toggleLang(){
-let hi=document.getElementById("hindi");
-let en=document.getElementById("english");
-hi.style.display = hi.style.display==="none"?"block":"none";
-en.style.display = en.style.display==="none"?"block":"none";
-}
+const API="https://script.google.com/macros/s/AKfycbyfpB_xzP53gQqhZAP_LwKy3jb1V9X_ymKjIm93DRWTwTB34BCFR6TWNZNdWSXVhzth/exec";
 
 function loadData(){
 fetch(API)
@@ -292,51 +134,60 @@ fetch(API)
 let html="";
 data.forEach((item,i)=>{
 html+=`<tr>
+
+<td>${item.date||''}</td>
 <td>${item.name}</td>
 <td>${item.phone}</td>
 
 <td>
+<button onclick="sendWhatsApp('${item.phone}','${item.meet}')">📲 Send</button>
+</td>
+
+<td>
 <button class="yes" onclick="setVal('call${i}','Yes')">Yes</button>
 <button class="no" onclick="setVal('call${i}','No')">No</button>
-<input id="call${i}" value="${item.call||''}">
+<input id="call${i}">
 </td>
 
 <td>
 <button class="yes" onclick="setVal('meet${i}','Yes')">Yes</button>
 <button class="no" onclick="setVal('meet${i}','No')">No</button>
-<input id="meet${i}" value="${item.meeting||''}">
+<input id="meet${i}">
 </td>
 
-<td><textarea id="fb${i}">${item.feedback||''}</textarea></td>
+<td><textarea id="fb${i}"></textarea></td>
 
 <td>
 <button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
 <button class="option" onclick="setVal('prob${i}','Wrong No')">Wrong</button>
-<input id="prob${i}" value="${item.problem||''}">
+<input id="prob${i}">
 </td>
 
 <td>
 <button class="option" onclick="setVal('recall${i}','Call Again')">Call Again</button>
 <button class="option" onclick="setVal('recall${i}','No Contact')">No Contact</button>
-<input id="recall${i}" value="${item.recall||''}">
+<input id="recall${i}">
 </td>
 
 <td>
-<button class="option" onclick="setVal('join${i}','Join Done')">Join Done</button>
-<button class="option" onclick="setVal('join${i}','Not Join')">Not Join</button>
-<input id="join${i}" value="${item.join||''}">
+<button class="option" onclick="setVal('join${i}','Join Done')">Join</button>
+<button class="option" onclick="setVal('join${i}','Not Join')">No</button>
+<input id="join${i}">
 </td>
 
 <td>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Angle')">Angle</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Upstox')">Upstox</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Tide')">Tide</button>
-<input id="ref${i}" value="${item.refer||''}">
+<input id="ref${i}">
 </td>
 
 <td>
-<button class="save" onclick="save(${i})">Save</button>
+<button onclick="setVal('status${i}','Interested')">Interested</button>
+<button onclick="setVal('status${i}','Call Again')">Call Again</button>
+<button onclick="setVal('status${i}','Not Interested')">Not</button>
+<input id="status${i}">
+</td>
+
+<td>
+<button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
 </td>
 
 </tr>`;
@@ -345,25 +196,34 @@ document.getElementById("data").innerHTML=html;
 });
 }
 
-function setVal(id,val){document.getElementById(id).value=val;}
-
-function toggleMulti(btn,id,val){
-btn.classList.toggle("active");
-let current=document.getElementById(id).value;
-current = current.includes(val) ? current.replace(val,"") : current + (current?",":"")+val;
-document.getElementById(id).value=current;
+function setVal(id,val){
+document.getElementById(id).value=val;
 }
 
-function save(i){
+function sendWhatsApp(phone, link){
+let msg = `Hello 👋
+
+Your meeting link:
+${link}
+
+Please join on time.`;
+
+window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
+}
+
+function save(i,name,phone){
+
 const payload={
-row:i,
+name:name,
+mobile:phone,
 call:document.getElementById("call"+i).value,
 meeting:document.getElementById("meet"+i).value,
 feedback:document.getElementById("fb"+i).value,
 problem:document.getElementById("prob"+i).value,
 recall:document.getElementById("recall"+i).value,
 join:document.getElementById("join"+i).value,
-refer:document.getElementById("ref"+i).value
+refer:document.getElementById("ref"+i).value,
+status:document.getElementById("status"+i).value
 };
 
 fetch(API,{

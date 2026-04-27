@@ -19,43 +19,40 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  position:sticky;
+  top:0;
+  z-index:5;
 }
 
-.logo{
-  font-weight:bold;
-  font-size:18px;
-}
+.logo{font-weight:bold;font-size:18px;}
 
 /* RUNNING NOTE */
 .note{
   background:#facc15;
-  color:#000;
   padding:5px;
   font-size:13px;
 }
 
-marquee{
-  font-weight:bold;
-}
-
-/* FILTER SMALL BUTTON */
+/* FILTER SMALL */
 .filter{
-  padding:8px;
-  text-align:center;
   background:#fff;
+  padding:6px;
+  text-align:center;
 }
 
 .filter input{
-  padding:5px;
+  padding:4px;
+  font-size:12px;
 }
 
 .filter button{
-  padding:6px 10px;
+  padding:5px 8px;
   background:#0b3d91;
-  color:white;
+  color:#fff;
   border:none;
-  border-radius:5px;
+  border-radius:4px;
   cursor:pointer;
+  font-size:12px;
 }
 
 /* TABLE */
@@ -77,7 +74,7 @@ th{
   background:#0b3d91;
   color:#fff;
   padding:8px;
-  font-size:13px;
+  font-size:12px;
   z-index:2;
 }
 
@@ -85,25 +82,24 @@ td{
   padding:6px;
   border-bottom:1px solid #ddd;
   text-align:center;
-  font-size:13px;
+  font-size:12px;
 }
 
 /* INPUT */
 input{
   width:100%;
-  padding:4px;
-  border-radius:4px;
-  border:1px solid #ccc;
+  padding:3px;
+  font-size:11px;
 }
 
 /* BUTTON */
 button{
-  padding:4px 6px;
+  padding:3px 5px;
   border:none;
   border-radius:4px;
   margin:2px;
   cursor:pointer;
-  font-size:11px;
+  font-size:10px;
 }
 
 .call{background:#e2e8f0;}
@@ -122,7 +118,6 @@ button{
 .stage5{background:#22c55e;color:#fff;}
 
 </style>
-
 </head>
 
 <body>
@@ -133,13 +128,15 @@ button{
 </div>
 
 <div class="note">
-<marquee>⚠ WhatsApp open rakho aur fast kaam karo | Daily calling complete karo | Data save karna na bhule</marquee>
+<marquee>
+⚠️ कॉल करते समय अपना WhatsApp और Application Dashboard हमेशा Login रखें और नए Tab या दूसरे Device में open रखें, ताकि काम तेज और बिना रुकावट के हो सके।
+</marquee>
 </div>
 
 <div class="filter">
 <input type="date" id="dateFilter">
-<button onclick="filterData()">Search</button>
-<button onclick="loadData()">All</button>
+<button onclick="filterData()">🔍</button>
+<button onclick="loadData()">♻</button>
 </div>
 
 <div class="container">
@@ -202,23 +199,31 @@ html+=`
 <td>${item.phone||''}</td>
 
 <td>
-<button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">Send</button>
+<button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">WA</button>
 </td>
 
 <td>
 <button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
 <button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
+<button class="call" onclick="setVal('call${i}','Switch Off',this)">Off</button>
+<button class="call" onclick="setVal('call${i}','Cut Call',this)">Cut</button>
+<button class="call" onclick="setVal('call${i}','Disconnect',this)">Disc</button>
 <input id="call${i}" value="${item.call||''}">
 </td>
 
 <td>
-<button class="recall" onclick="setVal('recall${i}','Meeting',this)">Meeting</button>
+<button class="recall" onclick="setVal('recall${i}','Send Meeting',this)">Meeting</button>
+<button class="recall" onclick="setVal('recall${i}','Send App',this)">App</button>
 <button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
 <input id="recall${i}" value="${item.recall||''}">
 </td>
 
 <td>
-<button class="join" onclick="setVal('join${i}','Join',this)">Join</button>
+<button class="join" onclick="setVal('join${i}','Joined',this)">Join</button>
+<button class="join" onclick="setVal('join${i}','Meeting Done',this)">Meet</button>
+<button class="join" onclick="setVal('join${i}','Training Now',this)">Train</button>
+<button class="join" onclick="setVal('join${i}','Join Later',this)">Later</button>
+<button class="join" onclick="setVal('join${i}','Not Interested',this)">Not</button>
 <input id="join${i}" value="${item.join||''}">
 </td>
 
@@ -238,9 +243,8 @@ document.getElementById("data").innerHTML=html;
 
 /* FILTER */
 function filterData(){
-
 let selected=document.getElementById("dateFilter").value;
-if(!selected){ alert("Select Date"); return; }
+if(!selected){alert("Select Date");return;}
 
 let d=new Date(selected);
 let formatted = String(d.getDate()).padStart(2,'0') + "/" +

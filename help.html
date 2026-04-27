@@ -44,7 +44,7 @@ body { margin:0; font-family:'Segoe UI', Arial; background:var(--bg); color:#333
   display: inline-block;
   white-space: nowrap;
   padding-left: 100%;
-  animation: ticker-scroll 25s linear infinite;
+  animation: ticker-scroll 35s linear infinite;
   font-weight: 600;
   color: #854d0e;
 }
@@ -91,12 +91,12 @@ iframe { width:100%; height:100%; border:none; }
 
   <div class="ticker-box">
     <div class="ticker-content" id="liveGuide">
-      M.Stock Guide: Step 1. Mobile & Email OTP verify karein, Step 2. PAN Card & DOB dalein, Step 3. Plan select karein, Step 4. Selfie & Signature upload karein, Step 5. Bank verify karein aur e-Sign poora karein.
+      m.Stock Guide: 1. Mobile/Email OTP verify karein → 2. PAN/DOB fill karein → 3. 999 ya Zero Plan select karein → 4. Quarterly AMC select karein → 5. Selfie/Signature upload karein → 6. Bank add karein → 7. NSDL Aadhaar E-Sign complete karein.
     </div>
   </div>
 
   <div id="mstock" class="card active">
-    <div class="card-header">m.Stock Account Opening Guide</div>
+    <div class="card-header">m.Stock Account Opening (Step-by-Step)</div>
     <div class="fallback"><a href="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/view" target="_blank">PDF Full Screen mein dekhein</a></div>
     <div class="viewer">
       <iframe src="https://drive.google.com/file/d/1B1G7MsYB2M5De8RXenWLDmSMHoCbhkn4/preview"></iframe>
@@ -104,7 +104,7 @@ iframe { width:100%; height:100%; border:none; }
   </div>
 
   <div id="angel" class="card">
-    <div class="card-header">Angel One Registration Guide</div>
+    <div class="card-header">Angel One Registration (Step-by-Step)</div>
     <div class="fallback"><a href="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/view" target="_blank">PDF Full Screen mein dekhein</a></div>
     <div class="viewer">
       <iframe src="https://drive.google.com/file/d/1xRVPrK87fORyGbgJ32du8Rzl5f7wWbsv/preview"></iframe>
@@ -112,7 +112,7 @@ iframe { width:100%; height:100%; border:none; }
   </div>
 
   <div id="upstox" class="card">
-    <div class="card-header">Upstox KYC Support</div>
+    <div class="card-header">Upstox Registration (Step-by-Step)</div>
     <div class="fallback"><a href="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/view" target="_blank">PDF Full Screen mein dekhein</a></div>
     <div class="viewer">
       <iframe src="https://drive.google.com/file/d/1qnCqglbq3XYi1A76AiHW0v76XJ7QPMeS/preview"></iframe>
@@ -120,7 +120,7 @@ iframe { width:100%; height:100%; border:none; }
   </div>
 
   <div id="tide" class="card">
-    <div class="card-header">Tide Business Account Guide</div>
+    <div class="card-header">Tide Business Account (Special Guide)</div>
     <div class="fallback"><a href="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/view" target="_blank">PDF Full Screen mein dekhein</a></div>
     <div class="viewer">
       <iframe src="https://drive.google.com/file/d/1tvMVv9XxbrQU1egYWCzhMkYw1et7ZYKT/preview"></iframe>
@@ -130,30 +130,25 @@ iframe { width:100%; height:100%; border:none; }
 </div>
 
 <script>
-// Yahan aap points ko edit kar sakte hain
 const guidesText = {
-  mstock: "M.Stock Step-by-Step: 1. Verify Mobile & Email (OTP) → 2. Enter PAN & DOB → 3. Select zero brokerage/free plan → 4. Upload Selfie & Signature → 5. Link Bank Account (IFSC) → 6. Final E-Sign via Aadhaar OTP.",
-  angel: "Angel One Guide: 1. Enter Mobile Number & OTP → 2. Fill Name & Email → 3. PAN Card & DOB verification → 4. DigiLocker Aadhaar KYC (Allow Access) → 5. Bank Account details → 6. Take Selfie → 7. NSDL Aadhaar E-Sign.",
-  upstox: "Upstox Process: 1. Mobile Login → 2. Google Email connection → 3. Enter PAN & Income details → 4. Live Selfie and Digital Signature on screen → 5. Bank account penny drop verification → 6. Aadhaar OTP E-sign.",
-  tide: "Tide Steps: 1. Mobile number verify karein → 2. Identity proof/Aadhaar upload karein → 3. Business details fill karein → 4. Video KYC ya verification process complete karein."
+  mstock: "m.Stock Process: 1. Mobile/Email OTP verify karein → 2. PAN aur DOB fill karein → 3. Brokerage Plan select karein (₹999/₹0) → 4. AMC select karein (Quarterly select karein) → 5. Digital Signature aur Selfie click karein → 6. Bank account link karein → 7. NSDL portal par Aadhaar E-Sign complete karein.",
+  angel: "Angel One Process: 1. Name aur Mobile Number dalkar OTP verify karein → 2. Email ID verify karein → 3. PAN details aur DOB fill karein → 4. DigiLocker se Aadhaar KYC authorize karein → 5. Bank details (Acc No & IFSC) add karein → 6. Selfie aur Signature upload karein → 7. Aadhaar OTP se E-Sign karein.",
+  upstox: "Upstox Process: 1. Mobile aur Email verify karein → 2. PAN details aur DOB enter karein → 3. Personal information (Income, Occupation) fill karein → 4. Live Selfie aur Signature capture karein → 5. Bank account details verify karein → 6. DigiLocker se connect karein aur Aadhaar E-Sign complete karein.",
+  tide: "Tide Process: 1. Mobile number verify karein → 2. PROMO CODE zaroor lagayein → 3. Email verify karein → 4. Business details aur Address fill karein → 5. PAN/Aadhaar se Video KYC complete karein → 6. IMPORTANT: Registration ke baad ₹50 add karein tabhi withdrawal active hoga."
 };
 
 function show(id, btn) {
-  // Hide all cards
   document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-  // Deactivate all buttons
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-  // Show clicked card and button
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 
-  // Update Ticker Text with animation reset
   const ticker = document.getElementById("liveGuide");
   ticker.style.animation = 'none';
-  ticker.offsetHeight; /* trigger reflow */
+  ticker.offsetHeight; 
   ticker.innerText = guidesText[id];
-  ticker.style.animation = 'ticker-scroll 25s linear infinite';
+  ticker.style.animation = 'ticker-scroll 35s linear infinite';
 }
 </script>
 

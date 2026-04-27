@@ -36,12 +36,11 @@ body{
 .logo-box img{
   width:100%;
   height:100%;
-  object-fit:cover;
 }
 
 /* NOTE */
 .note-bar{
-  background:linear-gradient(90deg,#ffeb3b,#ffc107);
+  background:#ffc107;
   padding:10px;
   font-weight:bold;
 }
@@ -56,24 +55,23 @@ table{
 th{
   background:#111;
   color:#fff;
-  padding:10px;
+  padding:8px;
 }
 td{
-  padding:6px;
+  padding:5px;
   border-bottom:1px solid #ddd;
   text-align:center;
 }
 
 button{
-  padding:6px;
+  padding:5px;
   border:none;
-  border-radius:6px;
+  border-radius:5px;
   margin:2px;
   cursor:pointer;
 }
-.yes{background:#4caf50;color:#fff;}
-.no{background:#f44336;color:#fff;}
 .option{background:#ddd;}
+.active{background:#4caf50;color:#fff;}
 .save{background:#2196f3;color:#fff;}
 
 input,textarea{
@@ -107,11 +105,10 @@ table{display:block;overflow-x:auto;}
 <th>Date</th>
 <th>Name</th>
 <th>Mobile</th>
-<th>Send Link</th>
+<th>Send</th>
 <th>Call</th>
 <th>Meeting</th>
 <th>Feedback</th>
-<th>Problem</th>
 <th>Recall</th>
 <th>Join</th>
 <th>Refer</th>
@@ -140,50 +137,48 @@ html+=`<tr>
 <td>${item.phone}</td>
 
 <td>
-<button onclick="sendWhatsApp('${item.phone}','${item.meet}')">📲 Send</button>
+<button onclick="sendMeet('${item.phone}','${item.meet}')">Meet</button>
+<button onclick="sendApp('${item.phone}')">App</button>
 </td>
 
 <td>
-<button class="yes" onclick="setVal('call${i}','Yes')">Yes</button>
-<button class="no" onclick="setVal('call${i}','No')">No</button>
+<button class="option" onclick="setVal('call${i}','Busy')">Busy</button>
+<button class="option" onclick="setVal('call${i}','Switch Off')">Off</button>
+<button class="option" onclick="setVal('call${i}','Wrong Number')">Wrong</button>
+<button class="option" onclick="setVal('call${i}','Connect Now')">Connect</button>
 <input id="call${i}">
 </td>
 
 <td>
-<button class="yes" onclick="setVal('meet${i}','Yes')">Yes</button>
-<button class="no" onclick="setVal('meet${i}','No')">No</button>
 <input id="meet${i}">
 </td>
 
 <td><textarea id="fb${i}"></textarea></td>
 
 <td>
-<button class="option" onclick="setVal('prob${i}','Busy')">Busy</button>
-<button class="option" onclick="setVal('prob${i}','Wrong No')">Wrong</button>
-<input id="prob${i}">
-</td>
-
-<td>
-<button class="option" onclick="setVal('recall${i}','Call Again')">Call Again</button>
-<button class="option" onclick="setVal('recall${i}','No Contact')">No Contact</button>
+<button class="option" onclick="setVal('recall${i}','Send Meeting Link')">Meeting</button>
+<button class="option" onclick="setVal('recall${i}','Send App Link')">App</button>
+<button class="option" onclick="setVal('recall${i}','Not Interested')">Not</button>
 <input id="recall${i}">
 </td>
 
 <td>
-<button class="option" onclick="setVal('join${i}','Join Done')">Join</button>
-<button class="option" onclick="setVal('join${i}','Not Join')">No</button>
+<button class="option" onclick="setVal('join${i}','Training Start')">Training</button>
+<button class="option" onclick="setVal('join${i}','Only Join')">Join</button>
+<button class="option" onclick="setVal('join${i}','Not Start')">Not</button>
 <input id="join${i}">
 </td>
 
 <td>
+<button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
+<button class="option" onclick="toggleMulti(this,'ref${i}','Angle')">Angle</button>
+<button class="option" onclick="toggleMulti(this,'ref${i}','Upstox')">Upstox</button>
+<button class="option" onclick="toggleMulti(this,'ref${i}','Tide')">Tide</button>
 <input id="ref${i}">
 </td>
 
 <td>
-<button onclick="setVal('status${i}','Interested')">Interested</button>
-<button onclick="setVal('status${i}','Call Again')">Call Again</button>
-<button onclick="setVal('status${i}','Not Interested')">Not</button>
-<input id="status${i}">
+<input id="status${i}" placeholder="Type...">
 </td>
 
 <td>
@@ -200,26 +195,36 @@ function setVal(id,val){
 document.getElementById(id).value=val;
 }
 
-function sendWhatsApp(phone, link){
-let msg = `Hello 👋
+function toggleMulti(btn,id,val){
+btn.classList.toggle("active");
+let current=document.getElementById(id).value;
+current = current.includes(val) ? current.replace(val,"") : current + (current?",":"")+val;
+document.getElementById(id).value=current;
+}
+
+/* WhatsApp */
+function sendMeet(phone, link){
+let msg=`Hello 👋
 
 Your meeting link:
-${link}
-
-Please join on time.`;
-
+${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
-function save(i,name,phone){
+function sendApp(phone){
+let msg=`Download App Link 👇
+https://your-app-link`;
+window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
+}
 
+/* SAVE */
+function save(i,name,phone){
 const payload={
 name:name,
 mobile:phone,
 call:document.getElementById("call"+i).value,
 meeting:document.getElementById("meet"+i).value,
 feedback:document.getElementById("fb"+i).value,
-problem:document.getElementById("prob"+i).value,
 recall:document.getElementById("recall"+i).value,
 join:document.getElementById("join"+i).value,
 refer:document.getElementById("ref"+i).value,

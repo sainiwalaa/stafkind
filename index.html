@@ -2,86 +2,86 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>STAFKIND CRM</title>
+<title>CRM Dashboard</title>
 
 <style>
 body{
-  font-family:Arial;
   margin:0;
-  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  font-family:Arial;
+  background:#0f172a;
+  color:#fff;
 }
 
 /* HEADER */
 .header{
+  background:#ffffff;
+  color:#1e293b;
+  padding:15px;
+  font-size:20px;
+  font-weight:bold;
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  padding:10px 20px;
-  background:#fff;
 }
 
-.title{
-  font-size:22px;
-  color:#1e3c72;
-  font-weight:bold;
+/* CONTAINER */
+.container{
+  padding:15px;
 }
 
-.logo-box{
-  width:70px;
-  height:70px;
+/* CARD */
+.card{
+  background:#1e293b;
+  padding:12px;
   border-radius:10px;
-  overflow:hidden;
-  border:2px solid #1e3c72;
-}
-.logo-box img{
-  width:100%;
-  height:100%;
+  margin-bottom:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.4);
 }
 
-/* NOTE */
-.note-bar{
-  background:#ffc107;
-  padding:10px;
+/* NAME */
+.name{
+  font-size:16px;
   font-weight:bold;
 }
 
-/* TABLE */
-.container{padding:10px;}
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
+.phone{
+  color:#94a3b8;
+  font-size:14px;
 }
-th{
-  background:#111;
-  color:#fff;
-  padding:8px;
-}
-td{
-  padding:5px;
-  border-bottom:1px solid #ddd;
-  text-align:center;
+
+/* BUTTON GROUP */
+.btn-group{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
 }
 
 button{
-  padding:5px;
+  padding:6px 10px;
   border:none;
-  border-radius:5px;
-  margin:2px;
+  border-radius:6px;
+  font-size:12px;
   cursor:pointer;
 }
-.option{background:#ddd;}
-.active{background:#4caf50;color:#fff;}
-.save{background:#2196f3;color:#fff;}
+
+/* COLORS */
+.call{background:#334155;color:#fff;}
+.recall{background:#475569;color:#fff;}
+.join{background:#6366f1;color:#fff;}
+.save{background:#22c55e;color:#fff;}
+.wa{background:#25D366;color:#fff;}
 
 input,textarea{
   width:100%;
-  padding:5px;
+  margin-top:6px;
+  padding:6px;
+  border-radius:6px;
+  border:none;
 }
 
 /* MOBILE */
 @media(max-width:600px){
-table{display:block;overflow-x:auto;}
+  .header{font-size:16px;}
 }
 </style>
 
@@ -90,153 +90,109 @@ table{display:block;overflow-x:auto;}
 <body>
 
 <div class="header">
-<div class="title">STAFKIND CRM</div>
-<div class="logo-box"><img src="logo.jpg"></div>
+CRM Dashboard
+<span>Work Panel</span>
 </div>
 
-<div class="note-bar">
-⚠️ WhatsApp open rakho aur fast kaam karo
-</div>
-
-<div class="container">
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Name</th>
-<th>Mobile</th>
-<th>Send</th>
-<th>Call</th>
-<th>Meeting</th>
-<th>Feedback</th>
-<th>Recall</th>
-<th>Join</th>
-<th>Refer</th>
-<th>Status</th>
-<th>Save</th>
-</tr>
-</thead>
-<tbody id="data"></tbody>
-</table>
-</div>
+<div class="container" id="data"></div>
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbyfpB_xzP53gQqhZAP_LwKy3jb1V9X_ymKjIm93DRWTwTB34BCFR6TWNZNdWSXVhzth/exec";
+const API="https://script.google.com/macros/s/AKfycbym8RG_PTgWYodIvH3g1_gZYZkPnBvBo5APBdaikGD5C1WA4iXH4GA0D1LyT18IK00s/exec";
 
 function loadData(){
 fetch(API)
 .then(res=>res.json())
 .then(data=>{
 let html="";
+
 data.forEach((item,i)=>{
-html+=`<tr>
 
-<td>${item.date||''}</td>
-<td>${item.name}</td>
-<td>${item.phone}</td>
+html+=`
+<div class="card">
 
-<td>
-<button onclick="sendMeet('${item.phone}','${item.meet}')">Meet</button>
-<button onclick="sendApp('${item.phone}')">App</button>
-</td>
+<div class="name">${item.name}</div>
+<div class="phone">${item.phone}</div>
 
-<td>
-<button class="option" onclick="setVal('call${i}','Busy')">Busy</button>
-<button class="option" onclick="setVal('call${i}','Switch Off')">Off</button>
-<button class="option" onclick="setVal('call${i}','Wrong Number')">Wrong</button>
-<button class="option" onclick="setVal('call${i}','Connect Now')">Connect</button>
-<input id="call${i}">
-</td>
+<div class="btn-group">
+<button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">Send Meet</button>
+</div>
 
-<td>
-<input id="meet${i}">
-</td>
+<!-- CALL -->
+<div class="btn-group">
+<button class="call" onclick="setVal('call${i}','Busy')">Busy</button>
+<button class="call" onclick="setVal('call${i}','Switch Off')">Off</button>
+<button class="call" onclick="setVal('call${i}','Wrong')">Wrong</button>
+<button class="call" onclick="setVal('call${i}','Connected')">Connect</button>
+</div>
+<input id="call${i}" placeholder="Call status">
 
-<td><textarea id="fb${i}"></textarea></td>
+<!-- RECALL -->
+<div class="btn-group">
+<button class="recall" onclick="setVal('recall${i}','Send Meeting')">Meeting</button>
+<button class="recall" onclick="setVal('recall${i}','Send App')">App</button>
+<button class="recall" onclick="setVal('recall${i}','Not Interested')">Not</button>
+</div>
+<input id="recall${i}" placeholder="Recall">
 
-<td>
-<button class="option" onclick="setVal('recall${i}','Send Meeting Link')">Meeting</button>
-<button class="option" onclick="setVal('recall${i}','Send App Link')">App</button>
-<button class="option" onclick="setVal('recall${i}','Not Interested')">Not</button>
-<input id="recall${i}">
-</td>
+<!-- JOIN -->
+<div class="btn-group">
+<button class="join" onclick="setVal('join${i}','Training Start')">Training</button>
+<button class="join" onclick="setVal('join${i}','Only Join')">Join</button>
+<button class="join" onclick="setVal('join${i}','Not Start')">Not</button>
+</div>
+<input id="join${i}" placeholder="Join status">
 
-<td>
-<button class="option" onclick="setVal('join${i}','Training Start')">Training</button>
-<button class="option" onclick="setVal('join${i}','Only Join')">Join</button>
-<button class="option" onclick="setVal('join${i}','Not Start')">Not</button>
-<input id="join${i}">
-</td>
+<textarea id="fb${i}" placeholder="Feedback"></textarea>
 
-<td>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Mstock')">Mstock</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Angle')">Angle</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Upstox')">Upstox</button>
-<button class="option" onclick="toggleMulti(this,'ref${i}','Tide')">Tide</button>
-<input id="ref${i}">
-</td>
+<input id="status${i}" placeholder="Status">
 
-<td>
-<input id="status${i}" placeholder="Type...">
-</td>
-
-<td>
 <button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
-</td>
 
-</tr>`;
+</div>
+`;
+
 });
+
 document.getElementById("data").innerHTML=html;
 });
 }
 
+/* SET VALUE */
 function setVal(id,val){
 document.getElementById(id).value=val;
 }
 
-function toggleMulti(btn,id,val){
-btn.classList.toggle("active");
-let current=document.getElementById(id).value;
-current = current.includes(val) ? current.replace(val,"") : current + (current?",":"")+val;
-document.getElementById(id).value=current;
-}
-
-/* WhatsApp */
-function sendMeet(phone, link){
+/* WHATSAPP */
+function sendMeet(phone,link){
 let msg=`Hello 👋
 
-Your meeting link:
+Join meeting:
 ${link}`;
-window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
-}
-
-function sendApp(phone){
-let msg=`Download App Link 👇
-https://your-app-link`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
 /* SAVE */
 function save(i,name,phone){
+
 const payload={
 name:name,
 mobile:phone,
 call:document.getElementById("call"+i).value,
-meeting:document.getElementById("meet"+i).value,
+meeting:"",
 feedback:document.getElementById("fb"+i).value,
 recall:document.getElementById("recall"+i).value,
 join:document.getElementById("join"+i).value,
-refer:document.getElementById("ref"+i).value,
+refer:"",
 status:document.getElementById("status"+i).value
 };
 
 fetch(API,{
 method:"POST",
-headers:{"Content-Type":"text/plain"},
-body:JSON.stringify(payload)
+body: JSON.stringify(payload)
 })
 .then(()=>alert("Saved ✅"));
+
 }
 
 loadData();

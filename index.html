@@ -26,6 +26,17 @@ body{
 
 .logo{font-weight:bold;font-size:18px;}
 
+/* DASHBOARD BUTTON */
+.dashbtn{
+  background:#22c55e;
+  color:#fff;
+  border:none;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
+}
+
 /* RUNNING NOTE */
 .note{
   background:#facc15;
@@ -124,7 +135,11 @@ button{
 
 <div class="header">
   <div class="logo">STAFKIND CRM</div>
-  <div>📞 Dashboard</div>
+
+  <!-- ✅ UPDATED BUTTON -->
+  <button class="dashbtn" onclick="openDashboard()">
+    🔐 Dashboard Login
+  </button>
 </div>
 
 <div class="note">
@@ -164,6 +179,11 @@ button{
 const API="https://script.google.com/macros/s/AKfycbyKKk-P8MHC_kskC3FDN8pRrSBWJCXRCoUJyTfI2C_KqcYcmX8uaECjRquoVRzQegPo/exec";
 
 let globalData=[];
+
+/* ✅ DASHBOARD LINK FUNCTION */
+function openDashboard(){
+  window.open("https://offers.earnpati.com/auth/login","_blank");
+}
 
 /* LOAD */
 function loadData(){

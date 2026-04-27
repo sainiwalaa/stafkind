@@ -21,29 +21,54 @@ body{
   text-align:center;
 }
 
-.container{padding:10px;}
+/* FILTER BAR */
+.filter{
+  background:#1e293b;
+  padding:10px;
+  text-align:center;
+}
+
+.filter input, .filter button{
+  padding:6px;
+  margin:3px;
+  border-radius:5px;
+  border:none;
+}
+
+.filter button{
+  background:#22c55e;
+  color:white;
+  cursor:pointer;
+}
+
+/* TABLE */
+.container{
+  padding:10px;
+  height:80vh;
+  overflow:auto;
+}
 
 table{
   width:100%;
   border-collapse:collapse;
   background:#fff;
   color:#000;
-  border-radius:8px;
-  overflow:hidden;
 }
 
+/* 🔥 FREEZE HEADER */
 th{
+  position:sticky;
+  top:0;
   background:#111;
   color:#fff;
   padding:8px;
-  font-size:13px;
+  z-index:2;
 }
 
 td{
   padding:6px;
   border-bottom:1px solid #ddd;
   text-align:center;
-  font-size:13px;
 }
 
 input{
@@ -70,16 +95,13 @@ button{
 
 .active{background:#22c55e !important;color:#fff;}
 
-/* 🎯 COLOR STAGES */
+/* COLOR STAGE */
 .stage1{background:#dcfce7;}
 .stage2{background:#bbf7d0;}
 .stage3{background:#86efac;}
 .stage4{background:#4ade80;}
 .stage5{background:#22c55e;color:#fff;}
 
-@media(max-width:600px){
-  table{display:block;overflow-x:auto;}
-}
 </style>
 
 </head>
@@ -87,6 +109,13 @@ button{
 <body>
 
 <div class="header">📞 CRM Dashboard</div>
+
+<!-- 🔥 DATE FILTER -->
+<div class="filter">
+<input type="date" id="dateFilter">
+<button onclick="filterData()">Filter</button>
+<button onclick="loadData()">All</button>
+</div>
 
 <div class="container">
 <table>
@@ -112,17 +141,26 @@ button{
 
 const API="https://script.google.com/macros/s/AKfycbzCtPtjA76jf-F0JpO4pM7wu6JHJffv45zX8al5-aKEftK0IqHCclZZ_E-s4dURdl0/exec";
 
+let globalData=[];
+
 /* LOAD DATA */
 function loadData(){
 fetch(API)
 .then(res=>res.json())
 .then(data=>{
+globalData=data;
+render(data);
+});
+}
+
+/* RENDER */
+function render(data){
 
 let html="";
 
 data.forEach((item,i)=>{
 
-let count = parseInt(item.count || 0);
+let count=parseInt(item.count||0);
 let stage="";
 
 if(count==1) stage="stage1";
@@ -134,9 +172,9 @@ else if(count>=5) stage="stage5";
 html+=`
 <tr id="row${i}" class="${stage}" data-count="${count}">
 
-<td>${item.date || ''}</td>
-<td>${item.name || ''}</td>
-<td>${item.phone || ''}</td>
+<td>${item.date||''}</td>
+<td>${item.name||''}</td>
+<td>${item.phone||''}</td>
 
 <td>
 <button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">Send</button>
@@ -144,48 +182,61 @@ html+=`
 
 <td>
 <button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
-<button class="call" onclick="setVal('call${i}','Switch Off',this)">Off</button>
-<button class="call" onclick="setVal('call${i}','Wrong',this)">Wrong</button>
 <button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
-<input id="call${i}" value="${item.call || ''}">
+<input id="call${i}" value="${item.call||''}">
 </td>
 
 <td>
-<button class="recall" onclick="setVal('recall${i}','Send Meeting',this)">Meeting</button>
-<button class="recall" onclick="setVal('recall${i}','Send App',this)">App</button>
+<button class="recall" onclick="setVal('recall${i}','Meeting',this)">Meeting</button>
 <button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
-<input id="recall${i}" value="${item.recall || ''}">
+<input id="recall${i}" value="${item.recall||''}">
 </td>
 
 <td>
-<button class="join" onclick="setVal('join${i}','Training Start',this)">Training</button>
-<button class="join" onclick="setVal('join${i}','Joined',this)">Join</button>
-<input id="join${i}" value="${item.join || ''}">
+<button class="join" onclick="setVal('join${i}','Join',this)">Join</button>
+<input id="join${i}" value="${item.join||''}">
 </td>
 
 <td>
-<input id="status${i}" value="${item.status || ''}">
+<input id="status${i}" value="${item.status||''}">
 </td>
 
 <td>
 <button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
 </td>
 
-</tr>
-`;
-
+</tr>`;
 });
 
 document.getElementById("data").innerHTML=html;
 
-});
 }
 
-/* BUTTON ACTIVE */
+/* FILTER BY DATE */
+function filterData(){
+
+let selected=document.getElementById("dateFilter").value;
+
+if(!selected){
+alert("Select Date First");
+return;
+}
+
+// convert to dd/mm/yyyy
+let d=new Date(selected);
+let formatted=d.toLocaleDateString("en-GB");
+
+let filtered=globalData.filter(x=>x.date===formatted);
+
+render(filtered);
+
+}
+
+/* BUTTON */
 function setVal(id,val,btn){
 document.getElementById(id).value=val;
 
-let group = btn.parentNode.querySelectorAll("button");
+let group=btn.parentNode.querySelectorAll("button");
 group.forEach(b=>b.classList.remove("active"));
 
 btn.classList.add("active");
@@ -197,17 +248,15 @@ let msg=`Join meeting:\n${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
-/* SAVE SYSTEM */
+/* SAVE */
 function save(i,name,phone){
 
 let row=document.getElementById("row"+i);
 
-// 🔥 COUNT UPDATE
 let count=parseInt(row.getAttribute("data-count")||0);
 count++;
 row.setAttribute("data-count",count);
 
-// 🎯 COLOR UPDATE
 row.classList.remove("stage1","stage2","stage3","stage4","stage5");
 
 if(count==1) row.classList.add("stage1");
@@ -216,7 +265,6 @@ else if(count==3) row.classList.add("stage3");
 else if(count==4) row.classList.add("stage4");
 else row.classList.add("stage5");
 
-// 📦 DATA
 const payload={
 name:name,
 mobile:phone,
@@ -226,22 +274,13 @@ join:document.getElementById("join"+i).value,
 status:document.getElementById("status"+i).value
 };
 
-// 🔥 SAVE + POPUP
 fetch(API,{
 method:"POST",
 body:JSON.stringify(payload)
 })
 .then(()=>{
-
-// ✅ SUCCESS POPUP
-alert("✅ Data Saved Successfully");
-
-// 🔄 AUTO REFRESH DATA (REAL SYNC)
+alert("✅ Saved");
 loadData();
-
-})
-.catch(()=>{
-alert("❌ Save Failed");
 });
 
 }

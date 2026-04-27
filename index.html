@@ -38,6 +38,11 @@ body{
   margin-left:5px;
 }
 
+/* New Help Button Style */
+.helpbtn {
+  background: #f97316; /* Orange color for distinction */
+}
+
 /* RUNNING NOTE */
 .note{
   background:#facc15;
@@ -171,6 +176,7 @@ button{
   <div>
     <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
     <button class="dashbtn" onclick="openScript()">📖 Script</button>
+    <button class="dashbtn helpbtn" onclick="openHelp()">❓ Help Guide</button>
   </div>
 </div>
 
@@ -226,6 +232,11 @@ button{
 const API="https://script.google.com/macros/s/AKfycbyKKk-P8MHC_kskC3FDN8pRrSBWJCXRCoUJyTfI2C_KqcYcmX8uaECjRquoVRzQegPo/exec";
 
 let globalData=[];
+
+/* HELP PAGE FUNCTION */
+function openHelp(){
+  window.open("https://sainiwalaa.github.io/stafkind/help.html","_blank");
+}
 
 /* DASHBOARD */
 function openDashboard(){

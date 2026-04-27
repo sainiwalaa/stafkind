@@ -3,156 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STAFKIND - Complete Registration Guide</title>
+<title>STAFKIND - Training Center</title>
 <style>
-  :root { --primary: #0b3d91; --secondary: #22c55e; --bg: #eef2f7; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #333; }
+  :root { --primary: #0b3d91; --secondary: #22c55e; --mstock: #ff5722; --bg: #f0f2f5; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
   
-  .header { background: var(--primary); color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+  .header { background: var(--primary); color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; }
+  .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
   
-  .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
-  
-  .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
-  
-  .app-selector { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
-  .tab-btn { padding: 12px 25px; border: none; border-radius: 30px; background: #ddd; cursor: pointer; font-weight: bold; transition: 0.3s; }
+  .selector-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab-btn { padding: 10px 15px; border: none; border-radius: 5px; background: #fff; cursor: pointer; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s; font-size: 13px; }
   .tab-btn.active { background: var(--primary); color: white; }
 
-  .guide-section { display: none; }
-  .guide-section.active { display: block; animation: fadeIn 0.5s; }
+  .content-area { display: none; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+  .content-area.active { display: block; animation: fadeIn 0.4s; }
 
-  .step-box { position: relative; padding-left: 50px; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-  .step-num { position: absolute; left: 0; top: 0; width: 35px; height: 35px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-  .step-title { font-weight: bold; color: var(--primary); font-size: 17px; display: block; margin-bottom: 5px; }
-  .step-desc { font-size: 15px; line-height: 1.6; color: #555; }
+  .pdf-container { margin-top: 20px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden; background: #525659; }
+  iframe { width: 100%; height: 600px; border: none; }
 
-  /* PDF Viewer Styling */
-  .pdf-viewer { width: 100%; height: 500px; border: 2px solid #ddd; border-radius: 8px; margin-top: 15px; background: #f1f1f1; }
+  .download-bar { background: #f8fafc; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+  .btn-download { background: var(--secondary); color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 14px; }
   
-  .warning { background: #fff4e5; border-left: 5px solid #ffa117; padding: 10px; margin-bottom: 15px; font-size: 14px; }
+  .step-list { margin: 15px 0; padding-left: 20px; }
+  .step-list li { margin-bottom: 8px; line-height: 1.4; color: #444; font-size: 14px; }
   
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @media (max-width: 600px) { .pdf-viewer { height: 400px; } }
+  @media (max-width: 600px) { iframe { height: 400px; } .download-bar { flex-direction: column; gap: 10px; text-align: center; } }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h2 style="margin:0;">STAFKIND AGENT SUPPORT</h2>
-  <p style="margin:5px 0 0; font-size:13px; opacity:0.9;">Dono PDF ke anusar complete steps yahan hain</p>
+  <h2 style="margin:0;">STAFKIND TRAINING PORTAL</h2>
+  <p style="margin:5px 0 0; font-size:14px;">Registration Guides & PDF Support</p>
 </div>
 
 <div class="container">
   
-  <div class="app-selector">
-    <button class="tab-btn active" onclick="switchApp('angel', this)">Angel One Guide</button>
-    <button class="tab-btn" onclick="switchApp('upstox', this)">Upstox Guide</button>
+  <div class="selector-tabs">
+    <button class="tab-btn active" onclick="openTab('angel', this)">Angel One</button>
+    <button class="tab-btn" onclick="openTab('upstox', this)">Upstox</button>
+    <button class="tab-btn" onclick="openTab('mstock', this)" style="border: 1px solid var(--mstock);">m.Stock (New)</button>
   </div>
 
-  <div id="angel" class="guide-section active">
-    <div class="card">
-      <h2 style="color:var(--primary); border-bottom:2px solid var(--primary); padding-bottom:10px;">Angel One Full Registration</h2>
-      
-      <div class="warning">📌 <b>Note:</b> Candidate ke paas Aadhaar linked mobile number aur PAN card hona chahiye.</div>
-
-      <div class="step-box">
-        <div class="step-num">1</div>
-        <span class="step-title">Basic Registration</span>
-        <span class="step-desc">Link open karke Name, Mobile Number aur City enter karein. OTP verify karke 'Start' par click karein.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">2</div>
-        <span class="step-title">Email Verification</span>
-        <span class="step-desc">Apni Email ID dalein ya Google account se login karein. Email par aaya OTP verify karein.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">3</div>
-        <span class="step-title">PAN & DOB Details</span>
-        <span class="step-desc">PAN card number aur Date of Birth (as per PAN) sahi-sahi fill karein.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">4</div>
-        <span class="step-title">Digital Locker (KYC)</span>
-        <span class="step-desc">DigiLocker page khulega. Aadhaar number dalkar 'Next' karein, OTP verify karein aur documents share karne ke liye 'Allow' par click karein.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">5</div>
-        <span class="step-title">Bank Account Details</span>
-        <span class="step-desc">Apna Bank Account number aur IFSC code enter karein. Isse aapka account verify hoga.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">6</div>
-        <span class="step-title">E-Sign Process</span>
-        <span class="step-desc">NSDL ka page khulega. Aadhaar number dalkar check-box tick karein aur Mobile OTP se final E-Sign karein.</span>
-      </div>
-
-      <h3 style="color:var(--primary);">Original PDF Reference:</h3>
-      <iframe class="pdf-viewer" src="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
+  <div id="angel" class="content-area active">
+    <div class="download-bar">
+      <div><strong>📄 Angel One Guide</strong></div>
+      <a href="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF</a>
+    </div>
+    <ul class="step-list">
+      <li>Mobile & Email OTP verification.</li>
+      <li>PAN Card & Date of Birth entry.</li>
+      <li>DigiLocker Aadhaar KYC (Allow access).</li>
+      <li>Bank Account & IFSC verification.</li>
+      <li>Final E-Sign via NSDL (Aadhaar OTP).</li>
+    </ul>
+    <div class="pdf-container">
+      <iframe src="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
     </div>
   </div>
 
-  <div id="upstox" class="guide-section">
-    <div class="card">
-      <h2 style="color:var(--primary); border-bottom:2px solid var(--primary); padding-bottom:10px;">Upstox Full Registration</h2>
-      
-      <div class="warning">📌 <b>Note:</b> Upstox mein mobile number aur email verification pehle hota hai.</div>
-
-      <div class="step-box">
-        <div class="step-num">1</div>
-        <span class="step-title">Sign Up & OTP</span>
-        <span class="step-desc">Mobile number enter karein, OTP verify karein. Uske baad "Continue with Google" par click karke email link karein.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">2</div>
-        <span class="step-title">KYC Personal Details</span>
-        <span class="step-desc">PAN Card details aur DOB dalein. Iske baad Gender, Marital Status aur Annual Income select karein.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">3</div>
-        <span class="step-title">Digital Signature & Selfie</span>
-        <span class="step-desc">Screen par apna signature ungli se karein. Uske baad ek saaf Selfie capture karein jisme face clear dikhe.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">4</div>
-        <span class="step-title">Bank Linking</span>
-        <span class="step-desc">Apna Bank Account Number aur IFSC dalein. Upstox aapke bank mein ₹1 bhej kar verify karega.</span>
-      </div>
-
-      <div class="step-box">
-        <div class="step-num">5</div>
-        <span class="step-title">Final E-Sign</span>
-        <span class="step-desc">'E-sign with Aadhaar OTP' par click karein. NSDL portal par Aadhaar dalkar final verification poora karein.</span>
-      </div>
-
-      <h3 style="color:var(--primary);">Original PDF Reference:</h3>
-      <iframe class="pdf-viewer" src="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
+  <div id="upstox" class="content-area">
+    <div class="download-bar">
+      <div><strong>📄 Upstox Guide</strong></div>
+      <a href="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF</a>
+    </div>
+    <ul class="step-list">
+      <li>Login with Mobile & Google Email.</li>
+      <li>PAN, Gender, and Income details.</li>
+      <li>Digital Signature on screen & Selfie.</li>
+      <li>Bank Account linking (Penny drop verification).</li>
+      <li>Aadhaar OTP E-Sign.</li>
+    </ul>
+    <div class="pdf-container">
+      <iframe src="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
     </div>
   </div>
 
-  <center style="padding-bottom: 30px;">
-    <button class="tab-btn" style="background:#64748b; color:white;" onclick="window.location.href='index.html'">← Back to CRM</button>
-  </center>
+  <div id="mstock" class="content-area">
+    <div class="download-bar" style="border-left: 5px solid var(--mstock);">
+      <div><strong>📄 m.Stock New Updated Guide</strong></div>
+      <a href="M.STOCK NEW ( UPDATED ACCOUNT OPNING ).pdf" target="_blank" class="btn-download" style="background: var(--mstock);">Open PDF</a>
+    </div>
+    <h3 style="color:var(--mstock);">m.Stock Opening Steps:</h3>
+    <ul class="step-list">
+      <li><b>Step 1:</b> Mobile number enter karke OTP verify karein.</li>
+      <li><b>Step 2:</b> Email ID enter karein aur uska OTP verify karein.</li>
+      <li><b>Step 3:</b> PAN Card number aur DOB (Date of Birth) fill karein.</li>
+      <li><b>Step 4:</b> Plan select karein (Zero Brokerage ya Free).</li>
+      <li><b>Step 5:</b> Selfie aur Signature upload karein.</li>
+      <li><b>Step 6:</b> Bank details (Account No & IFSC) add karein.</li>
+      <li><b>Step 7:</b> Final E-sign Aadhaar OTP ke saath complete karein.</li>
+    </ul>
+    <div class="pdf-container">
+      <iframe src="M.STOCK NEW ( UPDATED ACCOUNT OPNING ).pdf"></iframe>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
+    <button onclick="window.location.href='index.html'" style="padding: 10px 20px; border-radius: 5px; border: 1px solid #ccc; cursor: pointer; background: white;">← Back to CRM</button>
+  </div>
 
 </div>
 
 <script>
-function switchApp(appId, btn) {
-  // Hide all sections
-  document.querySelectorAll('.guide-section').forEach(sec => sec.classList.remove('active'));
-  // Remove active class from buttons
+function openTab(tabId, btn) {
+  document.querySelectorAll('.content-area').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  
-  // Show selected section
-  document.getElementById(appId).classList.add('active');
-  // Add active class to clicked button
+  document.getElementById(tabId).classList.add('active');
   btn.classList.add('active');
 }
 </script>

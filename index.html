@@ -47,7 +47,7 @@ td{
 }
 
 /* INPUT */
-input,textarea{
+input{
   width:100%;
   padding:4px;
   border-radius:4px;
@@ -70,13 +70,11 @@ button{
 .save{background:#22c55e;color:#fff;}
 .wa{background:#25D366;color:#fff;}
 
-/* ACTIVE STATUS COLOR */
 .active{
   background:#22c55e !important;
   color:#fff;
 }
 
-/* ROW HIGHLIGHT */
 .done{
   background:#dcfce7 !important;
 }
@@ -90,12 +88,13 @@ button{
 
 <body>
 
-<div class="header">CRM Dashboard</div>
+<div class="header">📞 CRM Dashboard</div>
 
 <div class="container">
 <table>
 <thead>
 <tr>
+<th>Date</th>
 <th>Name</th>
 <th>Mobile</th>
 <th>Send</th>
@@ -113,7 +112,7 @@ button{
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbym8RG_PTgWYodIvH3g1_gZYZkPnBvBo5APBdaikGD5C1WA4iXH4GA0D1LyT18IK00s/exec";
+const API="https://script.google.com/macros/s/AKfycbzAzzci-38QxCRG_93luc-cxnrNhIhxK93xgMbdwUXQsuaHnbjVpfkk0784BAOIlzvL/exec";
 
 function loadData(){
 fetch(API)
@@ -125,6 +124,7 @@ data.forEach((item,i)=>{
 
 html+=`<tr id="row${i}">
 
+<td>${item.date || ''}</td>
 <td>${item.name}</td>
 <td>${item.phone}</td>
 
@@ -135,23 +135,23 @@ html+=`<tr id="row${i}">
 <td>
 <button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
 <button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
-<input id="call${i}">
+<input id="call${i}" value="${item.call || ''}">
 </td>
 
 <td>
 <button class="recall" onclick="setVal('recall${i}','Meeting',this)">Meeting</button>
 <button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
-<input id="recall${i}">
+<input id="recall${i}" value="${item.recall || ''}">
 </td>
 
 <td>
 <button class="join" onclick="setVal('join${i}','Join',this)">Join</button>
 <button class="join" onclick="setVal('join${i}','Training',this)">Training</button>
-<input id="join${i}">
+<input id="join${i}" value="${item.join || ''}">
 </td>
 
 <td>
-<input id="status${i}" placeholder="Write...">
+<input id="status${i}" value="${item.status || ''}" placeholder="Write...">
 </td>
 
 <td>
@@ -165,7 +165,7 @@ document.getElementById("data").innerHTML=html;
 });
 }
 
-/* SET VALUE + ACTIVE COLOR */
+/* BUTTON SELECT */
 function setVal(id,val,btn){
 document.getElementById(id).value=val;
 
@@ -175,7 +175,7 @@ group.forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 }
 
-/* WHATSAPP */
+/* WHATSAPP SEND */
 function sendMeet(phone,link){
 let msg=`Join meeting:\n${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);

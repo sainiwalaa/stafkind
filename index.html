@@ -43,6 +43,11 @@ body{
   background: #f97316; /* Orange color for distinction */
 }
 
+/* Send Link Button Style */
+.sendbtn {
+  background: #3b82f6; /* Blue color */
+}
+
 /* RUNNING NOTE */
 .note{
   background:#facc15;
@@ -176,6 +181,7 @@ button{
   <div>
     <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
     <button class="dashbtn" onclick="openScript()">📖 Script</button>
+    <button class="dashbtn sendbtn" onclick="openSender()">🔗 Send Link</button>
     <button class="dashbtn helpbtn" onclick="openHelp()">❓ Help Guide</button>
   </div>
 </div>
@@ -233,12 +239,17 @@ const API="https://script.google.com/macros/s/AKfycbyKKk-P8MHC_kskC3FDN8pRrSBWJC
 
 let globalData=[];
 
-/* HELP PAGE FUNCTION */
+/* HELP PAGE FUNCTION - Same Tab */
 function openHelp(){
-  window.open("https://sainiwalaa.github.io/stafkind/help.html","_blank");
+  window.location.href = "https://sainiwalaa.github.io/stafkind/help.html";
 }
 
-/* DASHBOARD */
+/* SENDER PAGE FUNCTION - Same Tab */
+function openSender(){
+  window.location.href = "https://sainiwalaa.github.io/stafkind/sender.html";
+}
+
+/* DASHBOARD - New Tab */
 function openDashboard(){
   window.open("https://offers.earnpati.com/auth/login","_blank");
 }

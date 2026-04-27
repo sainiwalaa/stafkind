@@ -3,114 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STAFKIND - Training Center</title>
+<title>STAFKIND Support Center</title>
 <style>
-  :root { --primary: #0b3d91; --secondary: #22c55e; --mstock: #ff5722; --bg: #f0f2f5; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
+  :root { --primary: #0b3d91; --accent: #22c55e; --bg: #f8fafc; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; }
   
-  .header { background: var(--primary); color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; }
-  .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+  .header { background: var(--primary); color: white; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
   
-  .selector-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .tab-btn { padding: 10px 15px; border: none; border-radius: 5px; background: #fff; cursor: pointer; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s; font-size: 13px; }
+  .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
+  
+  /* Tabs Styling */
+  .tabs-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+  .tab-btn { padding: 12px 20px; border: none; background: white; cursor: pointer; border-radius: 8px 8px 0 0; font-weight: bold; min-width: 120px; transition: 0.3s; color: #555; }
   .tab-btn.active { background: var(--primary); color: white; }
 
-  .content-area { display: none; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-  .content-area.active { display: block; animation: fadeIn 0.4s; }
+  .content-section { display: none; background: white; padding: 20px; border-radius: 0 0 8px 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+  .content-section.active { display: block; animation: fadeIn 0.4s; }
 
-  .pdf-container { margin-top: 20px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden; background: #525659; position: relative; padding-top: 56.25%; /* 16:9 Aspect Ratio */ }
-  iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  /* PDF & Helper Box */
+  .helper-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+  .steps-box { background: #f1f5f9; padding: 15px; border-radius: 8px; border-left: 5px solid var(--accent); }
+  .pdf-box { background: #333; border-radius: 8px; height: 600px; overflow: hidden; }
+  iframe { width: 100%; height: 100%; border: none; }
 
-  .download-bar { background: #f8fafc; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border: 1px solid #e2e8f0; }
-  .btn-download { background: var(--secondary); color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 14px; font-weight: bold; }
-  
-  .step-list { margin: 15px 0; padding-left: 20px; }
-  .step-list li { margin-bottom: 8px; line-height: 1.4; color: #444; font-size: 14px; }
-  
+  .btn-action { display: inline-block; background: var(--accent); color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
+
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @media (max-width: 600px) { .pdf-container { padding-top: 120%; } .download-bar { flex-direction: column; gap: 10px; text-align: center; } }
+  @media (max-width: 800px) { .helper-grid { grid-template-columns: 1fr; } .pdf-box { height: 450px; } }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h2 style="margin:0;">STAFKIND TRAINING PORTAL</h2>
-  <p style="margin:5px 0 0; font-size:14px;">Complete Step-by-Step Registration Guide</p>
+  <h2 style="margin:0;">STAFKIND AGENT HELP CENTER</h2>
+  <p style="margin:5px 0 0; font-size:14px;">All Registration Guides in One Place</p>
 </div>
 
 <div class="container">
   
-  <div class="selector-tabs">
-    <button class="tab-btn active" onclick="openTab('angel', this)">Angel One</button>
-    <button class="tab-btn" onclick="openTab('upstox', this)">Upstox</button>
-    <button class="tab-btn" onclick="openTab('mstock', this)" style="border: 2px solid var(--mstock);">m.Stock (New)</button>
+  <div class="tabs-container">
+    <button class="tab-btn active" onclick="openTab('mstock', this)">M.STOCK</button>
+    <button class="tab-btn" onclick="openTab('angel', this)">ANGEL ONE</button>
+    <button class="tab-btn" onclick="openTab('upstox', this)">UPSTOX</button>
+    <button class="tab-btn" onclick="openTab('others', this)">OTHERS</button>
   </div>
 
-  <div id="angel" class="content-area active">
-    <div class="download-bar">
-      <div><strong>📄 Angel One Guide</strong><br><small>Original Training PDF</small></div>
-      <a href="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF Full View</a>
-    </div>
-    <ul class="step-list">
-      <li>Mobile Number & Email OTP Verification.</li>
-      <li>PAN Card details and Date of Birth.</li>
-      <li>DigiLocker integration for Aadhaar KYC.</li>
-      <li>Bank Account number and IFSC Code verification.</li>
-      <li>Final E-sign through NSDL portal.</li>
-    </ul>
-    <div class="pdf-container">
-      <iframe src="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
-    </div>
-  </div>
-
-  <div id="upstox" class="content-area">
-    <div class="download-bar">
-      <div><strong>📄 Upstox Guide</strong><br><small>Original Training PDF</small></div>
-      <a href="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF Full View</a>
-    </div>
-    <ul class="step-list">
-      <li>Sign up with Mobile and Google Email.</li>
-      <li>Enter PAN and Personal Information.</li>
-      <li>Live Selfie and Digital Signature on Screen.</li>
-      <li>Bank details addition and verification.</li>
-      <li>Aadhaar OTP based E-Sign.</li>
-    </ul>
-    <div class="pdf-container">
-      <iframe src="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
+  <div id="mstock" class="content-section active">
+    <div class="helper-grid">
+      <div class="steps-box">
+        <h3>M.Stock Guide</h3>
+        <p>1. Mobile & Email OTP verify karein.<br>
+           2. PAN details aur DOB dalein.<br>
+           3. Plan select karein (Zero/Free).<br>
+           4. Selfie aur Signature de.<br>
+           5. Bank aur E-Sign poora karein.</p>
+        <a href="mstock.pdf" target="_blank" class="btn-action">Download PDF</a>
+      </div>
+      <div class="pdf-box">
+        <iframe src="mstock.pdf"></iframe>
+      </div>
     </div>
   </div>
 
-  <div id="mstock" class="content-area">
-    <div class="download-bar" style="border-left: 5px solid var(--mstock);">
-      <div><strong>📄 m.Stock Updated Guide</strong><br><small>Latest Account Opening Process</small></div>
-      <a href="M.STOCK NEW ( UPDATED ACCOUNT OPNING ).pdf" target="_blank" class="btn-download" style="background: var(--mstock);">Open PDF Full View</a>
-    </div>
-    <h3 style="color:var(--mstock);">m.Stock Opening Steps:</h3>
-    <ul class="step-list">
-      <li><b>Mobile & Email:</b> Enter mobile number followed by email and verify both using OTP.</li>
-      <li><b>Identity:</b> Provide PAN Card number and your Date of Birth.</li>
-      <li><b>Pricing Plan:</b> Select your preferred brokerage plan as per candidate choice.</li>
-      <li><b>KYC Documents:</b> Upload a clear selfie and sign digitally on the mobile screen.</li>
-      <li><b>Bank Linking:</b> Enter Account Number and IFSC Code (Ensure name matches PAN).</li>
-      <li><b>Final Step:</b> Complete the E-sign process using Aadhaar-linked mobile OTP.</li>
-    </ul>
-    <div class="pdf-container">
-      <iframe src="M.STOCK NEW ( UPDATED ACCOUNT OPNING ).pdf"></iframe>
+  <div id="angel" class="content-section">
+    <div class="helper-grid">
+      <div class="steps-box">
+        <h3>Angel One Guide</h3>
+        <p>1. Link se registration start karein.<br>
+           2. Aadhaar e-KYC (DigiLocker) karein.<br>
+           3. Bank details verify karein.<br>
+           4. NSDL page par Aadhaar OTP dalein.</p>
+        <a href="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-action">Download PDF</a>
+      </div>
+      <div class="pdf-box">
+        <iframe src="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
+      </div>
     </div>
   </div>
 
-  <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
-    <button onclick="window.location.href='index.html'" style="padding: 12px 25px; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; background: white; font-weight: bold;">← Return to CRM Dashboard</button>
+  <div id="upstox" class="content-section">
+    <div class="helper-grid">
+      <div class="steps-box">
+        <h3>Upstox Guide</h3>
+        <p>1. Mobile aur Google ID se login.<br>
+           2. Personal details aur PAN verification.<br>
+           3. Live Selfie aur Signature upload.<br>
+           4. Aadhaar E-Sign complete karein.</p>
+        <a href="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-action">Download PDF</a>
+      </div>
+      <div class="pdf-box">
+        <iframe src="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div id="others" class="content-section" style="text-align: center; padding: 50px;">
+    <h3>Additional Guides</h3>
+    <p>Baaki PDF files bhi aap yahan dekh sakte hain.</p>
+    <a href="index.html" class="btn-action" style="background:#666;">Back to CRM Dashboard</a>
   </div>
 
 </div>
 
 <script>
-function openTab(tabId, btn) {
-  document.querySelectorAll('.content-area').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  btn.classList.add('active');
+function openTab(tabName, btn) {
+  var i, content, tabs;
+  content = document.getElementsByClassName("content-section");
+  for (i = 0; i < content.length; i++) { content[i].classList.remove("active"); }
+  
+  tabs = document.getElementsByClassName("tab-btn");
+  for (i = 0; i < tabs.length; i++) { tabs[i].classList.remove("active"); }
+  
+  document.getElementById(tabName).classList.add("active");
+  btn.classList.add("active");
 }
 </script>
 

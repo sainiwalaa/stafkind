@@ -20,10 +20,7 @@ body{
   font-size:18px;
 }
 
-/* TABLE */
-.container{
-  padding:10px;
-}
+.container{padding:10px;}
 
 table{
   width:100%;
@@ -46,7 +43,6 @@ td{
   font-size:13px;
 }
 
-/* INPUT */
 input{
   width:100%;
   padding:4px;
@@ -54,7 +50,6 @@ input{
   border:1px solid #ccc;
 }
 
-/* BUTTON */
 button{
   padding:4px 6px;
   border:none;
@@ -70,14 +65,14 @@ button{
 .save{background:#22c55e;color:#fff;}
 .wa{background:#25D366;color:#fff;}
 
-.active{
-  background:#22c55e !important;
-  color:#fff;
-}
+.active{background:#22c55e !important;color:#fff;}
 
-.done{
-  background:#dcfce7 !important;
-}
+/* 🔥 SAVE STAGES */
+.stage1{background:#dcfce7 !important;}
+.stage2{background:#bbf7d0 !important;}
+.stage3{background:#86efac !important;}
+.stage4{background:#4ade80 !important;}
+.stage5{background:#22c55e !important;color:#fff;}
 
 @media(max-width:600px){
   table{display:block;overflow-x:auto;}
@@ -122,7 +117,16 @@ let html="";
 
 data.forEach((item,i)=>{
 
-html+=`<tr id="row${i}">
+let stageClass="";
+let count = item.count || 0;
+
+if(count==1) stageClass="stage1";
+else if(count==2) stageClass="stage2";
+else if(count==3) stageClass="stage3";
+else if(count==4) stageClass="stage4";
+else if(count>=5) stageClass="stage5";
+
+html+=`<tr id="row${i}" class="${stageClass}" data-count="${count}">
 
 <td>${item.date || ''}</td>
 <td>${item.name}</td>
@@ -151,7 +155,7 @@ html+=`<tr id="row${i}">
 </td>
 
 <td>
-<input id="status${i}" value="${item.status || ''}" placeholder="Write...">
+<input id="status${i}" value="${item.status || ''}">
 </td>
 
 <td>
@@ -165,7 +169,6 @@ document.getElementById("data").innerHTML=html;
 });
 }
 
-/* BUTTON SELECT */
 function setVal(id,val,btn){
 document.getElementById(id).value=val;
 
@@ -175,16 +178,28 @@ group.forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 }
 
-/* WHATSAPP SEND */
 function sendMeet(phone,link){
 let msg=`Join meeting:\n${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
-/* SAVE */
 function save(i,name,phone){
 
-document.getElementById("row"+i).classList.add("done");
+let row = document.getElementById("row"+i);
+
+// 🔥 COUNT SYSTEM
+let count = parseInt(row.getAttribute("data-count") || 0);
+count++;
+row.setAttribute("data-count",count);
+
+// 🔥 COLOR APPLY
+row.classList.remove("stage1","stage2","stage3","stage4","stage5");
+
+if(count==1) row.classList.add("stage1");
+else if(count==2) row.classList.add("stage2");
+else if(count==3) row.classList.add("stage3");
+else if(count==4) row.classList.add("stage4");
+else row.classList.add("stage5");
 
 const payload={
 name:name,
@@ -192,14 +207,15 @@ mobile:phone,
 call:document.getElementById("call"+i).value,
 recall:document.getElementById("recall"+i).value,
 join:document.getElementById("join"+i).value,
-status:document.getElementById("status"+i).value
+status:document.getElementById("status"+i).value,
+count:count
 };
 
 fetch(API,{
 method:"POST",
 body: JSON.stringify(payload)
 })
-.then(()=>alert("Saved ✅"));
+.then(()=>console.log("Saved"));
 
 }
 

@@ -12,76 +12,77 @@ body{
   color:#fff;
 }
 
-/* HEADER */
 .header{
-  background:#ffffff;
-  color:#1e293b;
-  padding:15px;
-  font-size:20px;
-  font-weight:bold;
-  display:flex;
-  justify-content:space-between;
-}
-
-/* CONTAINER */
-.container{
-  padding:15px;
-}
-
-/* CARD */
-.card{
-  background:#1e293b;
+  background:#fff;
+  color:#000;
   padding:12px;
-  border-radius:10px;
-  margin-bottom:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.4);
-}
-
-/* NAME */
-.name{
-  font-size:16px;
   font-weight:bold;
+  font-size:18px;
 }
 
-.phone{
-  color:#94a3b8;
-  font-size:14px;
+/* TABLE */
+.container{
+  padding:10px;
 }
 
-/* BUTTON GROUP */
-.btn-group{
-  margin-top:8px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  color:#000;
 }
 
+th{
+  background:#111;
+  color:#fff;
+  padding:8px;
+  font-size:13px;
+}
+
+td{
+  padding:6px;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+  font-size:13px;
+}
+
+/* INPUT */
+input,textarea{
+  width:100%;
+  padding:4px;
+  border-radius:4px;
+  border:1px solid #ccc;
+}
+
+/* BUTTON */
 button{
-  padding:6px 10px;
+  padding:4px 6px;
   border:none;
-  border-radius:6px;
-  font-size:12px;
+  border-radius:4px;
+  margin:2px;
   cursor:pointer;
+  font-size:11px;
 }
 
-/* COLORS */
-.call{background:#334155;color:#fff;}
-.recall{background:#475569;color:#fff;}
-.join{background:#6366f1;color:#fff;}
+.call{background:#e2e8f0;}
+.recall{background:#fde68a;}
+.join{background:#c7d2fe;}
 .save{background:#22c55e;color:#fff;}
 .wa{background:#25D366;color:#fff;}
 
-input,textarea{
-  width:100%;
-  margin-top:6px;
-  padding:6px;
-  border-radius:6px;
-  border:none;
+/* ACTIVE STATUS COLOR */
+.active{
+  background:#22c55e !important;
+  color:#fff;
 }
 
-/* MOBILE */
+/* ROW HIGHLIGHT */
+.done{
+  background:#dcfce7 !important;
+}
+
 @media(max-width:600px){
-  .header{font-size:16px;}
+  table{display:block;overflow-x:auto;}
 }
 </style>
 
@@ -89,12 +90,26 @@ input,textarea{
 
 <body>
 
-<div class="header">
-CRM Dashboard
-<span>Work Panel</span>
-</div>
+<div class="header">CRM Dashboard</div>
 
-<div class="container" id="data"></div>
+<div class="container">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Mobile</th>
+<th>Send</th>
+<th>Call</th>
+<th>Recall</th>
+<th>Join</th>
+<th>Status</th>
+<th>Save</th>
+</tr>
+</thead>
+
+<tbody id="data"></tbody>
+</table>
+</div>
 
 <script>
 
@@ -108,82 +123,75 @@ let html="";
 
 data.forEach((item,i)=>{
 
-html+=`
-<div class="card">
+html+=`<tr id="row${i}">
 
-<div class="name">${item.name}</div>
-<div class="phone">${item.phone}</div>
+<td>${item.name}</td>
+<td>${item.phone}</td>
 
-<div class="btn-group">
-<button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">Send Meet</button>
-</div>
+<td>
+<button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">Send</button>
+</td>
 
-<!-- CALL -->
-<div class="btn-group">
-<button class="call" onclick="setVal('call${i}','Busy')">Busy</button>
-<button class="call" onclick="setVal('call${i}','Switch Off')">Off</button>
-<button class="call" onclick="setVal('call${i}','Wrong')">Wrong</button>
-<button class="call" onclick="setVal('call${i}','Connected')">Connect</button>
-</div>
-<input id="call${i}" placeholder="Call status">
+<td>
+<button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
+<button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
+<input id="call${i}">
+</td>
 
-<!-- RECALL -->
-<div class="btn-group">
-<button class="recall" onclick="setVal('recall${i}','Send Meeting')">Meeting</button>
-<button class="recall" onclick="setVal('recall${i}','Send App')">App</button>
-<button class="recall" onclick="setVal('recall${i}','Not Interested')">Not</button>
-</div>
-<input id="recall${i}" placeholder="Recall">
+<td>
+<button class="recall" onclick="setVal('recall${i}','Meeting',this)">Meeting</button>
+<button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
+<input id="recall${i}">
+</td>
 
-<!-- JOIN -->
-<div class="btn-group">
-<button class="join" onclick="setVal('join${i}','Training Start')">Training</button>
-<button class="join" onclick="setVal('join${i}','Only Join')">Join</button>
-<button class="join" onclick="setVal('join${i}','Not Start')">Not</button>
-</div>
-<input id="join${i}" placeholder="Join status">
+<td>
+<button class="join" onclick="setVal('join${i}','Join',this)">Join</button>
+<button class="join" onclick="setVal('join${i}','Training',this)">Training</button>
+<input id="join${i}">
+</td>
 
-<textarea id="fb${i}" placeholder="Feedback"></textarea>
+<td>
+<input id="status${i}" placeholder="Write...">
+</td>
 
-<input id="status${i}" placeholder="Status">
-
+<td>
 <button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
+</td>
 
-</div>
-`;
-
+</tr>`;
 });
 
 document.getElementById("data").innerHTML=html;
 });
 }
 
-/* SET VALUE */
-function setVal(id,val){
+/* SET VALUE + ACTIVE COLOR */
+function setVal(id,val,btn){
 document.getElementById(id).value=val;
+
+let group = btn.parentNode.querySelectorAll("button");
+group.forEach(b=>b.classList.remove("active"));
+
+btn.classList.add("active");
 }
 
 /* WHATSAPP */
 function sendMeet(phone,link){
-let msg=`Hello 👋
-
-Join meeting:
-${link}`;
+let msg=`Join meeting:\n${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
 /* SAVE */
 function save(i,name,phone){
 
+document.getElementById("row"+i).classList.add("done");
+
 const payload={
 name:name,
 mobile:phone,
 call:document.getElementById("call"+i).value,
-meeting:"",
-feedback:document.getElementById("fb"+i).value,
 recall:document.getElementById("recall"+i).value,
 join:document.getElementById("join"+i).value,
-refer:"",
 status:document.getElementById("status"+i).value
 };
 

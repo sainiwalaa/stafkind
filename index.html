@@ -2,65 +2,82 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CRM Dashboard</title>
+<title>STAFKIND CRM</title>
 
 <style>
 body{
   margin:0;
   font-family:Arial;
-  background:#0f172a;
-  color:#fff;
+  background:#eef2f7;
 }
 
+/* HEADER */
 .header{
-  background:#fff;
-  color:#000;
-  padding:12px;
+  background:#0b3d91;
+  color:#fff;
+  padding:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
   font-weight:bold;
   font-size:18px;
-  text-align:center;
 }
 
-/* FILTER */
+/* RUNNING NOTE */
+.note{
+  background:#facc15;
+  color:#000;
+  padding:5px;
+  font-size:13px;
+}
+
+marquee{
+  font-weight:bold;
+}
+
+/* FILTER SMALL BUTTON */
 .filter{
-  background:#1e293b;
-  padding:10px;
+  padding:8px;
   text-align:center;
+  background:#fff;
 }
 
-.filter input, .filter button{
-  padding:6px;
-  margin:3px;
-  border-radius:5px;
-  border:none;
+.filter input{
+  padding:5px;
 }
 
 .filter button{
-  background:#22c55e;
+  padding:6px 10px;
+  background:#0b3d91;
   color:white;
+  border:none;
+  border-radius:5px;
   cursor:pointer;
 }
 
 /* TABLE */
 .container{
-  padding:10px;
   height:80vh;
   overflow:auto;
+  padding:10px;
 }
 
 table{
   width:100%;
   border-collapse:collapse;
   background:#fff;
-  color:#000;
 }
 
 th{
   position:sticky;
   top:0;
-  background:#111;
+  background:#0b3d91;
   color:#fff;
   padding:8px;
+  font-size:13px;
   z-index:2;
 }
 
@@ -68,8 +85,10 @@ td{
   padding:6px;
   border-bottom:1px solid #ddd;
   text-align:center;
+  font-size:13px;
 }
 
+/* INPUT */
 input{
   width:100%;
   padding:4px;
@@ -77,6 +96,7 @@ input{
   border:1px solid #ccc;
 }
 
+/* BUTTON */
 button{
   padding:4px 6px;
   border:none;
@@ -94,6 +114,7 @@ button{
 
 .active{background:#22c55e !important;color:#fff;}
 
+/* COLOR TRACK */
 .stage1{background:#dcfce7;}
 .stage2{background:#bbf7d0;}
 .stage3{background:#86efac;}
@@ -106,11 +127,18 @@ button{
 
 <body>
 
-<div class="header">📞 CRM Dashboard</div>
+<div class="header">
+  <div class="logo">STAFKIND CRM</div>
+  <div>📞 Dashboard</div>
+</div>
+
+<div class="note">
+<marquee>⚠ WhatsApp open rakho aur fast kaam karo | Daily calling complete karo | Data save karna na bhule</marquee>
+</div>
 
 <div class="filter">
 <input type="date" id="dateFilter">
-<button onclick="filterData()">Filter</button>
+<button onclick="filterData()">Search</button>
 <button onclick="loadData()">All</button>
 </div>
 
@@ -140,7 +168,7 @@ const API="https://script.google.com/macros/s/AKfycbzCtPtjA76jf-F0JpO4pM7wu6JHJf
 
 let globalData=[];
 
-/* LOAD DATA */
+/* LOAD */
 function loadData(){
 fetch(API)
 .then(res=>res.json())
@@ -206,47 +234,32 @@ html+=`
 });
 
 document.getElementById("data").innerHTML=html;
-
 }
 
-/* 🔥 FINAL DATE FILTER FIX */
+/* FILTER */
 function filterData(){
 
 let selected=document.getElementById("dateFilter").value;
+if(!selected){ alert("Select Date"); return; }
 
-if(!selected){
-alert("Select Date First");
-return;
-}
-
-// FIX FORMAT
 let d=new Date(selected);
-let day = String(d.getDate()).padStart(2,'0');
-let month = String(d.getMonth()+1).padStart(2,'0');
-let year = d.getFullYear();
+let formatted = String(d.getDate()).padStart(2,'0') + "/" +
+                String(d.getMonth()+1).padStart(2,'0') + "/" +
+                d.getFullYear();
 
-let formatted = day + "/" + month + "/" + year;
+let filtered = globalData.filter(x => (x.date||"").trim()===formatted);
 
-// FILTER
-let filtered = globalData.filter(item => 
-(item.date || "").trim() === formatted
-);
-
-if(filtered.length===0){
-alert("❌ No Data Found: " + formatted);
+if(filtered.length==0){
+alert("No Data Found");
 }
 
 render(filtered);
-
 }
 
 /* BUTTON */
 function setVal(id,val,btn){
 document.getElementById(id).value=val;
-
-let group=btn.parentNode.querySelectorAll("button");
-group.forEach(b=>b.classList.remove("active"));
-
+btn.parentNode.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 }
 
@@ -260,9 +273,9 @@ window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 function save(i,name,phone){
 
 let row=document.getElementById("row"+i);
-
 let count=parseInt(row.getAttribute("data-count")||0);
 count++;
+
 row.setAttribute("data-count",count);
 
 row.classList.remove("stage1","stage2","stage3","stage4","stage5");
@@ -290,7 +303,6 @@ body:JSON.stringify(payload)
 alert("✅ Saved");
 loadData();
 });
-
 }
 
 loadData();

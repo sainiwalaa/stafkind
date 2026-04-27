@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAFKIND Link Sender</title>
+<style>
+:root { --primary:#0b3d91; --accent:#25D366; --bg:#f4f7fa; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+
+.sender-card {
+    max-width: 600px; margin: auto; background: #fff;
+    padding: 30px; border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+h2 { text-align: center; color: var(--primary); margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+
+.input-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
+input, select {
+    width: 100%; padding: 12px; border: 1.5px solid #ddd;
+    border-radius: 8px; box-sizing: border-box; font-size: 15px;
+    transition: 0.3s;
+}
+input:focus { border-color: var(--primary); outline: none; }
+
+.btn-send {
+    width: 100%; padding: 15px; background: var(--accent);
+    color: white; border: none; border-radius: 8px;
+    font-size: 18px; font-weight: bold; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+}
+
+.btn-send:hover { background: #1eb956; transform: translateY(-1px); }
+
+.preview-box {
+    margin-top: 25px; padding: 15px; background: #f8fafc;
+    border: 1px solid #e2e8f0; border-radius: 10px;
+}
+.preview-header { font-weight: bold; color: #64748b; margin-bottom: 10px; font-size: 12px; text-transform: uppercase; }
+#msgPreview { font-size: 13px; color: #334155; white-space: pre-wrap; line-height: 1.5; }
+
+.back-link { text-align: center; margin-top: 20px; }
+.back-link a { color: #64748b; text-decoration: none; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="sender-card">
+    <h2>🔗 Professional Link Sender</h2>
+    
+    <div class="input-group">
+        <label>Candidate Name</label>
+        <input type="text" id="custName" placeholder="Candidate ka naam likhein" oninput="updatePreview()">
+    </div>
+
+    <div class="input-group">
+        <label>WhatsApp Number</label>
+        <input type="number" id="custPhone" placeholder="91XXXXXXXXXX">
+    </div>
+
+    <div class="input-group">
+        <label>Select Profile/App</label>
+        <select id="appSelect" onchange="updatePreview()">
+            <option value="mstock">m.Stock (Demat Account)</option>
+            <option value="angel">Angel One (Demat Account)</option>
+            <option value="upstox">Upstox (Demat Account)</option>
+            <option value="tide">Tide (Business Account)</option>
+        </select>
+    </div>
+
+    <button class="btn-send" onclick="sendWhatsApp()">
+        Send Professional Guide ✅
+    </button>
+
+    <div class="preview-box">
+        <div class="preview-header">Live Message Preview</div>
+        <div id="msgPreview">Candidate ka details enter karein...</div>
+    </div>
+    
+    <div class="back-link">
+        <a href="javascript:history.back()">← Back to CRM Dashboard</a>
+    </div>
+</div>
+
+<script>
+const appData = {
+    mstock: {
+        title: "m.Stock Account",
+        link: "https://leads.banksathi.com/?h=VXJ3RDVJYXM5TEtFcjhOaC9vR1gxZz09",
+        steps: "- Keep Aadhaar Card, PAN Card, and Bank Details ready.\n- Complete the registration process by yourself.\n- Select 'Zero Brokerage Plan' and 'Quarterly AMC'.\n- Use only mobile data (Avoid Wi-Fi).\n- Do not refresh the page during the process."
+    },
+    angel: {
+        title: "Angel One Account",
+        link: "https://aryoleads.co.in/?uid=ANGEL_ONE", 
+        steps: "- Keep Aadhaar, PAN and DigiLocker access ready.\n- Use your mobile data for a smooth process.\n- Capture a clear selfie and signature on screen.\n- Complete E-Sign using Aadhaar OTP."
+    },
+    upstox: {
+        title: "Upstox Account",
+        link: "https://track.skro.in/11/ITC9",
+        steps: "- Ensure your Aadhaar is linked with your mobile number.\n- Use mobile data for the entire registration.\n- Upload clear photos of required documents.\n- Do not close or refresh the browser until success."
+    },
+    tide: {
+        title: "Tide Business Account",
+        link: "https://share.trkep.in/share/69ecdca35995639f0d191273",
+        steps: "- Use ONLY mobile data while registering (No Wi-Fi).\n- Apply the Referral/Promo Code during signup.\n- Complete Video KYC with original documents.\n- Add ₹50 to your account to activate withdrawals."
+    }
+};
+
+function generateMessage() {
+    const app = document.getElementById('appSelect').value;
+    const name = document.getElementById('custName').value || "[Candidate Name]";
+    const data = appData[app];
+
+    return `*Subject: Telecaller Position – Registration Process (${data.title})*
+
+Dear ${name},
+
+Congratulations! You have been shortlisted for the Telecaller position at our company.
+
+Please note that you are requested to complete your registration process using the official HR link shared below.
+
+*Before proceeding, kindly ensure the following:*
+
+${data.steps}
+- In case of any error, contact HR immediately.
+
+*Your Registration Link:* ${data.link}
+
+Best Regards,
+Recruitment Team
+*STAFKIND SERVICES*`;
+}
+
+function updatePreview() {
+    document.getElementById('msgPreview').innerText = generateMessage();
+}
+
+function sendWhatsApp() {
+    const phone = document.getElementById('custPhone').value;
+    if(!phone || phone.length < 10) { 
+        alert("Kripya sahi WhatsApp number dalein!"); 
+        return; 
+    }
+    
+    const message = generateMessage();
+    const waLink = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+    window.open(waLink, '_blank');
+}
+
+// Initial preview
+updatePreview();
+</script>
+
+</body>
+</html>

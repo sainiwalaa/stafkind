@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bulk Upload</title>
+
+<style>
+body{
+font-family:Arial;
+padding:20px;
+background:#1e293b;
+color:white;
+}
+
+textarea{
+width:100%;
+height:250px;
+padding:10px;
+border-radius:10px;
+}
+
+button{
+margin-top:10px;
+padding:12px;
+width:100%;
+background:#22c55e;
+color:white;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>📥 Paste Data Here</h2>
+
+<textarea id="data" placeholder="Name Number paste karo..."></textarea>
+
+<button onclick="upload()">Upload to Sheet</button>
+
+<script>
+
+const API="https://script.google.com/macros/s/AKfycbyfpB_xzP53gQqhZAP_LwKy3jb1V9X_ymKjIm93DRWTwTB34BCFR6TWNZNdWSXVhzth/exec";
+
+function upload(){
+
+let text = document.getElementById("data").value;
+
+fetch(API,{
+method:"POST",
+body: JSON.stringify({text:text})
+})
+.then(()=>alert("✅ Data Saved in Sheet"));
+
+}
+
+</script>
+
+</body>
+</html>

@@ -18,24 +18,24 @@
   .content-area { display: none; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
   .content-area.active { display: block; animation: fadeIn 0.4s; }
 
-  .pdf-container { margin-top: 20px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden; background: #525659; }
-  iframe { width: 100%; height: 600px; border: none; }
+  .pdf-container { margin-top: 20px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden; background: #525659; position: relative; padding-top: 56.25%; /* 16:9 Aspect Ratio */ }
+  iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
   .download-bar { background: #f8fafc; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border: 1px solid #e2e8f0; }
-  .btn-download { background: var(--secondary); color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 14px; }
+  .btn-download { background: var(--secondary); color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 14px; font-weight: bold; }
   
   .step-list { margin: 15px 0; padding-left: 20px; }
   .step-list li { margin-bottom: 8px; line-height: 1.4; color: #444; font-size: 14px; }
   
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @media (max-width: 600px) { iframe { height: 400px; } .download-bar { flex-direction: column; gap: 10px; text-align: center; } }
+  @media (max-width: 600px) { .pdf-container { padding-top: 120%; } .download-bar { flex-direction: column; gap: 10px; text-align: center; } }
 </style>
 </head>
 <body>
 
 <div class="header">
   <h2 style="margin:0;">STAFKIND TRAINING PORTAL</h2>
-  <p style="margin:5px 0 0; font-size:14px;">Registration Guides & PDF Support</p>
+  <p style="margin:5px 0 0; font-size:14px;">Complete Step-by-Step Registration Guide</p>
 </div>
 
 <div class="container">
@@ -43,20 +43,20 @@
   <div class="selector-tabs">
     <button class="tab-btn active" onclick="openTab('angel', this)">Angel One</button>
     <button class="tab-btn" onclick="openTab('upstox', this)">Upstox</button>
-    <button class="tab-btn" onclick="openTab('mstock', this)" style="border: 1px solid var(--mstock);">m.Stock (New)</button>
+    <button class="tab-btn" onclick="openTab('mstock', this)" style="border: 2px solid var(--mstock);">m.Stock (New)</button>
   </div>
 
   <div id="angel" class="content-area active">
     <div class="download-bar">
-      <div><strong>📄 Angel One Guide</strong></div>
-      <a href="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF</a>
+      <div><strong>📄 Angel One Guide</strong><br><small>Original Training PDF</small></div>
+      <a href="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF Full View</a>
     </div>
     <ul class="step-list">
-      <li>Mobile & Email OTP verification.</li>
-      <li>PAN Card & Date of Birth entry.</li>
-      <li>DigiLocker Aadhaar KYC (Allow access).</li>
-      <li>Bank Account & IFSC verification.</li>
-      <li>Final E-Sign via NSDL (Aadhaar OTP).</li>
+      <li>Mobile Number & Email OTP Verification.</li>
+      <li>PAN Card details and Date of Birth.</li>
+      <li>DigiLocker integration for Aadhaar KYC.</li>
+      <li>Bank Account number and IFSC Code verification.</li>
+      <li>Final E-sign through NSDL portal.</li>
     </ul>
     <div class="pdf-container">
       <iframe src="ANGEL ONE REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
@@ -65,15 +65,15 @@
 
   <div id="upstox" class="content-area">
     <div class="download-bar">
-      <div><strong>📄 Upstox Guide</strong></div>
-      <a href="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF</a>
+      <div><strong>📄 Upstox Guide</strong><br><small>Original Training PDF</small></div>
+      <a href="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf" target="_blank" class="btn-download">Open PDF Full View</a>
     </div>
     <ul class="step-list">
-      <li>Login with Mobile & Google Email.</li>
-      <li>PAN, Gender, and Income details.</li>
-      <li>Digital Signature on screen & Selfie.</li>
-      <li>Bank Account linking (Penny drop verification).</li>
-      <li>Aadhaar OTP E-Sign.</li>
+      <li>Sign up with Mobile and Google Email.</li>
+      <li>Enter PAN and Personal Information.</li>
+      <li>Live Selfie and Digital Signature on Screen.</li>
+      <li>Bank details addition and verification.</li>
+      <li>Aadhaar OTP based E-Sign.</li>
     </ul>
     <div class="pdf-container">
       <iframe src="UPSTOX REGISTATION ( STAFKIND SERVICES ).pdf"></iframe>
@@ -82,18 +82,17 @@
 
   <div id="mstock" class="content-area">
     <div class="download-bar" style="border-left: 5px solid var(--mstock);">
-      <div><strong>📄 m.Stock New Updated Guide</strong></div>
-      <a href="M.STOCK NEW ( UPDATED ACCOUNT OPNING ).pdf" target="_blank" class="btn-download" style="background: var(--mstock);">Open PDF</a>
+      <div><strong>📄 m.Stock Updated Guide</strong><br><small>Latest Account Opening Process</small></div>
+      <a href="M.STOCK NEW ( UPDATED ACCOUNT OPNING ).pdf" target="_blank" class="btn-download" style="background: var(--mstock);">Open PDF Full View</a>
     </div>
     <h3 style="color:var(--mstock);">m.Stock Opening Steps:</h3>
     <ul class="step-list">
-      <li><b>Step 1:</b> Mobile number enter karke OTP verify karein.</li>
-      <li><b>Step 2:</b> Email ID enter karein aur uska OTP verify karein.</li>
-      <li><b>Step 3:</b> PAN Card number aur DOB (Date of Birth) fill karein.</li>
-      <li><b>Step 4:</b> Plan select karein (Zero Brokerage ya Free).</li>
-      <li><b>Step 5:</b> Selfie aur Signature upload karein.</li>
-      <li><b>Step 6:</b> Bank details (Account No & IFSC) add karein.</li>
-      <li><b>Step 7:</b> Final E-sign Aadhaar OTP ke saath complete karein.</li>
+      <li><b>Mobile & Email:</b> Enter mobile number followed by email and verify both using OTP.</li>
+      <li><b>Identity:</b> Provide PAN Card number and your Date of Birth.</li>
+      <li><b>Pricing Plan:</b> Select your preferred brokerage plan as per candidate choice.</li>
+      <li><b>KYC Documents:</b> Upload a clear selfie and sign digitally on the mobile screen.</li>
+      <li><b>Bank Linking:</b> Enter Account Number and IFSC Code (Ensure name matches PAN).</li>
+      <li><b>Final Step:</b> Complete the E-sign process using Aadhaar-linked mobile OTP.</li>
     </ul>
     <div class="pdf-container">
       <iframe src="M.STOCK NEW ( UPDATED ACCOUNT OPNING ).pdf"></iframe>
@@ -101,7 +100,7 @@
   </div>
 
   <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
-    <button onclick="window.location.href='index.html'" style="padding: 10px 20px; border-radius: 5px; border: 1px solid #ccc; cursor: pointer; background: white;">← Back to CRM</button>
+    <button onclick="window.location.href='index.html'" style="padding: 12px 25px; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; background: white; font-weight: bold;">← Return to CRM Dashboard</button>
   </div>
 
 </div>

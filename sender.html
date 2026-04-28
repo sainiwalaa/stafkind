@@ -55,9 +55,9 @@ input, select {
     <div class="input-group">
         <label>Select Message Type</label>
         <select id="appType" onchange="updateContent()">
+            <option value="job_details">Job Details (WFH Description)</option>
             <option value="standard">Standard (m.Stock/Upstox/Angel)</option>
             <option value="tide">Tide Registration (Telecaller)</option>
-            <option value="job_details">Job Details (WFH Description)</option>
             <option value="about">About Stafkind (Landing Page)</option>
             <option value="not_interested">Not Interested / Referral Offer</option>
         </select>
@@ -123,31 +123,38 @@ function generateMessage() {
     const hr = document.getElementById('hrName').value || "Sunil Kumar Saini";
 
     if (type === 'job_details') {
-        return `Dear ${name},
+        return `*"PART TIME & FULL TIME WORK FROM HOME JOB"* Company Name : *STAFKIND SERVICES*
 
-Humne aapko call kiya tha par sampark nahi ho paya. Hum aapko niche di gayi job profile ke liye shortlist karna chahte hain:
-
-*"PART TIME & FULL TIME WORK FROM HOME JOB"* Company Name : *STAFKIND SERVICES*
 Company Location : *West Bengal, Kolkata*
-Designation : *Customer support executive (CSE)*
-Working process: *Voice Process*
-Gadget required : *Mobile/Laptop/PC*
-Working hours : *3-4 hrs in a day (flexible Timings)*
-Working days: *Monday to Friday (Saturday & Sunday Holiday)*
 
-Salary : *15000/- + INCENTIVES*
+Designation : *Customer support executive (CSE)*
+
+Working process: *Voice Process*
+
+Gadget required : *Mobile/Laptop/PC*
+
+Working hours : *3-4 hrs in a day  (flexible Timings)*
+
+ *Working days: *Monday to Friday*
+ *Saturday and Sunday holiday*
+
+Salary : *15000/-*+ *INCENTIVES*
+
 Identification: *Virtual ID card will be given*
-Trainings: *5 days (Product & Process related)*
+
+Trainings: *5 days*
+*(Product and process related Training)*
+
 *100% selection in Trainings with Zero Investment*
 
-SUPPORT: *Mentors will be provided in OJT WhatsApp group.*
+SUPPORT: *Mentors will be provided for newly joined Candidates in OJT what's app group*
 
 *NO FEES AND NO INVESTMENT*
 
-Agar aap interested hain toh kripya reply karein ya diye gaye link par register karein.
 
-Regards,
-*RECRUITMENT DEPARTMENT*
+
+  Regards,
+*RECRUITMENT    DEPARTMENT*
 *STAFKIND SERVICES*`;
     }
     else if (type === 'about') {
@@ -249,7 +256,8 @@ function sendWhatsApp() {
     window.open(waLink, '_blank');
 }
 
-updatePreview();
+// Initialize with Job Details preview
+updateContent();
 </script>
 
 </body>

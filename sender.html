@@ -57,6 +57,7 @@ input, select {
         <select id="appType" onchange="updateContent()">
             <option value="standard">Standard (m.Stock/Upstox/Angel)</option>
             <option value="tide">Tide Registration (Telecaller)</option>
+            <option value="job_details">Job Details (WFH Description)</option>
             <option value="about">About Stafkind (Landing Page)</option>
             <option value="not_interested">Not Interested / Referral Offer</option>
         </select>
@@ -72,7 +73,7 @@ input, select {
         <input type="number" id="custPhone" placeholder="91XXXXXXXXXX">
     </div>
 
-    <div class="input-group">
+    <div class="input-group" id="linkGroup">
         <label>Registration / Info Link</label>
         <input type="text" id="regLink" placeholder="Link paste karein" oninput="updatePreview()">
     </div>
@@ -103,12 +104,14 @@ const landingPage = "https://sainiwalaa.github.io/stafkind/landing.html";
 
 function updateContent() {
     const type = document.getElementById('appType').value;
+    const linkInput = document.getElementById('regLink');
+    
     if(type === 'tide' || type === 'not_interested') {
-        document.getElementById('regLink').value = tideLink;
+        linkInput.value = tideLink;
     } else if(type === 'about') {
-        document.getElementById('regLink').value = landingPage;
+        linkInput.value = landingPage;
     } else {
-        document.getElementById('regLink').value = "";
+        linkInput.value = "";
     }
     updatePreview();
 }
@@ -119,7 +122,35 @@ function generateMessage() {
     const link = document.getElementById('regLink').value || "[Link Here]";
     const hr = document.getElementById('hrName').value || "Sunil Kumar Saini";
 
-    if (type === 'about') {
+    if (type === 'job_details') {
+        return `Dear ${name},
+
+Humne aapko call kiya tha par sampark nahi ho paya. Hum aapko niche di gayi job profile ke liye shortlist karna chahte hain:
+
+*"PART TIME & FULL TIME WORK FROM HOME JOB"* Company Name : *STAFKIND SERVICES*
+Company Location : *West Bengal, Kolkata*
+Designation : *Customer support executive (CSE)*
+Working process: *Voice Process*
+Gadget required : *Mobile/Laptop/PC*
+Working hours : *3-4 hrs in a day (flexible Timings)*
+Working days: *Monday to Friday (Saturday & Sunday Holiday)*
+
+Salary : *15000/- + INCENTIVES*
+Identification: *Virtual ID card will be given*
+Trainings: *5 days (Product & Process related)*
+*100% selection in Trainings with Zero Investment*
+
+SUPPORT: *Mentors will be provided in OJT WhatsApp group.*
+
+*NO FEES AND NO INVESTMENT*
+
+Agar aap interested hain toh kripya reply karein ya diye gaye link par register karein.
+
+Regards,
+*RECRUITMENT DEPARTMENT*
+*STAFKIND SERVICES*`;
+    }
+    else if (type === 'about') {
         return `Hello ${name},
 
 Humari company *STAFKIND SERVICES* ke baare mein adhik jaankari aur uplabdha Work-From-Home opportunities ko samajhne ke liye niche diye gaye link par click karein:
@@ -148,15 +179,10 @@ Humein khushi hai ki hum apne candidates ke liye ek vishesh Business Card facili
 - 3% Guaranteed Rewards: Jab bhi aap shopping ya utility services (recharge, bills) ke liye ise use karenge.
 - Double Reward Offer: Pehli baar sirf ₹50 add karne par aapko ₹50 extra reward milta hai (Total ₹100), jise aap turant istemal kar sakte hain.
 
-Kaise prapt karein?
-Is offer ka labh uthane ke liye niche diye gaye link se agle 12 ghanton mein KYC process poora karein. (Note: 12 ghante baad link disable ho jayega).
-
 🔗 Registration Link: ${link}
 
 ⚠️ Important: Reward paane ke liye account opening ke waqt niche diya gaya Promo Code zaroor bharein:
 👉 Apply Referral Code: "EP3333"
-
-Humein umeed hai ki ye card aapke daily expenses ko bachat mein badalne mein madad karega.
 
 Best Regards,
 HR ${hr}
@@ -169,22 +195,10 @@ Dear ${name},
 
 Congratulations! You have been shortlisted for the Telecaller position at our company.
 
-Please note that no device will be provided by the company. Therefore, you are requested to complete your registration process using the official HR link shared with you.
-
-Before proceeding with registration, kindly ensure the following:
-- Keep your Aadhaar Card, PAN Card, Bank Details, and DigiLocker access ready.
-- Complete the registration process by yourself (self-registration only).
-- Use only your mobile SIM data while registering. Avoid using Wi-Fi or any other network.
-- Do not refresh the page during the registration process.
-- In case of any error or issue, contact HR immediately for assistance.
-
-Important Information:
-After completing your Video KYC, to activate the withdrawal service, you need to add ₹50 to your account. Once ₹50 is added, the company will credit ₹25 + ₹25 extra, making a total of ₹100, which you can then withdraw.
-
 Registration Link:
 ${link}
 
-Please follow all the instructions carefully to ensure a smooth and successful registration.
+Important: After completing Video KYC, add ₹50 to activate service. Company will credit extra reward making total ₹100 for withdrawal.
 
 Best Regards,
 HR ${hr}
@@ -195,18 +209,9 @@ HR ${hr}
 
 Dear ${name},
 
-Congratulations! You have been shortlisted for the Telecaller position at our company.
+Congratulations! You have been shortlisted for the Telecaller position. Kripya niche diye gaye link se registration poora karein:
 
-Please note that no device will be provided by the company. Therefore, you are requested to complete your registration process using the official HR link shared with you.
-
-Before proceeding with registration, kindly ensure the following:
-- Keep your Aadhaar Card, PAN Card, Bank Details, and DigiLocker access ready.
-- Complete the registration process by yourself (self-registration only).
-- Use only your mobile SIM data while registering. Avoid using Wi-Fi or any other network.
-
-Your link here: ${link}
-
-Please follow all the instructions carefully to ensure a smooth and successful registration.
+Link: ${link}
 
 Best Regards,
 HR ${hr}

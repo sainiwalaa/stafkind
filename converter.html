@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAFKIND - Data Tools</title>
+    <style>
+        :root { --primary:#0b3d91; --accent:#25D366; --bg:#f4f7fa; --blue:#3b82f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .main-container { max-width: 900px; margin: auto; }
+        
+        .card { background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; color: white; min-width: 150px; }
+        
+        .btn-convert { background: var(--blue); }
+        .btn-copy { background: #64748b; }
+        .btn-wa { background: var(--accent); }
+        .btn-clear { background: #ef4444; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .preview-box { margin-top: 15px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 13px; white-space: pre-wrap; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="card">
+        <h2>📊 Data to Excel Converter</h2>
+        <div class="input-group">
+            <label>Raw Data Paste Karein (Name Number):</label>
+            <textarea id="rawData" rows="6" placeholder="Shivam Yadav 9555696023&#10;Dhiraj kumar 9661129162"></textarea>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-convert" onclick="convertToExcel()">🔄 Convert Data</button>
+            <button id="copyExcelBtn" class="btn btn-wa" style="display:none;" onclick="copyToClipboard('excel')">📋 Copy for Google Sheet</button>
+            <button class="btn btn-clear" onclick="clearConverter()">🗑️ Clear</button>
+        </div>
+        <div id="excelPreviewArea" style="display:none; margin-top:15px;">
+            <label>Preview:</label>
+            <div id="excelTable"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🔗 Professional Link Sender</h2>
+        <div class="input-group">
+            <label>Message Type</label>
+            <select id="msgType" onchange="updateLink()">
+                <option value="standard">Standard (m.Stock/Upstox)</option>
+                <option value="not_interested">Not Interested / Referral (Tide)</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Candidate Name</label>
+            <input type="text" id="candName" placeholder="Naam likhein" oninput="updatePreview()">
+        </div>
+        <div class="input-group">
+            <label>WhatsApp Number</label>
+            <input type="number" id="candPhone" placeholder="91XXXXXXXXXX">
+        </div>
+        <div class="input-group">
+            <label>Registration Link</label>
+            <input type="text" id="regLink" oninput="updatePreview()">
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-wa" onclick="sendWA()">WhatsApp ✅</button>
+            <button class="btn btn-copy" onclick="copyToClipboard('msg')">Copy Message 📋</button>
+        </div>
+        <div class="preview-box" id="msgPreview">Preview yahan dikhega...</div>
+    </div>
+</div>
+
+<script>
+    let excelData = "";
+    const tideLink = "https://share.trkep.in/share/69ecdca35995639f0d191273";
+
+    // --- Converter Logic ---
+    function convertToExcel() {
+        const input = document.getElementById('rawData').value.trim();
+        if(!input) return alert("Data dalein!");
+        
+        const lines = input.split('\n');
+        let html = "<table><tr><th>Name</th><th>Phone</th></tr>";
+        excelData = "";
+
+        lines.forEach(line => {
+            const match = line.match(/(.*?)\s*(\d{10})$/);
+            if(match) {
+                const name = match[1].trim();
+                const phone = match[2].trim();
+                excelData += `${name}\t${phone}\n`;
+                html += `<tr><td>${name}</td><td>${phone}</td></tr>`;
+            }
+        });
+        html += "</table>";
+        document.getElementById('excelTable').innerHTML = html;
+        document.getElementById('excelPreviewArea').style.display = "block";
+        document.getElementById('copyExcelBtn').style.display = "inline-block";
+    }
+
+    function clearConverter() {
+        document.getElementById('rawData').value = "";
+        document.getElementById('excelPreviewArea').style.display = "none";
+    }
+
+    // --- Sender Logic ---
+    function updateLink() {
+        const type = document.getElementById('msgType').value;
+        document.getElementById('regLink').value = (type === 'not_interested') ? tideLink : "";
+        updatePreview();
+    }
+
+    function generateMsg() {
+        const type = document.getElementById('msgType').value;
+        const name = document.getElementById('candName').value || "[Candidate]";
+        const link = document.getElementById('regLink').value || "[Link]";
+
+        if(type === 'not_interested') {
+            return `Dear ${name},\n\nHunne aapko STAFKIND SERVICES mein shortlist kiya tha. Agar aap interested nahi hain toh koi issue nahi, lekin aap kisi jaruratmand ko refer kar sakte hain.\n\nSath hi aap hamara Business Card le sakte hain: 3% Rewards + ₹50 par ₹50 extra bonus.\n\nLink: ${link}\nPromo Code: EP3333\n(Valid for 12 hours)`;
+        } else {
+            return `Dear ${name},\n\nCongratulations! You are shortlisted for Telecaller job. Complete your registration using the link below:\n\nLink: ${link}\n\nRegards,\nSTAFKIND SERVICES`;
+        }
+    }
+
+    function updatePreview() {
+        document.getElementById('msgPreview').innerText = generateMsg();
+    }
+
+    function sendWA() {
+        const phone = document.getElementById('candPhone').value;
+        if(!phone) return alert("Number dalein!");
+        window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(generateMsg())}`);
+    }
+
+    function copyToClipboard(mode) {
+        const text = (mode === 'excel') ? excelData : generateMsg();
+        navigator.clipboard.writeText(text).then(() => alert("Copied!"));
+    }
+
+    updatePreview();
+</script>
+
+</body>
+</html>

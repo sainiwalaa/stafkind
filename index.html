@@ -24,10 +24,14 @@ body{
   z-index:5;
 }
 
-.logo-section { display: flex; flex-direction: column; }
+.logo-section {
+  display: flex;
+  flex-direction: column;
+}
+
 .logo{font-weight:bold;font-size:18px;}
 
-/* DIGITAL CLOCK */
+/* DIGITAL CLOCK STYLE */
 #digitalClock {
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
@@ -41,7 +45,7 @@ body{
   font-weight: bold;
 }
 
-/* STATS BAR */
+/* NEW: STATS BAR */
 .stats-bar {
     display: flex;
     justify-content: space-around;
@@ -53,7 +57,7 @@ body{
 .stat-val { font-weight: bold; font-size: 18px; color: #0b3d91; }
 .stat-lbl { font-size: 11px; color: #666; text-transform: uppercase; }
 
-/* BUTTONS */
+/* BUTTON */
 .dashbtn{
   background:#22c55e;
   color:#fff;
@@ -64,14 +68,19 @@ body{
   font-size:13px;
   margin-left:5px;
 }
+
 .helpbtn { background: #f97316; }
 .sendbtn { background: #3b82f6; }
 .uploadbtn { background: #3b82f6; border: 1px solid rgba(255,255,255,0.3); }
 
 /* RUNNING NOTE */
-.note{ background:#facc15; padding:5px; font-size:13px; }
+.note{
+  background:#facc15;
+  padding:5px;
+  font-size:13px;
+}
 
-/* FILTER & SEARCH BOX SECTION */
+/* FILTER & SEARCH SECTION */
 .filter-section {
   background:#fff;
   padding:15px;
@@ -84,18 +93,21 @@ body{
   border-bottom: 1px solid #eee;
 }
 
-/* SEARCH BOX STYLE (BOX JESA) */
+/* SEARCH BOX DESIGN - UPDATED */
 .search-box {
   padding: 8px 15px;
   font-size: 14px;
-  border: 2px solid #0b3d91;
+  border: 2px solid #0b3d91; /* Proper Box Look */
   border-radius: 8px;
   width: 250px;
   outline: none;
+  background: #f8fafc;
   transition: 0.3s;
 }
+
 .search-box:focus {
-  box-shadow: 0 0 8px rgba(11, 61, 145, 0.2);
+  background: #fff;
+  box-shadow: 0 0 10px rgba(11, 61, 145, 0.2);
 }
 
 .date-input {
@@ -105,27 +117,92 @@ body{
 }
 
 /* TABLE */
-.container{ height:70vh; overflow:auto; padding:10px; }
-table{ width:100%; border-collapse:collapse; background:#fff; min-width: 1000px; }
-th{ position:sticky; top:0; background:#0b3d91; color:#fff; padding:8px; font-size:12px; z-index:2; }
-td{ padding:6px; border-bottom:1px solid #ddd; text-align:center; font-size:12px; }
+.container{
+  height:70vh;
+  overflow:auto;
+  padding:10px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+
+th{
+  position:sticky;
+  top:0;
+  background:#0b3d91;
+  color:#fff;
+  padding:8px;
+  font-size:12px;
+  z-index:2;
+}
+
+td{
+  padding:6px;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+  font-size:12px;
+}
 
 input{ width:100%; padding:3px; font-size:11px; }
-button{ padding:3px 5px; border:none; border-radius:4px; margin:2px; cursor:pointer; font-size:10px; }
 
-.wa{background:#25D366;color:#fff;}
+button{
+  padding:3px 5px;
+  border:none;
+  border-radius:4px;
+  margin:2px;
+  cursor:pointer;
+  font-size:10px;
+}
+
 .call{background:#e2e8f0;}
 .recall{background:#fde68a;}
 .join{background:#c7d2fe;}
 .save{background:#22c55e;color:#fff;}
+.wa{background:#25D366;color:#fff;}
+
 .active{background:#22c55e !important;color:#fff;}
 
-/* STAGES COLOR */
-.stage1{background:#dcfce7;} .stage2{background:#bbf7d0;} .stage3{background:#86efac;} .stage4{background:#4ade80;} .stage5{background:#22c55e;color:#fff;}
+/* COLOR TRACK */
+.stage1{background:#dcfce7;}
+.stage2{background:#bbf7d0;}
+.stage3{background:#86efac;}
+.stage4{background:#4ade80;}
+.stage5{background:#22c55e;color:#fff;}
 
 /* POPUP */
-#scriptPopup{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:100; }
-.popup-box{ background:#fff; width:90%; max-width:500px; margin:5% auto; padding:15px; border-radius:8px; max-height:80vh; overflow:auto; }
+#scriptPopup{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  z-index:100;
+}
+
+.popup-box{
+  background:#fff;
+  width:90%;
+  max-width:500px;
+  margin:5% auto;
+  padding:15px;
+  border-radius:8px;
+  max-height:80vh;
+  overflow:auto;
+}
+
+.lang-btn {
+    padding: 8px 15px;
+    background: #0b3d91;
+    color: white;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
 </style>
 </head>
 
@@ -136,6 +213,7 @@ button{ padding:3px 5px; border:none; border-radius:4px; margin:2px; cursor:poin
     <div class="logo">STAFKIND CRM</div>
     <div id="digitalClock">00:00:00 AM</div>
   </div>
+
   <div>
     <button class="dashbtn uploadbtn" onclick="openConverter()">📥 Upload Call Data</button>
     <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
@@ -146,30 +224,52 @@ button{ padding:3px 5px; border:none; border-radius:4px; margin:2px; cursor:poin
 </div>
 
 <div class="stats-bar">
-    <div class="stat-item"><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">Total Leads</div></div>
-    <div class="stat-item"><div class="stat-val" id="statConnect" style="color: #22c55e;">0</div><div class="stat-lbl">Connected</div></div>
-    <div class="stat-item"><div class="stat-val" id="statPending" style="color: #f97316;">0</div><div class="stat-lbl">Pending</div></div>
-    <div class="stat-item"><div class="stat-val" id="statJoined" style="color: #3b82f6;">0</div><div class="stat-lbl">Joined</div></div>
+    <div class="stat-item">
+        <div class="stat-val" id="statTotal">0</div>
+        <div class="stat-lbl">Total Leads</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-val" id="statConnect" style="color: #22c55e;">0</div>
+        <div class="stat-lbl">Connected</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-val" id="statPending" style="color: #f97316;">0</div>
+        <div class="stat-lbl">Pending</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-val" id="statJoined" style="color: #3b82f6;">0</div>
+        <div class="stat-lbl">Joined</div>
+    </div>
 </div>
 
 <div class="note">
-<marquee>⚠️ कॉल करते समय अपना WhatsApp और Application Dashboard हमेशा Login रखें।</marquee>
+<marquee>
+⚠️ कॉल करते समय अपना WhatsApp और Application Dashboard हमेशा Login रखें और नए Tab या दूसरे Device में open रखें।
+</marquee>
 </div>
 
 <div class="filter-section">
     <input type="date" id="dateFilter" class="date-input">
     <button class="dashbtn" style="background:#0b3d91;" onclick="filterData()">🔍 Filter</button>
     
-    <input type="text" id="searchInput" class="search-box" oninput="searchData()" placeholder="🔎 Search Name or Mobile Number...">
+    <input type="text" id="searchInput" class="search-box" oninput="searchData()" placeholder="🔎 Search Name or Mobile...">
     
-    <button class="dashbtn" style="background:#64748b;" onclick="loadData()">♻ Reload Data</button>
+    <button class="dashbtn" style="background:#64748b;" onclick="loadData()">♻ Reload</button>
 </div>
 
 <div class="container">
 <table>
 <thead>
 <tr>
-<th>Date</th><th>Name</th><th>Mobile</th><th>Send</th><th>Call</th><th>Recall</th><th>Join</th><th>Status</th><th>Save</th>
+<th>Date</th>
+<th>Name</th>
+<th>Mobile</th>
+<th>Send</th>
+<th>Call</th>
+<th>Recall</th>
+<th>Join</th>
+<th>Status</th>
+<th>Save</th>
 </tr>
 </thead>
 <tbody id="data"></tbody>
@@ -180,9 +280,13 @@ button{ padding:3px 5px; border:none; border-radius:4px; margin:2px; cursor:poin
   <div class="popup-box">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; margin-bottom: 10px; padding-bottom: 5px;">
       <h3 style="margin:0;">Calling Script</h3>
-      <button onclick="closeScript()" style="background:#ef4444; color:white; padding: 5px 10px;">X</button>
+      <button onclick="closeScript()" style="background:#ef4444; color:white; font-size:14px; padding: 5px 10px;">X</button>
     </div>
-    <div id="scriptText" style="white-space:pre-wrap; font-size: 13px; line-height: 1.5; background: #f9fafb; padding: 10px;"></div>
+    <div style="text-align:center; margin-bottom: 15px;">
+      <button class="lang-btn" onclick="setLang('hin')">Hindi</button>
+      <button class="lang-btn" onclick="setLang('eng')">English</button>
+    </div>
+    <div id="scriptText" style="white-space:pre-wrap; font-size: 13px; line-height: 1.5; color: #333; background: #f9fafb; padding: 10px; border-radius: 5px; border: 1px solid #eee;"></div>
   </div>
 </div>
 
@@ -200,6 +304,7 @@ function updateTime() {
     document.getElementById('digitalClock').innerHTML = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
 }
 setInterval(updateTime, 1000);
+updateTime();
 
 function openConverter(){ window.location.href = "https://sainiwalaa.github.io/stafkind/converter.html"; }
 function openHelp(){ window.location.href = "https://sainiwalaa.github.io/stafkind/help.html"; }
@@ -207,25 +312,26 @@ function openSender(){ window.location.href = "https://sainiwalaa.github.io/staf
 function openDashboard(){ window.open("https://offers.earnpati.com/auth/login","_blank"); }
 
 function loadData(){
-    document.getElementById("data").innerHTML = "<tr><td colspan='9'>Data Loading... Please wait.</td></tr>";
     fetch(API).then(res=>res.json()).then(data=>{
         globalData=data;
         render(data);
     });
 }
 
-/* UPDATED SEARCH FUNCTION (Turant result dikhayega) */
+/* UPDATED SEARCH LOGIC (Fix: Show Results Instantly) */
 function searchData() {
-    let term = document.getElementById("searchInput").value.trim().toLowerCase();
+    let term = document.getElementById("searchInput").value.toLowerCase().trim();
     
+    // Agar search khali hai toh poora data dikhao
     if(term === "") {
-        render(globalData); // Agar search khali hai toh sab dikhao
+        render(globalData);
         return;
     }
 
+    // Filter by Name or Mobile
     let filtered = globalData.filter(x => 
-        (x.name && x.name.toLowerCase().includes(term)) || 
-        (x.phone && String(x.phone).includes(term))
+        (x.name || "").toLowerCase().includes(term) || 
+        (x.phone || "").toString().includes(term)
     );
     
     render(filtered);
@@ -241,14 +347,21 @@ function updateStats(data) {
 function render(data){
     updateStats(data);
     let html="";
+    
     if(data.length === 0) {
-        html = "<tr><td colspan='9'>No matching data found.</td></tr>";
+        html = "<tr><td colspan='9' style='padding:20px; color:red;'>No Records Found</td></tr>";
     } else {
         data.forEach((item,i)=>{
             let count=parseInt(item.count||0);
-            let stage = count >= 5 ? "stage5" : (count > 0 ? "stage"+count : "");
+            let stage="";
+            if(count==1) stage="stage1";
+            else if(count==2) stage="stage2";
+            else if(count==3) stage="stage3";
+            else if(count==4) stage="stage4";
+            else if(count>=5) stage="stage5";
+
             html+=`
-            <tr class="${stage}">
+            <tr id="row${i}" class="${stage}" data-count="${count}">
             <td>${item.date||''}</td>
             <td>${item.name||''}</td>
             <td>${item.phone||''}</td>
@@ -256,16 +369,23 @@ function render(data){
             <td>
                 <button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
                 <button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
-                <button class="call" onclick="setVal('call${i}','Off',this)">Off</button>
+                <button class="call" onclick="setVal('call${i}','Switch Off',this)">Off</button>
+                <button class="call" onclick="setVal('call${i}','Cut Call',this)">Cut</button>
+                <button class="call" onclick="setVal('call${i}','Disconnect',this)">Disc</button>
                 <input id="call${i}" value="${item.call||''}">
             </td>
             <td>
-                <button class="recall" onclick="setVal('recall${i}','Meeting',this)">Meeting</button>
-                <button class="recall" onclick="setVal('recall${i}','App',this)">App</button>
+                <button class="recall" onclick="setVal('recall${i}','Send Meeting',this)">Meeting</button>
+                <button class="recall" onclick="setVal('recall${i}','Send App',this)">App</button>
+                <button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
                 <input id="recall${i}" value="${item.recall||''}">
             </td>
             <td>
-                <button class="join" onclick="setVal('join${i}','Joined',this)">Joined</button>
+                <button class="join" onclick="setVal('join${i}','Joined',this)">Join</button>
+                <button class="join" onclick="setVal('join${i}','Meeting Done',this)">Meet</button>
+                <button class="join" onclick="setVal('join${i}','Training Now',this)">Train</button>
+                <button class="join" onclick="setVal('join${i}','Join Later',this)">Later</button>
+                <button class="join" onclick="setVal('join${i}','Not Interested',this)">Not</button>
                 <input id="join${i}" value="${item.join||''}">
             </td>
             <td><input id="status${i}" value="${item.status||''}"></td>
@@ -292,7 +412,8 @@ function setVal(id,val,btn){
 }
 
 function sendMeet(phone,link){
-    window.open(`https://wa.me/91${phone}?text=Join meeting: ${link}`);
+    let msg=`Join meeting:\n${link}`;
+    window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
 function save(i,name,phone){
@@ -307,14 +428,18 @@ function save(i,name,phone){
     .then(()=>{ alert("✅ Saved"); loadData(); });
 }
 
+let currentLang="hin";
 function openScript(){ document.getElementById("scriptPopup").style.display="block"; loadScript(); }
 function closeScript(){ document.getElementById("scriptPopup").style.display="none"; }
+function setLang(l){ currentLang=l; loadScript(); }
+
 function loadScript(){
-    document.getElementById("scriptText").innerText = "HR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI?\n...";
+    let hin=`√√ STAFKIND SERVICES √√\nYOUR CALLING SCRIPT 📖📕\n\nHR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI?\nCX- ....\n\nHR- MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE,, \nHUMARI COMPANY ME APKI PROFILE SHORT LISTED HUI HAI AS A CUSTOMER SUPPORT PART TIME WORK FROM HOME KE LIYE,,\n\n& APKI JO SALARY HOGA 12K TO 15K INHAND ,, SO ARE YOU INTERESTED?\nCX- .....\n\nHR- OK, TO JITNE CANDIDATE KA PROFILE SHORTLISTED HUE HAI UNKA AFTERNOON 2PM EK SESSION HAI..🕦\nSESSION ME APKO EACH AND EVERYTHING GUIDE KAR DIYA JAYEGA LIKE APKA SALARY KITNA HOGE , PROCESS KY HOGA , KITNE HOURS APKA WORK RAHEGA EACH & EVERYTHING APKO GUIDE KAR DIYA JAYEGA.\n\nKYA APKA YE WHATSAAP NUMBER HAI?\nCX- ....\n\nHR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU AP 2:00 PM SE SESSION JOIN KAR LENA & MERA NUMBER BHI SAVE KAR LIJIYE JISSE AP SESSION KE BAAD CONTACT KAR SAKTE HAI.`;
+    let eng=`√√ STAFKIND SERVICES √√\nYOUR CALLING SCRIPT 📖📕\n\nHR- AM I SPEAKING WITH MISS SUSHMITA?\nCX- ....\n\nHR- I AM HR ANKUSH FROM STAFKIND SERVICES. \nYOUR PROFILE HAS BEEN SHORTLISTED IN OUR COMPANY FOR CUSTOMER SUPPORT (PART-TIME WORK FROM HOME).\n\nTHE SALARY WILL BE 12K TO 15K IN-HAND. ARE YOU INTERESTED?\nCX- ....\n\nHR- OK, ALL THE SHORTLISTED CANDIDATES HAVE A SESSION TODAY AT 2:00 PM. 🕦\nIN THIS SESSION, EVERYTHING WILL BE GUIDED TO YOU, SUCH AS SALARY DETAILS, THE PROCESS, WORKING HOURS, AND ALL OTHER NECESSARY INFO.\n\nIS THIS YOUR WHATSAPP NUMBER?\nCX- ....\n\nHR- OK, I AM SENDING YOU THE GOOGLE MEET LINK. PLEASE JOIN THE SESSION AT 2:00 PM. ALSO, PLEASE SAVE MY NUMBER SO YOU CAN CONTACT ME AFTER THE SESSION.`;
+    document.getElementById("scriptText").innerText = (currentLang==="hin") ? hin : eng;
 }
 
 loadData();
-updateTime();
 </script>
 </body>
 </html>

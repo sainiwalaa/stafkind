@@ -55,8 +55,8 @@ input, select {
     <div class="input-group">
         <label>Select Message Type</label>
         <select id="appType" onchange="updateContent()">
-            <option value="standard">Standard (m.Stock/Upstox/Angel)</option>
             <option value="job_details">Job Details (WFH Description)</option>
+            <option value="standard">Standard (m.Stock/Upstox/Angel)</option>
             <option value="tide">Tide Registration (Telecaller)</option>
             <option value="about">About Stafkind (Landing Page)</option>
             <option value="not_interested">Not Interested / Referral Offer</option>
@@ -208,6 +208,31 @@ Your link here: ${link}
 
 Best Regards,
 Recruitment Team`;
+    }
+    else if (type === 'not_interested') {
+        return `Subject: Update from STAFKIND SERVICES – Referral Program & Exclusive Benefit
+
+Dear ${name},
+
+Humne aapko STAFKIND SERVICES mein Telecaller position ke liye shortlist kiya tha. Agar aap abhi is job mein interested nahi hain, toh koi baat nahi—hum aapke decision ka samman karte hain.
+
+1. Help Someone Get a Job (Referral):
+Agar aapke circle mein koi aisa yogy candidate hai jo Part-time work-from-home job ki talash mein hai, toh aap unhe hamari services refer kar sakte hain. Aapki ek chhoti si madad kisi ke liye behtar rozgaar ka zariya ban sakti hai.
+
+2. Exclusive Benefit for You (STAFKIND Business Card):
+Humein khushi hai ki hum apne candidates ke liye ek vishesh Business Card facility provide kar rahe hain. Is card ke fayde niche diye gaye hain:
+
+- 3% Guaranteed Rewards: Jab bhi aap shopping ya utility services (recharge, bills) ke liye ise use karenge.
+- Double Reward Offer: Pehli baar sirf ₹50 add karne par aapko ₹50 extra reward milta hai (Total ₹100), jise aap turant istemal kar sakte hain.
+
+🔗 Registration Link: ${link}
+
+⚠️ Important: Reward paane ke liye account opening ke waqt niche diya gaya Promo Code zaroor bharein:
+👉 Apply Referral Code: "EP3333"
+
+Best Regards,
+HR ${hr}
+STAFKIND SERVICES`;
     }
     else if (type === 'about') {
         return `Hello ${name},

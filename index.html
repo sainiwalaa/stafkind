@@ -24,7 +24,26 @@ body{
   z-index:5;
 }
 
+.logo-section {
+  display: flex;
+  flex-direction: column;
+}
+
 .logo{font-weight:bold;font-size:18px;}
+
+/* DIGITAL CLOCK STYLE */
+#digitalClock {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  color: #22c55e;
+  background: #061f4a;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid #1e40af;
+  text-shadow: 0 0 5px #22c55e;
+  margin-top: 4px;
+  font-weight: bold;
+}
 
 /* BUTTON */
 .dashbtn{
@@ -176,7 +195,10 @@ button{
 <body>
 
 <div class="header">
-  <div class="logo">STAFKIND CRM</div>
+  <div class="logo-section">
+    <div class="logo">STAFKIND CRM</div>
+    <div id="digitalClock">00:00:00 AM</div>
+  </div>
 
   <div>
     <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
@@ -238,6 +260,21 @@ button{
 const API="https://script.google.com/macros/s/AKfycbyKKk-P8MHC_kskC3FDN8pRrSBWJCXRCoUJyTfI2C_KqcYcmX8uaECjRquoVRzQegPo/exec";
 
 let globalData=[];
+
+/* DIGITAL CLOCK FUNCTION */
+function updateTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 should be 12
+    const strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+    document.getElementById('digitalClock').innerHTML = strTime;
+}
+setInterval(updateTime, 1000);
+updateTime();
 
 /* HELP PAGE FUNCTION - Same Tab */
 function openHelp(){

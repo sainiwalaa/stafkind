@@ -5,13 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STAFKIND - Data Converter</title>
     <style>
-        :root { --primary:#0b3d91; --accent:#25D366; --bg:#f4f7fa; --blue:#3b82f6; }
+        :root { --primary:#0b3d91; --accent:#25D366; --bg:#f4f7fa; --blue:#3b82f6; --orange:#f97316; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
         
         .converter-card {
-            max-width: 700px; margin: 40px auto; background: #fff;
+            max-width: 700px; margin: 20px auto; background: #fff;
             padding: 30px; border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* INSTRUCTION NOTE STYLE */
+        .instruction-note {
+            background: #fff7ed;
+            border-left: 5px solid var(--orange);
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            color: #9a3412;
+            font-size: 14px;
+            line-height: 1.6;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         h2 { text-align: center; color: var(--primary); margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -58,10 +71,14 @@
 
 <div class="converter-card">
     <h2>📊 Data to Excel Converter</h2>
+
+    <div class="instruction-note">
+        <strong>📝 Note:</strong> WhatsApp se data copy karke yahan paste karein, fir <b>Convert</b> button dabayein. Formatting ke baad data copy karein aur apne <b>Dashboard Google Sheet</b> mein paste karke save karein.
+    </div>
     
     <div class="input-group">
         <label>Raw Data Paste Karein (Name Number):</label>
-        <textarea id="rawData" rows="10" placeholder="Shivam Yadav 9555696023&#10;Dhiraj kumar 9661129162&#10;Mamta Bohra 8178195165"></textarea>
+        <textarea id="rawData" rows="10" placeholder="Shivam Yadav 9555696023&#10;Dhiraj kumar 9661129162"></textarea>
     </div>
 
     <div class="btn-group">
@@ -97,16 +114,11 @@
         formattedText = ""; 
 
         lines.forEach(line => {
-            // Regex to find 10 digits at the end of the line
             const match = line.match(/(.*?)\s*(\d{10})$/);
-            
             if (match) {
                 const name = match[1].trim();
                 const phone = match[2].trim();
-                
-                // Tab-separated format for Excel/Sheets
                 formattedText += `${name}\t${phone}\n`;
-                
                 html += `<tr><td>${name}</td><td>${phone}</td></tr>`;
             }
         });
@@ -123,18 +135,8 @@
 
     function copyToClipboard() {
         if (!formattedText) return;
-        
         navigator.clipboard.writeText(formattedText).then(() => {
             alert("✅ Data Copy ho gaya! Ab Google Sheet mein jaakar Paste (Ctrl+V) karein.");
-        }).catch(err => {
-            // Fallback for some browsers
-            const el = document.createElement('textarea');
-            el.value = formattedText;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            alert("✅ Data Copy ho gaya!");
         });
     }
 

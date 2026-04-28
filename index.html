@@ -45,6 +45,18 @@ body{
   font-weight: bold;
 }
 
+/* NEW: STATS BAR */
+.stats-bar {
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.stat-item { text-align: center; }
+.stat-val { font-weight: bold; font-size: 18px; color: #0b3d91; }
+.stat-lbl { font-size: 11px; color: #666; text-transform: uppercase; }
+
 /* BUTTON */
 .dashbtn{
   background:#22c55e;
@@ -57,21 +69,9 @@ body{
   margin-left:5px;
 }
 
-/* New Help Button Style */
-.helpbtn {
-  background: #f97316; /* Orange color for distinction */
-}
-
-/* Send Link Button Style */
-.sendbtn {
-  background: #3b82f6; /* Blue color */
-}
-
-/* Upload Data Button Style (New) */
-.uploadbtn {
-  background: #3b82f6; /* Consistent with sendbtn */
-  border: 1px solid rgba(255,255,255,0.3);
-}
+.helpbtn { background: #f97316; }
+.sendbtn { background: #3b82f6; }
+.uploadbtn { background: #3b82f6; border: 1px solid rgba(255,255,255,0.3); }
 
 /* RUNNING NOTE */
 .note{
@@ -80,20 +80,27 @@ body{
   font-size:13px;
 }
 
-/* FILTER */
-.filter{
+/* FILTER & SEARCH */
+.filter-section {
   background:#fff;
-  padding:6px;
+  padding:10px;
   text-align:center;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.filter input{
-  padding:4px;
+.filter-section input[type="date"], .filter-section input[type="text"] {
+  padding:6px;
   font-size:12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.filter button{
-  padding:5px 8px;
+.filter-section button{
+  padding:6px 12px;
   background:#0b3d91;
   color:#fff;
   border:none;
@@ -104,7 +111,7 @@ body{
 
 /* TABLE */
 .container{
-  height:80vh;
+  height:70vh;
   overflow:auto;
   padding:10px;
 }
@@ -132,14 +139,8 @@ td{
   font-size:12px;
 }
 
-/* INPUT */
-input{
-  width:100%;
-  padding:3px;
-  font-size:11px;
-}
+input{ width:100%; padding:3px; font-size:11px; }
 
-/* BUTTON */
 button{
   padding:3px 5px;
   border:none;
@@ -208,12 +209,30 @@ button{
 
   <div>
     <button class="dashbtn uploadbtn" onclick="openConverter()">📥 Upload Call Data</button>
-    
     <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
     <button class="dashbtn" onclick="openScript()">📖 Script</button>
     <button class="dashbtn sendbtn" onclick="openSender()">🔗 Send Link</button>
     <button class="dashbtn helpbtn" onclick="openHelp()">❓ Help Guide</button>
   </div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat-item">
+        <div class="stat-val" id="statTotal">0</div>
+        <div class="stat-lbl">Total Leads</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-val" id="statConnect" style="color: #22c55e;">0</div>
+        <div class="stat-lbl">Connected</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-val" id="statPending" style="color: #f97316;">0</div>
+        <div class="stat-lbl">Pending</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-val" id="statJoined" style="color: #3b82f6;">0</div>
+        <div class="stat-lbl">Joined</div>
+    </div>
 </div>
 
 <div class="note">
@@ -222,10 +241,11 @@ button{
 </marquee>
 </div>
 
-<div class="filter">
-<input type="date" id="dateFilter">
-<button onclick="filterData()">🔍</button>
-<button onclick="loadData()">♻</button>
+<div class="filter-section">
+    <input type="date" id="dateFilter">
+    <button onclick="filterData()">🔍 Filter</button>
+    <input type="text" id="searchInput" onkeyup="searchData()" placeholder="🔎 Search Name or Mobile...">
+    <button onclick="loadData()">♻ Reload</button>
 </div>
 
 <div class="container">
@@ -253,243 +273,151 @@ button{
       <h3 style="margin:0;">Calling Script</h3>
       <button onclick="closeScript()" style="background:#ef4444; color:white; font-size:14px; padding: 5px 10px;">X</button>
     </div>
-
     <div style="text-align:center; margin-bottom: 15px;">
       <button class="lang-btn" onclick="setLang('hin')">Hindi</button>
       <button class="lang-btn" onclick="setLang('eng')">English</button>
     </div>
-
     <div id="scriptText" style="white-space:pre-wrap; font-size: 13px; line-height: 1.5; color: #333; background: #f9fafb; padding: 10px; border-radius: 5px; border: 1px solid #eee;"></div>
   </div>
 </div>
 
 <script>
-
 const API="https://script.google.com/macros/s/AKfycbyKKk-P8MHC_kskC3FDN8pRrSBWJCXRCoUJyTfI2C_KqcYcmX8uaECjRquoVRzQegPo/exec";
-
 let globalData=[];
 
-/* DIGITAL CLOCK FUNCTION */
 function updateTime() {
     const now = new Date();
     let hours = now.getHours();
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; 
-    const strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-    document.getElementById('digitalClock').innerHTML = strTime;
+    hours = hours % 12 || 12;
+    document.getElementById('digitalClock').innerHTML = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
 }
 setInterval(updateTime, 1000);
 updateTime();
 
-/* CONVERTER FUNCTION - New */
-function openConverter(){
-  window.location.href = "https://sainiwalaa.github.io/stafkind/converter.html";
-}
+function openConverter(){ window.location.href = "https://sainiwalaa.github.io/stafkind/converter.html"; }
+function openHelp(){ window.location.href = "https://sainiwalaa.github.io/stafkind/help.html"; }
+function openSender(){ window.location.href = "https://sainiwalaa.github.io/stafkind/sender.html"; }
+function openDashboard(){ window.open("https://offers.earnpati.com/auth/login","_blank"); }
 
-/* HELP PAGE FUNCTION */
-function openHelp(){
-  window.location.href = "https://sainiwalaa.github.io/stafkind/help.html";
-}
-
-/* SENDER PAGE FUNCTION */
-function openSender(){
-  window.location.href = "https://sainiwalaa.github.io/stafkind/sender.html";
-}
-
-/* DASHBOARD - New Tab */
-function openDashboard(){
-  window.open("https://offers.earnpati.com/auth/login","_blank");
-}
-
-/* LOAD DATA */
 function loadData(){
-fetch(API)
-.then(res=>res.json())
-.then(data=>{
-globalData=data;
-render(data);
-});
+    fetch(API).then(res=>res.json()).then(data=>{
+        globalData=data;
+        render(data);
+    });
 }
 
-/* RENDER TABLE */
+/* NEW: SEARCH FUNCTION */
+function searchData() {
+    let term = document.getElementById("searchInput").value.toLowerCase();
+    let filtered = globalData.filter(x => 
+        (x.name || "").toLowerCase().includes(term) || 
+        (x.phone || "").includes(term)
+    );
+    render(filtered);
+}
+
+/* NEW: STATS UPDATE FUNCTION */
+function updateStats(data) {
+    document.getElementById("statTotal").innerText = data.length;
+    document.getElementById("statConnect").innerText = data.filter(x => x.call === 'Connect').length;
+    document.getElementById("statPending").innerText = data.filter(x => !x.call || x.call === '').length;
+    document.getElementById("statJoined").innerText = data.filter(x => x.join === 'Joined').length;
+}
+
 function render(data){
-let html="";
+    updateStats(data);
+    let html="";
+    data.forEach((item,i)=>{
+        let count=parseInt(item.count||0);
+        let stage="";
+        if(count==1) stage="stage1";
+        else if(count==2) stage="stage2";
+        else if(count==3) stage="stage3";
+        else if(count==4) stage="stage4";
+        else if(count>=5) stage="stage5";
 
-data.forEach((item,i)=>{
-
-let count=parseInt(item.count||0);
-let stage="";
-
-if(count==1) stage="stage1";
-else if(count==2) stage="stage2";
-else if(count==3) stage="stage3";
-else if(count==4) stage="stage4";
-else if(count>=5) stage="stage5";
-
-html+=`
-<tr id="row${i}" class="${stage}" data-count="${count}">
-
-<td>${item.date||''}</td>
-<td>${item.name||''}</td>
-<td>${item.phone||''}</td>
-
-<td>
-<button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">WA</button>
-</td>
-
-<td>
-<button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
-<button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
-<button class="call" onclick="setVal('call${i}','Switch Off',this)">Off</button>
-<button class="call" onclick="setVal('call${i}','Cut Call',this)">Cut</button>
-<button class="call" onclick="setVal('call${i}','Disconnect',this)">Disc</button>
-<input id="call${i}" value="${item.call||''}">
-</td>
-
-<td>
-<button class="recall" onclick="setVal('recall${i}','Send Meeting',this)">Meeting</button>
-<button class="recall" onclick="setVal('recall${i}','Send App',this)">App</button>
-<button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
-<input id="recall${i}" value="${item.recall||''}">
-</td>
-
-<td>
-<button class="join" onclick="setVal('join${i}','Joined',this)">Join</button>
-<button class="join" onclick="setVal('join${i}','Meeting Done',this)">Meet</button>
-<button class="join" onclick="setVal('join${i}','Training Now',this)">Train</button>
-<button class="join" onclick="setVal('join${i}','Join Later',this)">Later</button>
-<button class="join" onclick="setVal('join${i}','Not Interested',this)">Not</button>
-<input id="join${i}" value="${item.join||''}">
-</td>
-
-<td>
-<input id="status${i}" value="${item.status||''}">
-</td>
-
-<td>
-<button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button>
-</td>
-
-</tr>`;
-});
-
-document.getElementById("data").innerHTML=html;
+        html+=`
+        <tr id="row${i}" class="${stage}" data-count="${count}">
+        <td>${item.date||''}</td>
+        <td>${item.name||''}</td>
+        <td>${item.phone||''}</td>
+        <td><button class="wa" onclick="sendMeet('${item.phone}','${item.meet}')">WA</button></td>
+        <td>
+            <button class="call" onclick="setVal('call${i}','Busy',this)">Busy</button>
+            <button class="call" onclick="setVal('call${i}','Connect',this)">Connect</button>
+            <button class="call" onclick="setVal('call${i}','Switch Off',this)">Off</button>
+            <button class="call" onclick="setVal('call${i}','Cut Call',this)">Cut</button>
+            <button class="call" onclick="setVal('call${i}','Disconnect',this)">Disc</button>
+            <input id="call${i}" value="${item.call||''}">
+        </td>
+        <td>
+            <button class="recall" onclick="setVal('recall${i}','Send Meeting',this)">Meeting</button>
+            <button class="recall" onclick="setVal('recall${i}','Send App',this)">App</button>
+            <button class="recall" onclick="setVal('recall${i}','Not Interested',this)">Not</button>
+            <input id="recall${i}" value="${item.recall||''}">
+        </td>
+        <td>
+            <button class="join" onclick="setVal('join${i}','Joined',this)">Join</button>
+            <button class="join" onclick="setVal('join${i}','Meeting Done',this)">Meet</button>
+            <button class="join" onclick="setVal('join${i}','Training Now',this)">Train</button>
+            <button class="join" onclick="setVal('join${i}','Join Later',this)">Later</button>
+            <button class="join" onclick="setVal('join${i}','Not Interested',this)">Not</button>
+            <input id="join${i}" value="${item.join||''}">
+        </td>
+        <td><input id="status${i}" value="${item.status||''}"></td>
+        <td><button class="save" onclick="save(${i},'${item.name}','${item.phone}')">Save</button></td>
+        </tr>`;
+    });
+    document.getElementById("data").innerHTML=html;
 }
 
-/* FILTER */
 function filterData(){
-let selected=document.getElementById("dateFilter").value;
-if(!selected){alert("Select Date");return;}
-
-let d=new Date(selected);
-let formatted = String(d.getDate()).padStart(2,'0') + "/" +
-                String(d.getMonth()+1).padStart(2,'0') + "/" +
-                d.getFullYear();
-
-let filtered = globalData.filter(x => (x.date||"").trim()===formatted);
-
-render(filtered);
+    let selected=document.getElementById("dateFilter").value;
+    if(!selected){alert("Select Date");return;}
+    let d=new Date(selected);
+    let formatted = String(d.getDate()).padStart(2,'0') + "/" + String(d.getMonth()+1).padStart(2,'0') + "/" + d.getFullYear();
+    let filtered = globalData.filter(x => (x.date||"").trim()===formatted);
+    render(filtered);
 }
 
-/* BUTTON VALUE SETTER */
 function setVal(id,val,btn){
-document.getElementById(id).value=val;
-btn.parentNode.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
+    document.getElementById(id).value=val;
+    btn.parentNode.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
 }
 
-/* WHATSAPP SENDER */
 function sendMeet(phone,link){
-let msg=`Join meeting:\n${link}`;
-window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
+    let msg=`Join meeting:\n${link}`;
+    window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
-/* SAVE DATA */
 function save(i,name,phone){
-const payload={
-name:name,
-mobile:phone,
-call:document.getElementById("call"+i).value,
-recall:document.getElementById("recall"+i).value,
-join:document.getElementById("join"+i).value,
-status:document.getElementById("status"+i).value
-};
-
-fetch(API,{
-method:"POST",
-body:JSON.stringify(payload)
-})
-.then(()=>{ alert("✅ Saved"); loadData(); });
+    const payload={
+        name:name, mobile:phone,
+        call:document.getElementById("call"+i).value,
+        recall:document.getElementById("recall"+i).value,
+        join:document.getElementById("join"+i).value,
+        status:document.getElementById("status"+i).value
+    };
+    fetch(API,{ method:"POST", body:JSON.stringify(payload) })
+    .then(()=>{ alert("✅ Saved"); loadData(); });
 }
 
-/* SCRIPT SYSTEM */
 let currentLang="hin";
-
-function openScript(){
-document.getElementById("scriptPopup").style.display="block";
-loadScript();
-}
-
-function closeScript(){
-document.getElementById("scriptPopup").style.display="none";
-}
-
-function setLang(l){
-currentLang=l;
-loadScript();
-}
+function openScript(){ document.getElementById("scriptPopup").style.display="block"; loadScript(); }
+function closeScript(){ document.getElementById("scriptPopup").style.display="none"; }
+function setLang(l){ currentLang=l; loadScript(); }
 
 function loadScript(){
-let hin=`√√ STAFKIND SERVICES √√
-YOUR CALLING SCRIPT 📖📕
-
-HR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI?
-CX- ....
-
-HR- MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE,, 
-HUMARI COMPANY ME APKI PROFILE SHORT LISTED HUI HAI AS A CUSTOMER SUPPORT PART TIME WORK FROM HOME KE LIYE,,
-
-& APKI JO SALARY HOGA 12K TO 15K INHAND ,, SO ARE YOU INTERESTED?
-CX- .....
-
-HR- OK, TO JITNE CANDIDATE KA PROFILE SHORTLISTED HUE HAI UNKA AFTERNOON 2PM EK SESSION HAI..🕦
-SESSION ME APKO EACH AND EVERYTHING GUIDE KAR DIYA JAYEGA LIKE APKA SALARY KITNA HOGE , PROCESS KY HOGA , KITNE HOURS APKA WORK RAHEGA EACH & EVERYTHING APKO GUIDE KAR DIYA JAYEGA.
-
-KYA APKA YE WHATSAAP NUMBER HAI?
-CX- ....
-
-HR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU AP 2:00 PM SE SESSION JOIN KAR LENA & MERA NUMBER BHI SAVE KAR LIJIYE JISSE AP SESSION KE BAAD CONTACT KAR SAKTE HAI.`;
-
-let eng=`√√ STAFKIND SERVICES √√
-YOUR CALLING SCRIPT 📖📕
-
-HR- AM I SPEAKING WITH MISS SUSHMITA?
-CX- ....
-
-HR- I AM HR ANKUSH FROM STAFKIND SERVICES. 
-YOUR PROFILE HAS BEEN SHORTLISTED IN OUR COMPANY FOR CUSTOMER SUPPORT (PART-TIME WORK FROM HOME).
-
-THE SALARY WILL BE 12K TO 15K IN-HAND. ARE YOU INTERESTED?
-CX- ....
-
-HR- OK, ALL THE SHORTLISTED CANDIDATES HAVE A SESSION TODAY AT 2:00 PM. 🕦
-IN THIS SESSION, EVERYTHING WILL BE GUIDED TO YOU, SUCH AS SALARY DETAILS, THE PROCESS, WORKING HOURS, AND ALL OTHER NECESSARY INFO.
-
-IS THIS YOUR WHATSAPP NUMBER?
-CX- ....
-
-HR- OK, I AM SENDING YOU THE GOOGLE MEET LINK. PLEASE JOIN THE SESSION AT 2:00 PM. ALSO, PLEASE SAVE MY NUMBER SO YOU CAN CONTACT ME AFTER THE SESSION.`;
-
-document.getElementById("scriptText").innerText =
-(currentLang==="hin") ? hin : eng;
+    let hin=`√√ STAFKIND SERVICES √√\nYOUR CALLING SCRIPT 📖📕\n\nHR- KYA MERI BAAT MISS SUSHMITA SE HO RAHI HAI?\nCX- ....\n\nHR- MAI HR ANKUSH BAAT KAR RAHA HU STAFKIND SERVICES SE,, \nHUMARI COMPANY ME APKI PROFILE SHORT LISTED HUI HAI AS A CUSTOMER SUPPORT PART TIME WORK FROM HOME KE LIYE,,\n\n& APKI JO SALARY HOGA 12K TO 15K INHAND ,, SO ARE YOU INTERESTED?\nCX- .....\n\nHR- OK, TO JITNE CANDIDATE KA PROFILE SHORTLISTED HUE HAI UNKA AFTERNOON 2PM EK SESSION HAI..🕦\nSESSION ME APKO EACH AND EVERYTHING GUIDE KAR DIYA JAYEGA LIKE APKA SALARY KITNA HOGE , PROCESS KY HOGA , KITNE HOURS APKA WORK RAHEGA EACH & EVERYTHING APKO GUIDE KAR DIYA JAYEGA.\n\nKYA APKA YE WHATSAAP NUMBER HAI?\nCX- ....\n\nHR- OK MAI APKO GOOGLE MEET KA LINK SEND KAR DETA HU AP 2:00 PM SE SESSION JOIN KAR LENA & MERA NUMBER BHI SAVE KAR LIJIYE JISSE AP SESSION KE BAAD CONTACT KAR SAKTE HAI.`;
+    let eng=`√√ STAFKIND SERVICES √√\nYOUR CALLING SCRIPT 📖📕\n\nHR- AM I SPEAKING WITH MISS SUSHMITA?\nCX- ....\n\nHR- I AM HR ANKUSH FROM STAFKIND SERVICES. \nYOUR PROFILE HAS BEEN SHORTLISTED IN OUR COMPANY FOR CUSTOMER SUPPORT (PART-TIME WORK FROM HOME).\n\nTHE SALARY WILL BE 12K TO 15K IN-HAND. ARE YOU INTERESTED?\nCX- ....\n\nHR- OK, ALL THE SHORTLISTED CANDIDATES HAVE A SESSION TODAY AT 2:00 PM. 🕦\nIN THIS SESSION, EVERYTHING WILL BE GUIDED TO YOU, SUCH AS SALARY DETAILS, THE PROCESS, WORKING HOURS, AND ALL OTHER NECESSARY INFO.\n\nIS THIS YOUR WHATSAPP NUMBER?\nCX- ....\n\nHR- OK, I AM SENDING YOU THE GOOGLE MEET LINK. PLEASE JOIN THE SESSION AT 2:00 PM. ALSO, PLEASE SAVE MY NUMBER SO YOU CAN CONTACT ME AFTER THE SESSION.`;
+    document.getElementById("scriptText").innerText = (currentLang==="hin") ? hin : eng;
 }
 
 loadData();
-
 </script>
-
 </body>
 </html>

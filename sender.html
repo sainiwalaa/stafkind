@@ -55,8 +55,8 @@ input, select {
     <div class="input-group">
         <label>Select Message Type</label>
         <select id="appType" onchange="updateContent()">
-            <option value="job_details">Job Details (WFH Description)</option>
             <option value="standard">Standard (m.Stock/Upstox/Angel)</option>
+            <option value="job_details">Job Details (WFH Description)</option>
             <option value="tide">Tide Registration (Telecaller)</option>
             <option value="about">About Stafkind (Landing Page)</option>
             <option value="not_interested">Not Interested / Referral Offer</option>
@@ -157,44 +157,6 @@ SUPPORT: *Mentors will be provided for newly joined Candidates in OJT what's app
 *RECRUITMENT    DEPARTMENT*
 *STAFKIND SERVICES*`;
     }
-    else if (type === 'about') {
-        return `Hello ${name},
-
-Humari company *STAFKIND SERVICES* ke baare mein adhik jaankari aur uplabdha Work-From-Home opportunities ko samajhne ke liye niche diye gaye link par click karein:
-
-🔗 Info Link: ${link}
-
-Is page par aapko hamari services, salary details aur HR se judne ka direct tarika mil jayega. Kripya ise dhyaan se padhein.
-
-Best Regards,
-HR ${hr}
-*STAFKIND SERVICES*`;
-    }
-    else if (type === 'not_interested') {
-        return `Subject: Update from STAFKIND SERVICES – Referral Program & Exclusive Benefit
-
-Dear ${name},
-
-Humne aapko STAFKIND SERVICES mein Telecaller position ke liye shortlist kiya tha. Agar aap abhi is job mein interested nahi hain, toh koi baat nahi—hum aapke decision ka samman karte hain.
-
-1. Help Someone Get a Job (Referral):
-Agar aapke circle mein koi aisa yogy candidate hai jo Part-time work-from-home job ki talash mein hai, toh aap unhe hamari services refer kar sakte hain. Aapki ek chhoti si madad kisi ke liye behtar rozgaar ka zariya ban sakti hai.
-
-2. Exclusive Benefit for You (STAFKIND Business Card):
-Humein khushi hai ki hum apne candidates ke liye ek vishesh Business Card facility provide kar rahe hain. Is card ke fayde niche diye gaye hain:
-
-- 3% Guaranteed Rewards: Jab bhi aap shopping ya utility services (recharge, bills) ke liye ise use karenge.
-- Double Reward Offer: Pehli baar sirf ₹50 add karne par aapko ₹50 extra reward milta hai (Total ₹100), jise aap turant istemal kar sakte hain.
-
-🔗 Registration Link: ${link}
-
-⚠️ Important: Reward paane ke liye account opening ke waqt niche diya gaya Promo Code zaroor bharein:
-👉 Apply Referral Code: "EP3333"
-
-Best Regards,
-HR ${hr}
-STAFKIND SERVICES`;
-    } 
     else if (type === 'tide') {
         return `Subject: Telecaller Position – Registration Process
 
@@ -222,19 +184,56 @@ Please follow all the instructions carefully to ensure a smooth and successful r
 
 Best Regards,
 Recruitment Team`;
-    } 
-    else {
+    }
+    else if (type === 'standard') {
         return `Subject: Telecaller Position – Registration Process
 
 Dear ${name},
 
-Congratulations! You have been shortlisted for the Telecaller position. Kripya niche diye gaye link se registration poora karein:
+Congratulations! You have been shortlisted for the Telecaller position at our company.
 
-Link: ${link}
+Please note that no device will be provided by the company. Therefore, you are requested to complete your registration process using the official HR link shared with you.
+
+Before proceeding with registration, kindly ensure the following:
+
+- Keep your Aadhaar Card, PAN Card, Bank Details, and DigiLocker access ready.
+- Complete the registration process by yourself (self-registration only).
+- Use only your mobile SIM data while registering. Avoid using Wi-Fi or any other network.
+- Do not refresh the page during the registration process.
+- In case of any error or issue, contact HR immediately for assistance.
+
+Please follow all the instructions carefully to ensure a smooth and successful registration.
+
+Your link here: ${link}
+
+Best Regards,
+Recruitment Team`;
+    }
+    else if (type === 'about') {
+        return `Hello ${name},
+
+Humari company *STAFKIND SERVICES* ke baare mein adhik jaankari aur uplabdha Work-From-Home opportunities ko samajhne ke liye niche diye gaye link par click karein:
+
+🔗 Info Link: ${link}
+
+Is page par aapko hamari services, salary details aur HR se judne ka direct tarika mil jayega. Kripya ise dhyaan se padhein.
 
 Best Regards,
 HR ${hr}
 *STAFKIND SERVICES*`;
+    }
+    else {
+        return `Subject: Update from STAFKIND SERVICES
+
+Dear ${name},
+
+Humne aapko Telecaller position ke liye shortlist kiya tha. Referral aur offers ke liye niche diye link par click karein.
+
+Registration Link: ${link}
+
+Best Regards,
+HR ${hr}
+STAFKIND SERVICES`;
     }
 }
 

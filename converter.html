@@ -3,151 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STAFKIND - Data Tools</title>
+    <title>STAFKIND - Data Converter</title>
     <style>
         :root { --primary:#0b3d91; --accent:#25D366; --bg:#f4f7fa; --blue:#3b82f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .main-container { max-width: 900px; margin: auto; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
         
-        .card { background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        .converter-card {
+            max-width: 700px; margin: 40px auto; background: #fff;
+            padding: 30px; border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h2 { text-align: center; color: var(--primary); margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; font-size: 14px; }
         
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
-        
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; color: white; min-width: 150px; }
-        
+        textarea {
+            width: 100%; padding: 15px; border: 1.5px solid #ddd;
+            border-radius: 10px; box-sizing: border-box; font-size: 14px;
+            font-family: monospace; background: #fafafa;
+        }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+
+        .btn {
+            flex: 1; padding: 15px; border: none; border-radius: 8px;
+            font-size: 16px; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s; color: white;
+        }
+
         .btn-convert { background: var(--blue); }
-        .btn-copy { background: #64748b; }
-        .btn-wa { background: var(--accent); }
+        .btn-copy { background: var(--accent); }
         .btn-clear { background: #ef4444; }
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        .preview-box { margin-top: 15px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 13px; white-space: pre-wrap; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background: var(--primary); color: white; }
+        .preview-area {
+            margin-top: 25px; padding: 15px; background: #f8fafc;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+        }
+        
+        .preview-header { font-weight: bold; color: #64748b; margin-bottom: 10px; font-size: 12px; text-transform: uppercase; }
+        
+        table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f1f5f9; color: var(--primary); }
+
+        .back-link { text-align: center; margin-top: 25px; }
+        .back-link a { color: #64748b; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <div class="card">
-        <h2>📊 Data to Excel Converter</h2>
-        <div class="input-group">
-            <label>Raw Data Paste Karein (Name Number):</label>
-            <textarea id="rawData" rows="6" placeholder="Shivam Yadav 9555696023&#10;Dhiraj kumar 9661129162"></textarea>
-        </div>
-        <div class="btn-group">
-            <button class="btn btn-convert" onclick="convertToExcel()">🔄 Convert Data</button>
-            <button id="copyExcelBtn" class="btn btn-wa" style="display:none;" onclick="copyToClipboard('excel')">📋 Copy for Google Sheet</button>
-            <button class="btn btn-clear" onclick="clearConverter()">🗑️ Clear</button>
-        </div>
-        <div id="excelPreviewArea" style="display:none; margin-top:15px;">
-            <label>Preview:</label>
-            <div id="excelTable"></div>
+<div class="converter-card">
+    <h2>📊 Data to Excel Converter</h2>
+    
+    <div class="input-group">
+        <label>Raw Data Paste Karein (Name Number):</label>
+        <textarea id="rawData" rows="10" placeholder="Shivam Yadav 9555696023&#10;Dhiraj kumar 9661129162&#10;Mamta Bohra 8178195165"></textarea>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-convert" onclick="convertToExcel()">🔄 Convert Data</button>
+        <button id="copyBtn" class="btn btn-copy" style="display:none;" onclick="copyToClipboard()">📋 Copy for Google Sheet</button>
+        <button class="btn btn-clear" onclick="clearAll()">🗑️ Clear</button>
+    </div>
+
+    <div id="previewSection" style="display:none;">
+        <div class="preview-area">
+            <div class="preview-header">Live Preview (Ready to Paste)</div>
+            <div id="tableDisplay"></div>
         </div>
     </div>
 
-    <div class="card">
-        <h2>🔗 Professional Link Sender</h2>
-        <div class="input-group">
-            <label>Message Type</label>
-            <select id="msgType" onchange="updateLink()">
-                <option value="standard">Standard (m.Stock/Upstox)</option>
-                <option value="not_interested">Not Interested / Referral (Tide)</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>Candidate Name</label>
-            <input type="text" id="candName" placeholder="Naam likhein" oninput="updatePreview()">
-        </div>
-        <div class="input-group">
-            <label>WhatsApp Number</label>
-            <input type="number" id="candPhone" placeholder="91XXXXXXXXXX">
-        </div>
-        <div class="input-group">
-            <label>Registration Link</label>
-            <input type="text" id="regLink" oninput="updatePreview()">
-        </div>
-        <div class="btn-group">
-            <button class="btn btn-wa" onclick="sendWA()">WhatsApp ✅</button>
-            <button class="btn btn-copy" onclick="copyToClipboard('msg')">Copy Message 📋</button>
-        </div>
-        <div class="preview-box" id="msgPreview">Preview yahan dikhega...</div>
+    <div class="back-link">
+        <a href="javascript:history.back()">← Back to Dashboard</a>
     </div>
 </div>
 
 <script>
-    let excelData = "";
-    const tideLink = "https://share.trkep.in/share/69ecdca35995639f0d191273";
+    let formattedText = "";
 
-    // --- Converter Logic ---
     function convertToExcel() {
         const input = document.getElementById('rawData').value.trim();
-        if(!input) return alert("Data dalein!");
-        
+        if (!input) {
+            alert("Kripya pehle data paste karein!");
+            return;
+        }
+
         const lines = input.split('\n');
-        let html = "<table><tr><th>Name</th><th>Phone</th></tr>";
-        excelData = "";
+        let html = "<table><tr><th>Name</th><th>Mobile Number</th></tr>";
+        formattedText = ""; 
 
         lines.forEach(line => {
+            // Regex to find 10 digits at the end of the line
             const match = line.match(/(.*?)\s*(\d{10})$/);
-            if(match) {
+            
+            if (match) {
                 const name = match[1].trim();
                 const phone = match[2].trim();
-                excelData += `${name}\t${phone}\n`;
+                
+                // Tab-separated format for Excel/Sheets
+                formattedText += `${name}\t${phone}\n`;
+                
                 html += `<tr><td>${name}</td><td>${phone}</td></tr>`;
             }
         });
-        html += "</table>";
-        document.getElementById('excelTable').innerHTML = html;
-        document.getElementById('excelPreviewArea').style.display = "block";
-        document.getElementById('copyExcelBtn').style.display = "inline-block";
-    }
 
-    function clearConverter() {
-        document.getElementById('rawData').value = "";
-        document.getElementById('excelPreviewArea').style.display = "none";
-    }
-
-    // --- Sender Logic ---
-    function updateLink() {
-        const type = document.getElementById('msgType').value;
-        document.getElementById('regLink').value = (type === 'not_interested') ? tideLink : "";
-        updatePreview();
-    }
-
-    function generateMsg() {
-        const type = document.getElementById('msgType').value;
-        const name = document.getElementById('candName').value || "[Candidate]";
-        const link = document.getElementById('regLink').value || "[Link]";
-
-        if(type === 'not_interested') {
-            return `Dear ${name},\n\nHunne aapko STAFKIND SERVICES mein shortlist kiya tha. Agar aap interested nahi hain toh koi issue nahi, lekin aap kisi jaruratmand ko refer kar sakte hain.\n\nSath hi aap hamara Business Card le sakte hain: 3% Rewards + ₹50 par ₹50 extra bonus.\n\nLink: ${link}\nPromo Code: EP3333\n(Valid for 12 hours)`;
-        } else {
-            return `Dear ${name},\n\nCongratulations! You are shortlisted for Telecaller job. Complete your registration using the link below:\n\nLink: ${link}\n\nRegards,\nSTAFKIND SERVICES`;
+        if (formattedText === "") {
+            alert("Data format sahi nahi hai. Har line ke baad 10 digit ka number hona chahiye.");
+            return;
         }
+
+        document.getElementById('tableDisplay').innerHTML = html + "</table>";
+        document.getElementById('previewSection').style.display = "block";
+        document.getElementById('copyBtn').style.display = "flex";
     }
 
-    function updatePreview() {
-        document.getElementById('msgPreview').innerText = generateMsg();
+    function copyToClipboard() {
+        if (!formattedText) return;
+        
+        navigator.clipboard.writeText(formattedText).then(() => {
+            alert("✅ Data Copy ho gaya! Ab Google Sheet mein jaakar Paste (Ctrl+V) karein.");
+        }).catch(err => {
+            // Fallback for some browsers
+            const el = document.createElement('textarea');
+            el.value = formattedText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("✅ Data Copy ho gaya!");
+        });
     }
 
-    function sendWA() {
-        const phone = document.getElementById('candPhone').value;
-        if(!phone) return alert("Number dalein!");
-        window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(generateMsg())}`);
+    function clearAll() {
+        document.getElementById('rawData').value = "";
+        document.getElementById('previewSection').style.display = "none";
+        document.getElementById('copyBtn').style.display = "none";
+        formattedText = "";
     }
-
-    function copyToClipboard(mode) {
-        const text = (mode === 'excel') ? excelData : generateMsg();
-        navigator.clipboard.writeText(text).then(() => alert("Copied!"));
-    }
-
-    updatePreview();
 </script>
 
 </body>

@@ -412,12 +412,19 @@ function sendMeet(phone,link){
     window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
-// UPDATED SAVE FUNCTION WITH PASSWORD PROTECTION
+// STRICT SAVE PROTECTION
 function save(i,name,phone){
     let pass = prompt("Enter Agent Password to Save Data:");
     
-    if (pass === null) return; // User cancelled
+    // Check if cancel was pressed
+    if (pass === null) return;
     
+    // Check if empty or incorrect
+    if (pass.trim() === "") {
+        alert("⚠️ Password cannot be empty!");
+        return;
+    }
+
     if (pass === AGENT_PASS) {
         const payload={
             name:name, mobile:phone,

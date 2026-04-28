@@ -38,7 +38,7 @@ input, select {
 
 .preview-box {
     margin-top: 25px; padding: 15px; background: #f8fafc;
-    border: 1px solid #e2e8f0; border-radius: 10px;
+    border: 1px solid #e2e880; border-radius: 10px;
 }
 .preview-header { font-weight: bold; color: #64748b; margin-bottom: 10px; font-size: 12px; text-transform: uppercase; }
 #msgPreview { font-size: 13px; color: #334155; white-space: pre-wrap; line-height: 1.5; font-family: sans-serif; }
@@ -53,10 +53,11 @@ input, select {
     <h2>🔗 Professional Link Sender</h2>
     
     <div class="input-group">
-        <label>Select App Profile</label>
+        <label>Select Message Type</label>
         <select id="appType" onchange="updateContent()">
-            <option value="standard">m.Stock / Upstox / Angel One</option>
-            <option value="tide">Tide Business Account</option>
+            <option value="standard">Standard (m.Stock/Upstox/Angel)</option>
+            <option value="tide">Tide Registration (Telecaller)</option>
+            <option value="not_interested">Not Interested / Referral Offer</option>
         </select>
     </div>
 
@@ -76,7 +77,7 @@ input, select {
     </div>
 
     <div class="input-group">
-        <label>HR Name</label>
+        <label>HR / Sender Name</label>
         <input type="text" id="hrName" value="Sunil Kumar Saini" oninput="updatePreview()">
     </div>
 
@@ -96,12 +97,11 @@ input, select {
 </div>
 
 <script>
-// Tide fixed link as per your request
 const tideLink = "https://share.trkep.in/share/69ecdca35995639f0d191273";
 
 function updateContent() {
     const type = document.getElementById('appType').value;
-    if(type === 'tide') {
+    if(type === 'tide' || type === 'not_interested') {
         document.getElementById('regLink').value = tideLink;
     } else {
         document.getElementById('regLink').value = "";
@@ -112,10 +112,40 @@ function updateContent() {
 function generateMessage() {
     const type = document.getElementById('appType').value;
     const name = document.getElementById('custName').value || "[Candidate Name]";
-    const link = document.getElementById('regLink').value || "[Registration Link]";
+    const link = document.getElementById('regLink').value || "[Link Here]";
     const hr = document.getElementById('hrName').value || "Sunil Kumar Saini";
 
-    if (type === 'tide') {
+    if (type === 'not_interested') {
+        return `Subject: Update from STAFKIND SERVICES – Referral Program & Exclusive Benefit
+
+Dear ${name},
+
+Humne aapko STAFKIND SERVICES mein Telecaller position ke liye shortlist kiya tha. Agar aap abhi is job mein interested nahi hain, toh koi baat nahi—hum aapke decision ka samman karte hain.
+
+1. Help Someone Get a Job (Referral):
+Agar aapke circle mein koi aisa yogy candidate hai jo Part-time work-from-home job ki talash mein hai, toh aap unhe hamari services refer kar sakte hain. Aapki ek chhoti si madad kisi ke liye behtar rozgaar ka zariya ban sakti hai.
+
+2. Exclusive Benefit for You (STAFKIND Business Card):
+Humein khushi hai ki hum apne candidates ke liye ek vishesh Business Card facility provide kar rahe hain. Is card ke fayde niche diye gaye hain:
+
+- 3% Guaranteed Rewards: Jab bhi aap shopping ya utility services (recharge, bills) ke liye ise use karenge.
+- Double Reward Offer: Pehli baar sirf ₹50 add karne par aapko ₹50 extra reward milta hai (Total ₹100), jise aap turant istemal kar sakte hain.
+
+Kaise prapt karein?
+Is offer ka labh uthane ke liye niche diye gaye link se agle 12 ghanton mein KYC process poora karein. (Note: 12 ghante baad link disable ho jayega).
+
+🔗 Registration Link: ${link}
+
+⚠️ Important: Reward paane ke liye account opening ke waqt niche diya gaya Promo Code zaroor bharein:
+👉 Apply Referral Code: "EP3333"
+
+Humein umeed hai ki ye card aapke daily expenses ko bachat mein badalne mein madad karega.
+
+Best Regards,
+HR ${hr}
+STAFKIND SERVICES`;
+    } 
+    else if (type === 'tide') {
         return `Subject: Telecaller Position – Registration Process
 
 Dear ${name},
@@ -125,7 +155,6 @@ Congratulations! You have been shortlisted for the Telecaller position at our co
 Please note that no device will be provided by the company. Therefore, you are requested to complete your registration process using the official HR link shared with you.
 
 Before proceeding with registration, kindly ensure the following:
-
 - Keep your Aadhaar Card, PAN Card, Bank Details, and DigiLocker access ready.
 - Complete the registration process by yourself (self-registration only).
 - Use only your mobile SIM data while registering. Avoid using Wi-Fi or any other network.
@@ -143,7 +172,8 @@ Please follow all the instructions carefully to ensure a smooth and successful r
 Best Regards,
 HR ${hr}
 *STAFKIND SERVICES*`;
-    } else {
+    } 
+    else {
         return `Subject: Telecaller Position – Registration Process
 
 Dear ${name},
@@ -153,16 +183,13 @@ Congratulations! You have been shortlisted for the Telecaller position at our co
 Please note that no device will be provided by the company. Therefore, you are requested to complete your registration process using the official HR link shared with you.
 
 Before proceeding with registration, kindly ensure the following:
-
 - Keep your Aadhaar Card, PAN Card, Bank Details, and DigiLocker access ready.
 - Complete the registration process by yourself (self-registration only).
 - Use only your mobile SIM data while registering. Avoid using Wi-Fi or any other network.
-- Do not refresh the page during the registration process.
-- In case of any error or issue, contact HR immediately for assistance.
-
-Please follow all the instructions carefully to ensure a smooth and successful registration.
 
 Your link here: ${link}
+
+Please follow all the instructions carefully to ensure a smooth and successful registration.
 
 Best Regards,
 HR ${hr}
@@ -176,9 +203,17 @@ function updatePreview() {
 
 function copyToClipboard() {
     const text = generateMessage();
-    navigator.clipboard.writeText(text).then(() => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        document.execCommand('copy');
         alert("Message copied to clipboard!");
-    });
+    } catch (err) {
+        alert("Unable to copy");
+    }
+    document.body.removeChild(textArea);
 }
 
 function sendWhatsApp() {
@@ -192,7 +227,6 @@ function sendWhatsApp() {
     window.open(waLink, '_blank');
 }
 
-// Initial preview
 updatePreview();
 </script>
 

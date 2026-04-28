@@ -67,6 +67,12 @@ body{
   background: #3b82f6; /* Blue color */
 }
 
+/* Upload Data Button Style (New) */
+.uploadbtn {
+  background: #3b82f6; /* Consistent with sendbtn */
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
 /* RUNNING NOTE */
 .note{
   background:#facc15;
@@ -201,6 +207,8 @@ button{
   </div>
 
   <div>
+    <button class="dashbtn uploadbtn" onclick="openConverter()">📥 Upload Call Data</button>
+    
     <button class="dashbtn" onclick="openDashboard()">🔐 Dashboard</button>
     <button class="dashbtn" onclick="openScript()">📖 Script</button>
     <button class="dashbtn sendbtn" onclick="openSender()">🔗 Send Link</button>
@@ -269,19 +277,24 @@ function updateTime() {
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
-    hours = hours ? hours : 12; // 0 should be 12
+    hours = hours ? hours : 12; 
     const strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
     document.getElementById('digitalClock').innerHTML = strTime;
 }
 setInterval(updateTime, 1000);
 updateTime();
 
-/* HELP PAGE FUNCTION - Same Tab */
+/* CONVERTER FUNCTION - New */
+function openConverter(){
+  window.location.href = "https://sainiwalaa.github.io/stafkind/converter.html";
+}
+
+/* HELP PAGE FUNCTION */
 function openHelp(){
   window.location.href = "https://sainiwalaa.github.io/stafkind/help.html";
 }
 
-/* SENDER PAGE FUNCTION - Same Tab */
+/* SENDER PAGE FUNCTION */
 function openSender(){
   window.location.href = "https://sainiwalaa.github.io/stafkind/sender.html";
 }
@@ -291,7 +304,7 @@ function openDashboard(){
   window.open("https://offers.earnpati.com/auth/login","_blank");
 }
 
-/* LOAD */
+/* LOAD DATA */
 function loadData(){
 fetch(API)
 .then(res=>res.json())
@@ -301,7 +314,7 @@ render(data);
 });
 }
 
-/* RENDER */
+/* RENDER TABLE */
 function render(data){
 let html="";
 
@@ -381,20 +394,20 @@ let filtered = globalData.filter(x => (x.date||"").trim()===formatted);
 render(filtered);
 }
 
-/* BUTTON */
+/* BUTTON VALUE SETTER */
 function setVal(id,val,btn){
 document.getElementById(id).value=val;
 btn.parentNode.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 }
 
-/* WHATSAPP */
+/* WHATSAPP SENDER */
 function sendMeet(phone,link){
 let msg=`Join meeting:\n${link}`;
 window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
 }
 
-/* SAVE */
+/* SAVE DATA */
 function save(i,name,phone){
 const payload={
 name:name,
@@ -430,7 +443,6 @@ loadScript();
 }
 
 function loadScript(){
-
 let hin=`√√ STAFKIND SERVICES √√
 YOUR CALLING SCRIPT 📖📕
 

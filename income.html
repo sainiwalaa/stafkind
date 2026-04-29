@@ -1,8 +1,59 @@
-// ... (Baki CSS wahi rahega) ...
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sainiwalaa CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1e293b; --accent: #3b82f6; --success: #22c55e; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--primary); }
+        .compact-form { background: white; padding: 15px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        .row { display: flex; gap: 8px; margin-bottom: 10px; }
+        input { flex: 1; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; }
+        .app-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+        .chip { padding: 8px 14px; background: #f1f5f9; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .chip.active { background: var(--success); color: white; border-color: #16a34a; }
+        .btn-submit { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .list-container { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .list-header { background: #f1f5f9; padding: 12px 15px; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
+        .data-list { max-height: 400px; overflow-y: auto; }
+        .list-item { padding: 12px 15px; border-bottom: 1px solid #f8fafc; display: flex; justify-content: space-between; align-items: center; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .info b { display: block; font-size: 14px; color: #1e293b; }
+        .info span { font-size: 11px; color: #64748b; }
+        .amt { font-weight: 700; color: #16a34a; font-size: 15px; }
+        #loader { text-align: center; padding: 20px; font-size: 12px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div class="compact-form">
+        <div class="row">
+            <input type="text" id="name" placeholder="Name">
+            <input type="number" id="mobile" placeholder="Mobile">
+        </div>
+        <div class="app-chips">
+            <div class="chip" onclick="toggleApp(this, 150, 'Upstox')">Upstox ₹150</div>
+            <div class="chip" onclick="toggleApp(this, 320, 'Tide')">Tide ₹320</div>
+            <div class="chip" onclick="toggleApp(this, 150, 'mStock')">mStock ₹150</div>
+            <div class="chip" onclick="toggleApp(this, 260, 'AngelOne')">Angel One ₹260</div>
+        </div>
+        <button class="btn-submit" id="saveBtn" onclick="submitData()">Save Record</button>
+    </div>
+
+    <div class="list-container">
+        <div class="list-header">
+            <span>Recent Entries</span>
+            <span id="totalDay" style="color:var(--accent)">₹ 0</span>
+        </div>
+        <div id="loader">Loading data...</div>
+        <div class="data-list" id="records"></div>
+    </div>
 
 <script>
     // ⚠️ APNI NAYI DEPLOY URL YAHAN DALEIN
-    const API = "https://script.google.com/macros/s/AKfycby86a8hHJl76614y1r7JlPeOXsV_d3J8UxkYnXK7WXySzkobd_OyJGcwrf_4bZijY3w/exec"; 
+    const API = "YOUR_NEW_DEPLOY_URL_HERE"; 
     
     let selectedApps = [];
     let currentIncome = 0;
@@ -19,43 +70,42 @@
         }
     }
 
-    function submitData() {
+    async function submitData() {
         const n = document.getElementById('name').value;
         const m = document.getElementById('mobile').value;
-        if(!n || selectedApps.length === 0) return alert("Fill Name & Select App");
+        const btn = document.getElementById('saveBtn');
 
-        const saveBtn = document.getElementById('saveBtn');
-        saveBtn.disabled = true;
-        saveBtn.innerText = "Saving...";
+        if(!n || selectedApps.length === 0) return alert("Bhai, details to bharo!");
+
+        btn.disabled = true;
+        btn.innerText = "Saving...";
         
         const payload = { name: n, mobile: m, apps: selectedApps.join(", "), income: currentIncome };
 
-        // Post request with stringified body
-        fetch(API, { 
-            method: "POST", 
-            body: JSON.stringify(payload) 
-        })
-        .then(res => {
-            alert("Data Saved Successfully! ✅");
+        try {
+            await fetch(API, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            // Data sheet mein pahunch gaya
+            alert("Data Saved! ✅");
             resetForm();
-            fetchList(); // List refresh
-        })
-        .catch(err => {
-            console.log(err);
-            // No-cors mein error aata hai par data save ho jata hai
-            setTimeout(() => { fetchList(); resetForm(); }, 2000);
-        });
+            fetchList();
+        } catch (e) {
+            // Kabhi-kabhi save ho jata hai par error dikhata hai, isliye list refresh karein
+            setTimeout(() => { fetchList(); resetForm(); }, 1500);
+        }
     }
 
-    function fetchList() {
+    async function fetchList() {
         document.getElementById('loader').style.display = "block";
-        fetch(API)
-        .then(res => res.json())
-        .then(data => {
+        try {
+            const res = await fetch(API);
+            const data = await res.json();
             let html = "";
             let dayTotal = 0;
-            // Naya data upar dikhane ke liye reverse
-            data.slice().reverse().forEach(item => {
+            
+            data.reverse().forEach(item => {
                 html += `
                     <div class="list-item">
                         <div class="info">
@@ -69,20 +119,24 @@
             });
             document.getElementById('records').innerHTML = html;
             document.getElementById('totalDay').innerText = "Total: ₹ " + dayTotal;
-            document.getElementById('loader').style.display = "none";
-        });
+        } catch (e) {
+            console.error("Fetch error");
+        }
+        document.getElementById('loader').style.display = "none";
     }
 
     function resetForm() {
         document.getElementById('name').value = "";
         document.getElementById('mobile').value = "";
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        const saveBtn = document.getElementById('saveBtn');
-        saveBtn.disabled = false;
-        saveBtn.innerText = "Save & Add to List";
+        const btn = document.getElementById('saveBtn');
+        btn.disabled = false;
+        btn.innerText = "Save Record";
         selectedApps = [];
         currentIncome = 0;
     }
 
     fetchList();
 </script>
+</body>
+</html>

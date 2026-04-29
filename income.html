@@ -3,196 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sainiwalaa | Income Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Sainiwalaa CRM | Income List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #3b82f6;
-            --success: #22c55e;
-            --bg: #f8fafc;
-        }
+        :root { --primary: #1e293b; --accent: #3b82f6; --success: #22c55e; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--primary); }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            padding: 10px;
-            color: var(--primary);
+        /* Chota & Attractive Form */
+        .compact-form {
+            background: white; padding: 15px; border-radius: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px;
         }
-
-        .header {
-            background: var(--primary);
-            color: white;
-            padding: 30px 20px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .header h1 { margin: 0; font-size: 18px; font-weight: 400; opacity: 0.9; }
-        .income-val { font-size: 48px; font-weight: 700; margin: 10px 0; display: block; }
+        .row { display: flex; gap: 10px; margin-bottom: 10px; }
+        input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
         
-        .card {
-            background: white;
-            padding: 24px;
-            border-radius: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        .app-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .chip {
+            padding: 6px 12px; background: #f1f5f9; border-radius: 20px;
+            font-size: 12px; font-weight: 600; cursor: pointer; border: 2px solid transparent;
+        }
+        .chip.active { background: var(--success); color: white; border-color: #16a34a; }
+
+        .btn-submit {
+            width: 100%; background: var(--primary); color: white; padding: 12px;
+            border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
         }
 
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #64748b; }
+        /* Niche List Jesa Data */
+        .list-container { background: white; border-radius: 15px; overflow: hidden; }
+        .list-header { background: #e2e8f0; padding: 10px 15px; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; }
         
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 16px;
-            box-sizing: border-box;
-            transition: 0.3s;
+        .data-list { max-height: 400px; overflow-y: auto; }
+        .list-item {
+            padding: 12px 15px; border-bottom: 1px solid #f1f5f9;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        input:focus { border-color: var(--accent); outline: none; }
+        .list-item:last-child { border-bottom: none; }
+        .info b { display: block; font-size: 14px; }
+        .info span { font-size: 11px; color: #64748b; }
+        .amt { font-weight: 700; color: var(--success); font-size: 15px; }
 
-        .app-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        .app-item {
-            background: #f1f5f9;
-            border: 2px solid transparent;
-            padding: 16px;
-            border-radius: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .app-item b { display: block; font-size: 15px; margin-bottom: 2px; }
-        .app-item span { font-size: 12px; font-weight: 600; color: #64748b; }
-
-        /* Click Logic */
-        .app-item.active {
-            background: #dcfce7;
-            border-color: var(--success);
-            color: #166534;
-        }
-        .app-item.active span { color: #166534; }
-
-        .btn-save {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            padding: 18px;
-            border: none;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 14px 0 rgba(15, 23, 42, 0.39);
-        }
-        .btn-save:active { transform: scale(0.98); }
-        
-        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #94a3b8; }
+        #loader { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Sainiwalaa Today's Income</h1>
-        <span class="income-val">₹ <span id="totalDisplay">0</span></span>
-        <div id="dateNow" style="font-size: 13px; opacity: 0.7;"></div>
+    <div class="compact-form">
+        <div class="row">
+            <input type="text" id="name" placeholder="Name">
+            <input type="number" id="mobile" placeholder="Mobile">
+        </div>
+        <div class="app-chips">
+            <div class="chip" onclick="toggleApp(this, 150, 'Upstox')">Upstox ₹150</div>
+            <div class="chip" onclick="toggleApp(this, 320, 'Tide')">Tide ₹320</div>
+            <div class="chip" onclick="toggleApp(this, 150, 'mStock')">mStock ₹150</div>
+            <div class="chip" onclick="toggleApp(this, 260, 'AngelOne')">AngelOne ₹260</div>
+        </div>
+        <button class="btn-submit" id="saveBtn" onclick="submitData()">Save & Add to List</button>
     </div>
 
-    <div class="card">
-        <div class="input-group">
-            <label>Candidate Name</label>
-            <input type="text" id="name" placeholder="Naam likhein...">
+    <div class="list-container">
+        <div class="list-header">
+            <span>Recent Registrations</span>
+            <span id="totalDay">₹ 0</span>
         </div>
-        
-        <div class="input-group">
-            <label>Mobile Number</label>
-            <input type="number" id="mobile" placeholder="Mobile no...">
-        </div>
-
-        <label>Select Registered Apps</label>
-        <div class="app-grid">
-            <div class="app-item" onclick="selectApp(this, 150, 'Upstox')">
-                <b>Upstox</b> <span>₹150</span>
+        <div id="loader">Loading list...</div>
+        <div class="data-list" id="records">
             </div>
-            <div class="app-item" onclick="selectApp(this, 320, 'Tide')">
-                <b>Tide</b> <span>₹320</span>
-            </div>
-            <div class="app-item" onclick="selectApp(this, 150, 'mStock')">
-                <b>mStock</b> <span>₹150</span>
-            </div>
-            <div class="app-item" onclick="selectApp(this, 260, 'AngelOne')">
-                <b>Angel One</b> <span>₹260</span>
-            </div>
-        </div>
-
-        <button class="btn-save" id="saveBtn" onclick="submitToSheet()">Submit Record</button>
     </div>
-
-    <div class="footer">Powered by Sainiwalaa Tech CRM</div>
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbzhOPkJtv8txQD5rtkZ6Zui9qZWTLSTFdk2qZR4qK231F1wnleBZ9flcJSqRXMZqcPr/exec";
+    const API = "https://script.google.com/macros/s/AKfycbx5ZQ1FMaXlAgqTM15TPB6sVXDqQ2ClfWJ1yAieCSDiBrKcnWyiikUwR11G64w0Woy2/exec";
     
-    let total = 0;
-    let selected = [];
+    let selectedApps = [];
+    let currentIncome = 0;
 
-    document.getElementById('dateNow').innerText = new Date().toDateString();
-
-    function selectApp(el, price, name) {
+    // 1. App Selection Logic
+    function toggleApp(el, price, name) {
         if(el.classList.contains('active')) {
             el.classList.remove('active');
-            total -= price;
-            selected = selected.filter(a => a !== name);
+            currentIncome -= price;
+            selectedApps = selectedApps.filter(a => a !== name);
         } else {
             el.classList.add('active');
-            total += price;
-            selected.push(name);
+            currentIncome += price;
+            selectedApps.push(name);
         }
-        document.getElementById('totalDisplay').innerText = total;
     }
 
-    function submitToSheet() {
-        const uName = document.getElementById('name').value;
-        const uMob = document.getElementById('mobile').value;
-        const btn = document.getElementById('saveBtn');
+    // 2. Submit Data to Sheet
+    function submitData() {
+        const n = document.getElementById('name').value;
+        const m = document.getElementById('mobile').value;
+        if(!n || selectedApps.length === 0) return alert("Fill Name & Select App");
 
-        if(!uName || selected.length === 0) {
-            alert("Details bharna zaroori hai!");
-            return;
-        }
+        document.getElementById('saveBtn').disabled = true;
+        
+        const payload = { name: n, mobile: m, apps: selectedApps.join(", "), income: currentIncome };
 
-        btn.disabled = true;
-        btn.innerText = "Saving Data...";
-
-        const payload = {
-            name: uName,
-            mobile: uMob,
-            apps: selected.join(", "),
-            income: total
-        };
-
-        fetch(API, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify(payload)
-        }).then(() => {
-            alert("Entry Saved Successfully! ✅");
-            window.location.reload();
-        }).catch(() => {
-            alert("Error saving data!");
-            btn.disabled = false;
+        fetch(API, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
+        .then(() => {
+            alert("Saved! ✅");
+            fetchList(); // List refresh karein
+            resetForm();
         });
     }
+
+    // 3. Fetch List from Google Sheet
+    function fetchList() {
+        fetch(API)
+        .then(res => res.json())
+        .then(data => {
+            let html = "";
+            let dayTotal = 0;
+            // Data ko reverse dikhayenge takki naya record upar aaye
+            data.reverse().forEach(item => {
+                html += `
+                    <div class="list-item">
+                        <div class="info">
+                            <b>${item.name}</b>
+                            <span>${item.apps} | ${item.mobile}</span>
+                        </div>
+                        <div class="amt">₹${item.income}</div>
+                    </div>
+                `;
+                dayTotal += Number(item.income);
+            });
+            document.getElementById('records').innerHTML = html;
+            document.getElementById('totalDay').innerText = "Total: ₹ " + dayTotal;
+            document.getElementById('loader').style.display = "none";
+        });
+    }
+
+    function resetForm() {
+        document.getElementById('name').value = "";
+        document.getElementById('mobile').value = "";
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        document.getElementById('saveBtn').disabled = false;
+        selectedApps = [];
+        currentIncome = 0;
+    }
+
+    // Page khulte hi list load karein
+    fetchList();
 </script>
 
 </body>

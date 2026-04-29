@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAFKIND Referral Income</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1e3c72; --accent: #ff9800; --success: #2ecc71; --bg: #f0f2f5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 15px; }
+
+        /* Dashboard Stats */
+        .stats-container {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white; padding: 25px; border-radius: 20px;
+            text-align: center; margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(30, 60, 114, 0.3);
+        }
+        .stats-container h2 { margin: 0; font-size: 14px; opacity: 0.8; text-transform: uppercase; }
+        .stats-container .total-amt { font-size: 36px; font-weight: 700; margin: 10px 0; }
+
+        .form-card {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        input {
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            border: 2px solid #eee; border-radius: 12px;
+            font-size: 16px; box-sizing: border-box; outline: none;
+        }
+        input:focus { border-color: var(--primary); }
+
+        /* App Selection Grid */
+        .app-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; margin: 20px 0;
+        }
+        .app-item {
+            background: #f8f9fa; border: 2px solid #eee;
+            padding: 15px; border-radius: 15px; text-align: center;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .app-item b { display: block; font-size: 16px; }
+        .app-item span { font-size: 13px; color: #666; }
+
+        /* Status: Selected (Green) */
+        .app-item.selected {
+            background: var(--success); border-color: var(--success); color: white;
+            transform: translateY(-3px); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+        .app-item.selected span { color: white; }
+
+        .submit-btn {
+            width: 100%; padding: 18px; border: none;
+            background: var(--primary); color: white;
+            border-radius: 15px; font-size: 18px; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:disabled { background: #ccc; }
+
+        .footer-note { text-align: center; font-size: 12px; color: #888; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="stats-container">
+        <h2>Today's Referral Income</h2>
+        <div class="total-amt">₹ <span id="displayIncome">0</span></div>
+        <div id="displayDate" style="font-size: 12px; opacity: 0.7;">--</div>
+    </div>
+
+    <div class="form-card">
+        <input type="text" id="candName" placeholder="Candidate Name" required>
+        <input type="number" id="candMob" placeholder="Mobile Number" required>
+
+        <p style="font-weight: 700; color: #444; margin-bottom: 10px;">Select Registered Apps:</p>
+        <div class="app-grid">
+            <div class="app-item" onclick="toggleApp(this, 150, 'Upstox')">
+                <b>Upstox</b> <span>₹150</span>
+            </div>
+            <div class="app-item" onclick="toggleApp(this, 320, 'Tide')">
+                <b>Tide</b> <span>₹320</span>
+            </div>
+            <div class="app-item" onclick="toggleApp(this, 150, 'mStock')">
+                <b>mStock</b> <span>₹150</span>
+            </div>
+            <div class="app-item" onclick="toggleApp(this, 260, 'AngelOne')">
+                <b>Angel One</b> <span>₹260</span>
+            </div>
+        </div>
+
+        <button class="submit-btn" id="saveBtn" onclick="sendData()">SAVE TO SHEET</button>
+    </div>
+
+    <div class="footer-note">STAFKIND CRM - Secured System</div>
+
+<script>
+    // Aapka Web App URL
+    const API_URL = "https://script.google.com/macros/s/AKfycbzhOPkJtv8txQD5rtkZ6Zui9qZWTLSTFdk2qZR4qK231F1wnleBZ9flcJSqRXMZqcPr/exec";
+
+    let selectedApps = [];
+    let currentTotal = 0;
+
+    // Set Current Date
+    document.getElementById('displayDate').innerText = new Date().toDateString();
+
+    function toggleApp(element, price, appName) {
+        if (element.classList.contains('selected')) {
+            // Unselect Logic
+            element.classList.remove('selected');
+            currentTotal -= price;
+            selectedApps = selectedApps.filter(app => app !== appName);
+        } else {
+            // Select Logic
+            element.classList.add('selected');
+            currentTotal += price;
+            selectedApps.push(appName);
+        }
+        document.getElementById('displayIncome').innerText = currentTotal;
+    }
+
+    function sendData() {
+        const name = document.getElementById('candName').value;
+        const mob = document.getElementById('candMob').value;
+        const btn = document.getElementById('saveBtn');
+
+        if (!name || !mob || selectedApps.length === 0) {
+            alert("Kripya saari details bharein!");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "Saving...";
+
+        const payload = {
+            name: name,
+            mobile: mob,
+            apps: selectedApps.join(", "),
+            income: currentTotal
+        };
+
+        // Sending Data to Apps Script
+        fetch(API_URL, {
+            method: "POST",
+            mode: "no-cors", 
+            cache: "no-cache",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            alert("Data Successfully Save Ho Gaya! ✅");
+            window.location.reload(); // Refresh to reset form
+        })
+        .catch(err => {
+            alert("Error: " + err);
+            btn.disabled = false;
+            btn.innerText = "SAVE TO SHEET";
+        });
+    }
+</script>
+
+</body>
+</html>

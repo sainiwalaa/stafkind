@@ -1,201 +1,107 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sainiwalaa CRM | Income Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #0f172a; --accent: #3b82f6; --success: #22c55e; --bg: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--primary); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Income Tracker</title>
 
-        /* Compact & Stylish Form */
-        .compact-form {
-            background: white; padding: 15px; border-radius: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
-        }
-        .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
-        input { 
-            flex: 1; padding: 12px; border: 2px solid #f1f5f9; border-radius: 12px; 
-            font-size: 14px; transition: 0.3s; outline: none;
-        }
-        input:focus { border-color: var(--accent); background: #fff; }
-        
-        .app-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-        .chip {
-            padding: 8px 14px; background: #f1f5f9; border-radius: 50px;
-            font-size: 12px; font-weight: 600; cursor: pointer; border: 2px solid transparent;
-            transition: 0.2s; user-select: none;
-        }
-        .chip.active { background: var(--success); color: white; border-color: #15803d; transform: scale(0.95); }
-
-        .btn-submit {
-            width: 100%; background: var(--primary); color: white; padding: 14px;
-            border: none; border-radius: 12px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
-
-        /* Live Data List */
-        .list-container { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; }
-        .list-header { 
-            background: #f8fafc; padding: 12px 18px; font-size: 13px; font-weight: 700; 
-            display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .data-list { max-height: 450px; overflow-y: auto; }
-        .list-item {
-            padding: 14px 18px; border-bottom: 1px solid #f1f5f9;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .list-item:last-child { border-bottom: none; }
-        .info b { display: block; font-size: 14px; margin-bottom: 2px; }
-        .info span { font-size: 11px; color: #64748b; font-weight: 500; }
-        .amt { font-weight: 700; color: #16a34a; font-size: 15px; background: #f0fdf4; padding: 4px 10px; border-radius: 8px; }
-
-        #loader { text-align: center; padding: 30px; font-size: 13px; color: #94a3b8; }
-    </style>
+<style>
+body{font-family:Arial;background:#f1f5f9;margin:0;padding:10px;}
+.box{background:#fff;padding:15px;border-radius:15px;margin-bottom:15px;}
+input{padding:10px;width:100%;margin:5px 0;border-radius:8px;border:1px solid #ccc;}
+button{padding:12px;width:100%;background:#0f172a;color:#fff;border:none;border-radius:10px;}
+.chip{display:inline-block;padding:8px 12px;background:#ddd;border-radius:20px;margin:5px;cursor:pointer;}
+.active{background:green;color:#fff;}
+.item{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:8px;}
+</style>
 </head>
+
 <body>
 
-    <div class="compact-form">
-        <div class="form-row">
-            <input type="text" id="name" placeholder="Candidate Name">
-            <input type="number" id="mobile" placeholder="Mobile No.">
-        </div>
-        
-        <div class="app-chips">
-            <div class="chip" onclick="toggleApp(this, 150, 'Upstox')">Upstox ₹150</div>
-            <div class="chip" onclick="toggleApp(this, 320, 'Tide')">Tide ₹320</div>
-            <div class="chip" onclick="toggleApp(this, 150, 'mStock')">mStock ₹150</div>
-            <div class="chip" onclick="toggleApp(this, 260, 'AngelOne')">Angel One ₹260</div>
-        </div>
+<div class="box">
+<input id="name" placeholder="Name">
+<input id="mobile" placeholder="Mobile">
 
-        <button class="btn-submit" id="saveBtn" onclick="submitData()">Save & Add to List</button>
-    </div>
+<div>
+<span class="chip" onclick="sel(this,150,'Upstox')">Upstox 150</span>
+<span class="chip" onclick="sel(this,320,'Tide')">Tide 320</span>
+<span class="chip" onclick="sel(this,150,'mStock')">mStock 150</span>
+<span class="chip" onclick="sel(this,260,'Angel')">Angel 260</span>
+</div>
 
-    <div class="list-container">
-        <div class="list-header">
-            <span>Recent Records</span>
-            <span id="totalDay" style="color: var(--accent);">Total: ₹ 0</span>
-        </div>
-        <div id="loader">Loading data from sheet...</div>
-        <div class="data-list" id="records">
-            </div>
-    </div>
+<button onclick="send()">Save</button>
+</div>
+
+<div class="box">
+<h3 id="total">Total ₹0</h3>
+<div id="list"></div>
+</div>
 
 <script>
-    // Aapki Update ki hui API URL
-    const API = "https://script.google.com/macros/s/AKfycby86a8hHJl76614y1r7JlPeOXsV_d3J8UxkYnXK7WXySzkobd_OyJGcwrf_4bZijY3w/exec";
-    
-    let selectedApps = [];
-    let currentIncome = 0;
+const API = "PASTE_YOUR_NEW_DEPLOY_URL_HERE";
 
-    // 1. App Toggle Logic (Green on Click, Normal on Re-click)
-    function toggleApp(el, price, name) {
-        if(el.classList.contains('active')) {
-            el.classList.remove('active');
-            currentIncome -= price;
-            selectedApps = selectedApps.filter(a => a !== name);
-        } else {
-            el.classList.add('active');
-            currentIncome += price;
-            selectedApps.push(name);
-        }
-    }
+let apps=[];
+let income=0;
 
-    // 2. Submit Data
-    async function submitData() {
-        const n = document.getElementById('name').value;
-        const m = document.getElementById('mobile').value;
-        const btn = document.getElementById('saveBtn');
+function sel(el,price,name){
+  if(el.classList.contains("active")){
+    el.classList.remove("active");
+    income-=price;
+    apps=apps.filter(a=>a!=name);
+  }else{
+    el.classList.add("active");
+    income+=price;
+    apps.push(name);
+  }
+}
 
-        if(!n || selectedApps.length === 0) {
-            alert("Bhai, Naam aur App dono select karo!");
-            return;
-        }
+async function send(){
+  let name=document.getElementById("name").value;
+  let mobile=document.getElementById("mobile").value;
 
-        btn.disabled = true;
-        btn.innerText = "Saving...";
-        
-        const payload = { 
-            name: n, 
-            mobile: m, 
-            apps: selectedApps.join(", "), 
-            income: currentIncome 
-        };
+  if(!name || apps.length==0){
+    alert("Name aur app select karo");
+    return;
+  }
 
-        try {
-            // Google Script POST (CORS handle karne ke liye text/plain)
-            await fetch(API, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify(payload)
-            });
-            
-            // Response no-cors mein nahi dikhta par data save ho jata hai
-            alert("Entry Saved Successfully! ✅");
-            resetForm();
-            setTimeout(fetchList, 1500); // Thoda ruk kar list update
-        } catch (e) {
-            console.error(e);
-            alert("Kuch error aaya, sheet check karein.");
-            btn.disabled = false;
-            btn.innerText = "Save & Add to List";
-        }
-    }
+  let data={
+    name:name,
+    mobile:mobile,
+    apps:apps.join(","),
+    income:income
+  };
 
-    // 3. Fetch List from Google Sheet (doGet)
-    async function fetchList() {
-        const loader = document.getElementById('loader');
-        loader.style.display = "block";
+  await fetch(API,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(data)
+  });
 
-        try {
-            const response = await fetch(API);
-            const data = await response.json();
-            
-            let html = "";
-            let dayTotal = 0;
-            
-            // Naye records upar dikhane ke liye reverse
-            data.slice().reverse().forEach(item => {
-                html += `
-                    <div class="list-item">
-                        <div class="info">
-                            <b>${item.name}</b>
-                            <span>${item.apps} | ${item.mobile}</span>
-                        </div>
-                        <div class="amt">₹${item.income}</div>
-                    </div>
-                `;
-                dayTotal += Number(item.income);
-            });
-            
-            document.getElementById('records').innerHTML = html;
-            document.getElementById('totalDay').innerText = "Total: ₹ " + dayTotal;
-            loader.style.display = "none";
+  alert("Saved ✅");
+  location.reload();
+}
 
-        } catch (e) {
-            loader.innerText = "Data load nahi ho paya. Refresh karein.";
-            console.error("Fetch error:", e);
-        }
-    }
+async function load(){
+  let res=await fetch(API);
+  let data=await res.json();
 
-    function resetForm() {
-        document.getElementById('name').value = "";
-        document.getElementById('mobile').value = "";
-        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        const btn = document.getElementById('saveBtn');
-        btn.disabled = false;
-        btn.innerText = "Save & Add to List";
-        selectedApps = [];
-        currentIncome = 0;
-    }
+  let html="";
+  let total=0;
 
-    // Page load hote hi list dikhao
-    window.onload = fetchList;
+  data.reverse().forEach(d=>{
+    html+=`
+    <div class="item">
+      <div>${d.name}<br><small>${d.apps}</small></div>
+      <div>₹${d.income}</div>
+    </div>`;
+    total+=Number(d.income);
+  });
+
+  document.getElementById("list").innerHTML=html;
+  document.getElementById("total").innerText="Total ₹"+total;
+}
+
+load();
 </script>
 
 </body>

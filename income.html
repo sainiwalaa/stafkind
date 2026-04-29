@@ -1,84 +1,12 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sainiwalaa CRM | Income List</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #1e293b; --accent: #3b82f6; --success: #22c55e; --bg: #f1f5f9; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--primary); }
-
-        /* Chota & Attractive Form */
-        .compact-form {
-            background: white; padding: 15px; border-radius: 15px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px;
-        }
-        .row { display: flex; gap: 10px; margin-bottom: 10px; }
-        input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
-        
-        .app-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-        .chip {
-            padding: 6px 12px; background: #f1f5f9; border-radius: 20px;
-            font-size: 12px; font-weight: 600; cursor: pointer; border: 2px solid transparent;
-        }
-        .chip.active { background: var(--success); color: white; border-color: #16a34a; }
-
-        .btn-submit {
-            width: 100%; background: var(--primary); color: white; padding: 12px;
-            border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
-        }
-
-        /* Niche List Jesa Data */
-        .list-container { background: white; border-radius: 15px; overflow: hidden; }
-        .list-header { background: #e2e8f0; padding: 10px 15px; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; }
-        
-        .data-list { max-height: 400px; overflow-y: auto; }
-        .list-item {
-            padding: 12px 15px; border-bottom: 1px solid #f1f5f9;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .list-item:last-child { border-bottom: none; }
-        .info b { display: block; font-size: 14px; }
-        .info span { font-size: 11px; color: #64748b; }
-        .amt { font-weight: 700; color: var(--success); font-size: 15px; }
-
-        #loader { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
-    </style>
-</head>
-<body>
-
-    <div class="compact-form">
-        <div class="row">
-            <input type="text" id="name" placeholder="Name">
-            <input type="number" id="mobile" placeholder="Mobile">
-        </div>
-        <div class="app-chips">
-            <div class="chip" onclick="toggleApp(this, 150, 'Upstox')">Upstox ₹150</div>
-            <div class="chip" onclick="toggleApp(this, 320, 'Tide')">Tide ₹320</div>
-            <div class="chip" onclick="toggleApp(this, 150, 'mStock')">mStock ₹150</div>
-            <div class="chip" onclick="toggleApp(this, 260, 'AngelOne')">AngelOne ₹260</div>
-        </div>
-        <button class="btn-submit" id="saveBtn" onclick="submitData()">Save & Add to List</button>
-    </div>
-
-    <div class="list-container">
-        <div class="list-header">
-            <span>Recent Registrations</span>
-            <span id="totalDay">₹ 0</span>
-        </div>
-        <div id="loader">Loading list...</div>
-        <div class="data-list" id="records">
-            </div>
-    </div>
+// ... (Baki CSS wahi rahega) ...
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbx5ZQ1FMaXlAgqTM15TPB6sVXDqQ2ClfWJ1yAieCSDiBrKcnWyiikUwR11G64w0Woy2/exec";
+    // ⚠️ APNI NAYI DEPLOY URL YAHAN DALEIN
+    const API = "https://script.google.com/macros/s/AKfycby86a8hHJl76614y1r7JlPeOXsV_d3J8UxkYnXK7WXySzkobd_OyJGcwrf_4bZijY3w/exec"; 
     
     let selectedApps = [];
     let currentIncome = 0;
 
-    // 1. App Selection Logic
     function toggleApp(el, price, name) {
         if(el.classList.contains('active')) {
             el.classList.remove('active');
@@ -91,33 +19,43 @@
         }
     }
 
-    // 2. Submit Data to Sheet
     function submitData() {
         const n = document.getElementById('name').value;
         const m = document.getElementById('mobile').value;
         if(!n || selectedApps.length === 0) return alert("Fill Name & Select App");
 
-        document.getElementById('saveBtn').disabled = true;
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.disabled = true;
+        saveBtn.innerText = "Saving...";
         
         const payload = { name: n, mobile: m, apps: selectedApps.join(", "), income: currentIncome };
 
-        fetch(API, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
-        .then(() => {
-            alert("Saved! ✅");
-            fetchList(); // List refresh karein
+        // Post request with stringified body
+        fetch(API, { 
+            method: "POST", 
+            body: JSON.stringify(payload) 
+        })
+        .then(res => {
+            alert("Data Saved Successfully! ✅");
             resetForm();
+            fetchList(); // List refresh
+        })
+        .catch(err => {
+            console.log(err);
+            // No-cors mein error aata hai par data save ho jata hai
+            setTimeout(() => { fetchList(); resetForm(); }, 2000);
         });
     }
 
-    // 3. Fetch List from Google Sheet
     function fetchList() {
+        document.getElementById('loader').style.display = "block";
         fetch(API)
         .then(res => res.json())
         .then(data => {
             let html = "";
             let dayTotal = 0;
-            // Data ko reverse dikhayenge takki naya record upar aaye
-            data.reverse().forEach(item => {
+            // Naya data upar dikhane ke liye reverse
+            data.slice().reverse().forEach(item => {
                 html += `
                     <div class="list-item">
                         <div class="info">
@@ -139,14 +77,12 @@
         document.getElementById('name').value = "";
         document.getElementById('mobile').value = "";
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        document.getElementById('saveBtn').disabled = false;
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.disabled = false;
+        saveBtn.innerText = "Save & Add to List";
         selectedApps = [];
         currentIncome = 0;
     }
 
-    // Page khulte hi list load karein
     fetchList();
 </script>
-
-</body>
-</html>

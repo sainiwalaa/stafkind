@@ -3,46 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Income Tracker</title>
+<title>Sainiwalaa Income Tracker</title>
 
 <style>
 body{font-family:Arial;background:#f1f5f9;margin:0;padding:10px;}
 .box{background:#fff;padding:15px;border-radius:15px;margin-bottom:15px;}
 input{padding:10px;width:100%;margin:5px 0;border-radius:8px;border:1px solid #ccc;}
-button{padding:12px;width:100%;background:#0f172a;color:#fff;border:none;border-radius:10px;}
+button{padding:12px;width:100%;background:#0f172a;color:#fff;border:none;border-radius:10px;font-weight:bold;}
 .chip{display:inline-block;padding:8px 12px;background:#ddd;border-radius:20px;margin:5px;cursor:pointer;}
 .active{background:green;color:#fff;}
 .item{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:8px;}
+.total{font-weight:bold;color:#2563eb;}
 </style>
 </head>
 
 <body>
 
 <div class="box">
-<input id="name" placeholder="Name">
-<input id="mobile" placeholder="Mobile">
+<input id="name" placeholder="Candidate Name">
+<input id="mobile" placeholder="Mobile Number">
 
 <div>
-<span class="chip" onclick="sel(this,150,'Upstox')">Upstox 150</span>
-<span class="chip" onclick="sel(this,320,'Tide')">Tide 320</span>
-<span class="chip" onclick="sel(this,150,'mStock')">mStock 150</span>
-<span class="chip" onclick="sel(this,260,'Angel')">Angel 260</span>
+<span class="chip" onclick="sel(this,150,'Upstox')">Upstox ₹150</span>
+<span class="chip" onclick="sel(this,320,'Tide')">Tide ₹320</span>
+<span class="chip" onclick="sel(this,150,'mStock')">mStock ₹150</span>
+<span class="chip" onclick="sel(this,260,'Angel One')">Angel ₹260</span>
 </div>
 
-<button onclick="send()">Save</button>
+<button onclick="send()">Save Data</button>
 </div>
 
 <div class="box">
-<h3 id="total">Total ₹0</h3>
-<div id="list"></div>
+<h3 class="total" id="total">Total ₹0</h3>
+<div id="list">Loading...</div>
 </div>
 
 <script>
-const API = "PASTE_YOUR_NEW_DEPLOY_URL_HERE";
+
+const API = "https://script.google.com/macros/s/AKfycbz4ceYclsk_M_Z6SWwkgCrXy__QgBCJoKj_75PSZHBfIhVpCUS0wvpm7X6ZCmPrymo/exec";
 
 let apps=[];
 let income=0;
 
+// Select Apps
 function sel(el,price,name){
   if(el.classList.contains("active")){
     el.classList.remove("active");
@@ -55,53 +58,84 @@ function sel(el,price,name){
   }
 }
 
+// Save Data
 async function send(){
-  let name=document.getElementById("name").value;
-  let mobile=document.getElementById("mobile").value;
+  let name=document.getElementById("name").value.trim();
+  let mobile=document.getElementById("mobile").value.trim();
 
   if(!name || apps.length==0){
-    alert("Name aur app select karo");
+    alert("Naam aur App select karo!");
     return;
   }
 
   let data={
     name:name,
     mobile:mobile,
-    apps:apps.join(","),
+    apps:apps.join(", "),
     income:income
   };
 
-  await fetch(API,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(data)
-  });
+  try{
+    await fetch(API,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(data)
+    });
 
-  alert("Saved ✅");
-  location.reload();
+    alert("Saved Successfully ✅");
+
+    reset();
+    load();
+
+  }catch(err){
+    alert("Error aa gaya ❌");
+    console.log(err);
+  }
 }
 
+// Load Data
 async function load(){
-  let res=await fetch(API);
-  let data=await res.json();
+  try{
+    let res=await fetch(API);
+    let data=await res.json();
 
-  let html="";
-  let total=0;
+    let html="";
+    let total=0;
 
-  data.reverse().forEach(d=>{
-    html+=`
-    <div class="item">
-      <div>${d.name}<br><small>${d.apps}</small></div>
-      <div>₹${d.income}</div>
-    </div>`;
-    total+=Number(d.income);
-  });
+    data.reverse().forEach(d=>{
+      html+=`
+      <div class="item">
+        <div>
+          <b>${d.name}</b><br>
+          <small>${d.apps} | ${d.mobile}</small>
+        </div>
+        <div>₹${d.income}</div>
+      </div>`;
+      total+=Number(d.income);
+    });
 
-  document.getElementById("list").innerHTML=html;
-  document.getElementById("total").innerText="Total ₹"+total;
+    document.getElementById("list").innerHTML=html;
+    document.getElementById("total").innerText="Total ₹"+total;
+
+  }catch(e){
+    document.getElementById("list").innerText="Data load nahi hua";
+  }
 }
 
+// Reset Form
+function reset(){
+  document.getElementById("name").value="";
+  document.getElementById("mobile").value="";
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+  apps=[];
+  income=0;
+}
+
+// Auto load
 load();
+
 </script>
 
 </body>
